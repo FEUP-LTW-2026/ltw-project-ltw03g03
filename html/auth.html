@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>W8</title>
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Background layers -->
+  <div class="bg-layer bg-overlay"></div>
+  <div class="bg-layer bg-grid"></div>
+  <div class="bg-layer bg-diagonal"></div>
+
+  <!-- Animated corner accents -->
+  <span class="corner corner--tl"></span>
+  <span class="corner corner--br"></span>
+
+  <!-- Floating stat pills -->
+  <div class="stat-pill stat-pill--left">
+    <span class="stat-num">2,400+</span>
+    <span class="stat-label">Active Members</span>
+  </div>
+  <div class="stat-pill stat-pill--right">
+    <span class="stat-num">48</span>
+    <span class="stat-label">Weekly Classes</span>
+  </div>
+
+  <main class="auth-shell">
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand__icon">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="16" width="8" height="8" rx="1" fill="currentColor"/>
+          <rect x="30" y="16" width="8" height="8" rx="1" fill="currentColor"/>
+          <rect x="10" y="10" width="4" height="20" rx="1" fill="currentColor"/>
+          <rect x="26" y="10" width="4" height="20" rx="1" fill="currentColor"/>
+          <rect x="14" y="18" width="12" height="4" rx="1" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="brand__text">
+        <span class="brand__name">W8</span>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="auth-card">
+
+      <!-- Tab switcher -->
+      <div class="tabs" role="tablist">
+        <button class="tab tab--active" id="tab-login" role="tab" aria-selected="true" aria-controls="panel-login">Sign In</button>
+        <button class="tab" id="tab-register" role="tab" aria-selected="false" aria-controls="panel-register">Register</button>
+        <span class="tab-indicator" id="tab-indicator"></span>
+      </div>
+
+      <!-- Login Panel -->
+      <div class="panel panel--active" id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+
+        <form class="form" method="post" action="#" novalidate>
+
+          <div class="field">
+            <label class="field__label" for="login-email">Email / Username</label>
+            <div class="field__wrap">
+              <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M2.5 5.5A1.5 1.5 0 014 4h12a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0116 16H4a1.5 1.5 0 01-1.5-1.5v-9z" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 6l7.5 5 7.5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <input class="field__input" type="text" id="login-email" name="email" placeholder="you@example.com" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="login-password">Password</label>
+            <div class="field__wrap">
+              <svg class="field__icon" viewBox="0 0 20 20" fill="none"><rect x="4" y="9" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M7 9V6.5a3 3 0 016 0V9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="10" cy="13" r="1.2" fill="currentColor"/></svg>
+              <input class="field__input" type="password" id="login-password" name="password" placeholder="••••••••" autocomplete="current-password" required />
+            </div>
+            <a href="#forgot" class="field__link" style="align-self: flex-end;">Forgot?</a>
+          </div>
+
+          <div class="field field--inline">
+            <label class="checkbox">
+              <input type="checkbox" id="remember" name="remember" />
+              <span class="checkbox__box"></span>
+              <span class="checkbox__label">Keep me signed in</span>
+            </label>
+          </div>
+
+          <button class="btn-submit" type="submit">
+            <span class="btn-submit__text">Continue</span>
+            <svg class="btn-submit__arrow" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div class="role-hint">
+            Sign in as:
+            <button class="role-chip role-chip--active">Member</button>
+            <button class="role-chip">Trainer</button>
+            <button class="role-chip">Admin</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Register Panel -->
+      <div class="panel" id="panel-register" role="tabpanel" aria-labelledby="tab-register">
+
+        <form class="form" method="post" action="#" novalidate>
+
+          <div class="form__row">
+            <div class="field">
+              <label class="field__label" for="reg-firstname">First Name</label>
+              <div class="field__wrap">
+                <input class="field__input" type="text" id="reg-firstname" name="firstname" placeholder="Alex" required />
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="reg-lastname">Last Name</label>
+              <div class="field__wrap">
+                <input class="field__input" type="text" id="reg-lastname" name="lastname" placeholder="Stone" required />
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="reg-username">Username</label>
+            <div class="field__wrap">
+              <svg class="field__icon" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <input class="field__input" type="text" id="reg-username" name="username" placeholder="ironrookie" autocomplete="username" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="reg-email">Email</label>
+            <div class="field__wrap">
+              <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M2.5 5.5A1.5 1.5 0 014 4h12a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0116 16H4a1.5 1.5 0 01-1.5-1.5v-9z" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 6l7.5 5 7.5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <input class="field__input" type="email" id="reg-email" name="email" placeholder="you@example.com" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="reg-password">Password</label>
+            <div class="field__wrap">
+              <svg class="field__icon" viewBox="0 0 20 20" fill="none"><rect x="4" y="9" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M7 9V6.5a3 3 0 016 0V9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <input class="field__input" type="password" id="reg-password" name="password" placeholder="min. 8 characters" autocomplete="new-password" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="reg-role">I am joining as</label>
+            <div class="field__wrap field__wrap--select">
+              <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <select class="field__input field__input--select" id="reg-role" name="role" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="member">Member</option>
+                <option value="trainer">Trainer</option>
+              </select>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+    <!-- /auth-card -->
+
+    <footer class="auth-footer">
+      &copy; W8 — All rights reserved
+    </footer>
+
+  </main>
+
+</body>
+</html>
