@@ -1,16 +1,3 @@
-/* =============================================================
-   W8 GYM — Authentication Page
-   CSS organized in three layers:
-     1. Base       — variables, resets, default HTML element styles
-     2. Components — reusable UI pieces (buttons, cards, fields…)
-     3. Specific   — styles unique to this page only
-   ============================================================= */
-
-
-/* ============================================================
-   1. BASE
-   ============================================================ */
-
 /* ── Custom Properties ─────────────────────────────────────── */
 :root {
   /* Color palette */
@@ -74,10 +61,6 @@ option {
 }
 
 
-/* ============================================================
-   2. COMPONENTS
-   ============================================================ */
-
 /* ── Button — Primary Submit ───────────────────────────────── */
 .btn-submit {
   width: 100%;
@@ -123,38 +106,11 @@ option {
 }
 .btn-submit:hover .btn-submit__arrow { transform: translateX(4px); }
 
-/* ── Card ──────────────────────────────────────────────────── */
-.card {
-  background: var(--color-steel);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.03) inset,
-    0 24px 60px rgba(0,0,0,0.6);
-  position: relative;
-  overflow: hidden;
-}
-
-.card--accent-top::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), var(--color-accent2), transparent);
-  z-index: 1;
-}
-
 /* ── Form ──────────────────────────────────────────────────── */
 .form {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-}
-
-.form__row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
 }
 
 /* ── Field ─────────────────────────────────────────────────── */
@@ -230,19 +186,6 @@ option {
 }
 
 .field__wrap:focus-within .field__icon { color: var(--color-accent); }
-
-.field__input--select {
-  padding-right: 2.3rem;
-  cursor: pointer;
-}
-
-.field__wrap--select .field__icon {
-  left: auto;
-  right: 11px;
-  pointer-events: none;
-}
-
-.field__wrap--select .field__input--select { padding-left: 0.75rem; }
 
 /* ── Checkbox ──────────────────────────────────────────────── */
 .checkbox {
@@ -555,9 +498,6 @@ option {
   color: #fff;
 }
 
-/* ── Checkbox terms variant ────────────────────────────────── */
-.checkbox--terms { margin-top: 0.2rem; }
-
 /* ── Footer ────────────────────────────────────────────────── */
 .auth-footer {
   font-family: var(--font-ui);
@@ -575,7 +515,6 @@ option {
 
   .auth-shell { padding: 1rem 0.75rem; gap: 1rem; }
   .panel { padding: 1.3rem 1.3rem 1.1rem; }
-  .form__row { grid-template-columns: 1fr; }
 
   .brand__name { font-size: 2.2rem; }
 }
