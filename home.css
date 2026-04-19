@@ -21,6 +21,12 @@
   object-fit: cover;
 }
 
+.map-ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { background: var(--black); color: var(--text); font-family: var(--fb); overflow-x: hidden; }
