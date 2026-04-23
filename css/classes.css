@@ -1,0 +1,408 @@
+/* ── Page Header ─────────────────────────────────────────────── */
+.page-header {
+  position: relative;
+  z-index: 10;
+  padding: 10rem 2rem 5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.page-header__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.page-header__title {
+  font-family: var(--fd);
+  font-size: clamp(3.5rem, 10vw, 7.5rem);
+  letter-spacing: 0.06em;
+  line-height: 0.92;
+  margin-top: 0.8rem;
+}
+
+.page-header__title span {
+  color: var(--accent);
+}
+
+.page-header__sub {
+  font-family: var(--fu);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  color: var(--subtle);
+  margin-top: 1.5rem;
+  text-transform: uppercase;
+}
+
+/* Oversized decorative text behind the heading */
+.page-header__deco {
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--fd);
+  font-size: clamp(6rem, 16vw, 14rem);
+  letter-spacing: 0.04em;
+  color: var(--steel);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ── Filters Bar ─────────────────────────────────────────────── */
+.filters-bar {
+  position: sticky;
+  top: 64px; /* matches nav height */
+  z-index: 50;
+  background: rgba(10, 10, 10, 0.94);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+}
+
+.filters-bar__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.9rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2.5rem;
+  align-items: center;
+}
+
+/* ── Filter group ────────────────────────────────────────────── */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filter-group__label {
+  font-family: var(--fu);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  white-space: nowrap;
+  min-width: 30px;
+}
+
+/* ── Chips ───────────────────────────────────────────────────── */
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  display: inline-block;
+  font-family: var(--fu);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--border);
+  color: var(--subtle);
+  cursor: pointer;
+  transition: color var(--t), border-color var(--t), background var(--t);
+  user-select: none;
+}
+
+.chip:hover {
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+/* Hide the underlying radio */
+.chip input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Active state driven purely by CSS :has() */
+.chip:has(input:checked),
+.chip--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Schedule Section ────────────────────────────────────────── */
+.schedule-section {
+  position: relative;
+  z-index: 10;
+}
+
+.schedule-section .inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* ── Day Block ───────────────────────────────────────────────── */
+.day-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.day-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.day-label__name {
+  font-family: var(--fd);
+  font-size: 1.2rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.day-label__line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.day-label__count {
+  font-family: var(--fu);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  white-space: nowrap;
+}
+
+/* ── Schedule Grid ───────────────────────────────────────────── */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1px;
+  background: var(--border);
+}
+
+/* ── Schedule Card ───────────────────────────────────────────── */
+.sched-card {
+  position: relative;
+  background: var(--steel);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  transition: background var(--t), transform var(--t);
+}
+
+.sched-card:hover {
+  background: #1e2026;
+  transform: translateY(-2px);
+  z-index: 2;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Dimmed state for full class */
+.sched-card--full {
+  opacity: 0.65;
+}
+.sched-card--full:hover {
+  opacity: 0.8;
+}
+
+/* ── Accent bar (left edge, colour-coded by type) ────────────── */
+.sched-card__bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
+
+.sched-card__bar--powerlifting { background: var(--accent); }
+.sched-card__bar--hiit         { background: #e84040; }
+.sched-card__bar--crossfit     { background: #c0a030; }
+.sched-card__bar--yoga         { background: #42a882; }
+
+/* ── Time block ──────────────────────────────────────────────── */
+.sched-card__time {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 1.1rem 1.3rem 0.4rem 1.6rem;
+}
+
+.sched-card__hour {
+  font-family: var(--fd);
+  font-size: 1.7rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.sched-card__dur {
+  font-family: var(--fu);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--subtle);
+}
+
+/* ── Body ────────────────────────────────────────────────────── */
+.sched-card__body {
+  padding: 0 1.3rem 0.8rem 1.6rem;
+  flex: 1;
+}
+
+.sched-card__type {
+  font-family: var(--fu);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 0.25rem;
+}
+
+.sched-card__name {
+  font-family: var(--fd);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 0.6rem;
+}
+
+.sched-card__trainer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--fu);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--subtle);
+}
+
+.sched-card__trainer svg {
+  width: 12px;
+  height: 12px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── Meta row ────────────────────────────────────────────────── */
+.sched-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 1.3rem 0.55rem 1.6rem;
+  border-top: 1px solid var(--border);
+  gap: 0.5rem;
+}
+
+/* Level badges */
+.sched-card__level {
+  font-family: var(--fu);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+}
+
+.sched-card__level--all          { color: var(--subtle); border: 1px solid var(--border); }
+.sched-card__level--intermediate { color: #c0a030; border: 1px solid rgba(192,160,48,.4); }
+.sched-card__level--advanced     { color: #e84040; border: 1px solid rgba(232,64,64,.4); }
+.sched-card__level--beginner     { color: #42a882; border: 1px solid rgba(66,168,130,.4); }
+
+/* Spots counter */
+.sched-card__spots {
+  font-family: var(--fu);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--subtle);
+  white-space: nowrap;
+}
+
+.sched-card__spots--low  { color: #e87840; }
+.sched-card__spots--full { color: #e84040; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+
+/* ── Enroll button ───────────────────────────────────────────── */
+.sched-card__enroll {
+  display: block;
+  text-align: center;
+  padding: 0.65rem;
+  font-family: var(--fd);
+  font-size: 0.88rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  border-top: 1px solid var(--border);
+  background: none;
+  transition: background var(--t), color var(--t), border-color var(--t);
+}
+
+.sched-card__enroll:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.sched-card__enroll--waitlist {
+  color: var(--muted);
+}
+
+.sched-card__enroll--waitlist:hover {
+  background: var(--muted);
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+/* ── Active nav link ─────────────────────────────────────────── */
+.nav-link--active {
+  color: var(--accent) !important;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .page-header__deco {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 8rem 1.2rem 3.5rem;
+  }
+
+  .filters-bar__inner {
+    padding: 0.8rem 1.2rem;
+    gap: 0.9rem 1.5rem;
+  }
+
+  .schedule-section .inner {
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .filter-group {
+    width: 100%;
+  }
+
+  .schedule-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sched-card:hover {
+    transform: none;
+  }
+}
