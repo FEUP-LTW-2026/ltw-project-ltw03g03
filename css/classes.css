@@ -99,41 +99,7 @@
   gap: 0.35rem;
 }
 
-.chip {
-  display: inline-block;
-  font-family: var(--fu);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 0.3rem 0.75rem;
-  border: 1px solid var(--border);
-  color: var(--subtle);
-  cursor: pointer;
-  transition: color var(--t), border-color var(--t), background var(--t);
-  user-select: none;
-}
 
-.chip:hover {
-  color: var(--text);
-  border-color: var(--muted);
-}
-
-/* Hide the underlying radio */
-.chip input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* Active state driven purely by CSS :has() */
-.chip:has(input:checked),
-.chip--active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
 
 /* ── Schedule Section ────────────────────────────────────────── */
 .schedule-section {
@@ -366,10 +332,7 @@
   color: var(--text);
 }
 
-/* ── Active nav link ─────────────────────────────────────────── */
-.nav-link--active {
-  color: var(--accent) !important;
-}
+
 
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 900px) {

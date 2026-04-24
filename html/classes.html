@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>W8 — Classes</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/home.css">
   <link rel="stylesheet" href="../css/classes.css">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap"
+    rel="stylesheet">
 </head>
+
 <body>
 
   <div class="bg-fixed bg-grid"></div>
@@ -19,11 +25,11 @@
   <nav>
     <a href="home.html" class="nav-brand">
       <svg viewBox="0 0 40 40" fill="none">
-        <rect x="2" y="16" width="8" height="8" rx="1" fill="currentColor"/>
-        <rect x="30" y="16" width="8" height="8" rx="1" fill="currentColor"/>
-        <rect x="10" y="10" width="4" height="20" rx="1" fill="currentColor"/>
-        <rect x="26" y="10" width="4" height="20" rx="1" fill="currentColor"/>
-        <rect x="14" y="18" width="12" height="4" rx="1" fill="currentColor"/>
+        <rect x="2" y="16" width="8" height="8" rx="1" fill="currentColor" />
+        <rect x="30" y="16" width="8" height="8" rx="1" fill="currentColor" />
+        <rect x="10" y="10" width="4" height="20" rx="1" fill="currentColor" />
+        <rect x="26" y="10" width="4" height="20" rx="1" fill="currentColor" />
+        <rect x="14" y="18" width="12" height="4" rx="1" fill="currentColor" />
       </svg>
       <span>W8</span>
     </a>
@@ -57,7 +63,7 @@
       <div class="filter-group">
         <span class="filter-group__label">Day</span>
         <div class="filter-chips" role="group" aria-label="Filter by day">
-          <label class="chip chip--active">
+          <label class="chip">
             <input type="radio" name="day" value="all" checked>All
           </label>
           <label class="chip">
@@ -88,7 +94,7 @@
       <div class="filter-group">
         <span class="filter-group__label">Type</span>
         <div class="filter-chips" role="group" aria-label="Filter by type">
-          <label class="chip chip--active">
+          <label class="chip">
             <input type="radio" name="type" value="all" checked>All
           </label>
           <label class="chip">
@@ -110,7 +116,7 @@
       <div class="filter-group">
         <span class="filter-group__label">Level</span>
         <div class="filter-chips" role="group" aria-label="Filter by level">
-          <label class="chip chip--active">
+          <label class="chip">
             <input type="radio" name="level" value="all" checked>All
           </label>
           <label class="chip">
@@ -152,7 +158,11 @@
               <div class="sched-card__type">Powerlifting</div>
               <h3 class="sched-card__name">Morning Strength</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Ronnie Coleman
               </div>
             </div>
@@ -173,7 +183,11 @@
               <div class="sched-card__type">Yoga</div>
               <h3 class="sched-card__name">Morning Flow</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Master Oogway
               </div>
             </div>
@@ -194,7 +208,11 @@
               <div class="sched-card__type">HIIT</div>
               <h3 class="sched-card__name">Lunchtime Burn</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Sportacus
               </div>
             </div>
@@ -215,7 +233,11 @@
               <div class="sched-card__type">CrossFit</div>
               <h3 class="sched-card__name">WOD — Iron Hour</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Popeye
               </div>
             </div>
@@ -236,7 +258,11 @@
               <div class="sched-card__type">Powerlifting</div>
               <h3 class="sched-card__name">Evening Lifters</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Ronnie Coleman
               </div>
             </div>
@@ -270,7 +296,11 @@
               <div class="sched-card__type">HIIT</div>
               <h3 class="sched-card__name">Rise &amp; Grind</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Sportacus
               </div>
             </div>
@@ -291,7 +321,11 @@
               <div class="sched-card__type">Yoga</div>
               <h3 class="sched-card__name">Deep Stretch</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Master Oogway
               </div>
             </div>
@@ -312,7 +346,11 @@
               <div class="sched-card__type">CrossFit</div>
               <h3 class="sched-card__name">Functional Fury</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Popeye
               </div>
             </div>
@@ -333,7 +371,11 @@
               <div class="sched-card__type">Powerlifting</div>
               <h3 class="sched-card__name">Compete Prep</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Ronnie Coleman
               </div>
             </div>
@@ -367,7 +409,11 @@
               <div class="sched-card__type">Yoga</div>
               <h3 class="sched-card__name">Sunrise Balance</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Master Oogway
               </div>
             </div>
@@ -388,7 +434,11 @@
               <div class="sched-card__type">HIIT</div>
               <h3 class="sched-card__name">Midweek Blast</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Sportacus
               </div>
             </div>
@@ -409,7 +459,11 @@
               <div class="sched-card__type">Powerlifting</div>
               <h3 class="sched-card__name">Big Three</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Ronnie Coleman
               </div>
             </div>
@@ -430,7 +484,11 @@
               <div class="sched-card__type">CrossFit</div>
               <h3 class="sched-card__name">WOD — Power Surge</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Popeye
               </div>
             </div>
@@ -464,7 +522,11 @@
               <div class="sched-card__type">HIIT</div>
               <h3 class="sched-card__name">Weekend Warrior</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Sportacus
               </div>
             </div>
@@ -485,7 +547,11 @@
               <div class="sched-card__type">Powerlifting</div>
               <h3 class="sched-card__name">Saturday Iron</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Ronnie Coleman
               </div>
             </div>
@@ -506,7 +572,11 @@
               <div class="sched-card__type">Yoga</div>
               <h3 class="sched-card__name">Weekend Restore</h3>
               <div class="sched-card__trainer">
-                <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M2 14c0-3 2.686-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.2"
+                    stroke-linecap="round" />
+                </svg>
                 Master Oogway
               </div>
             </div>
@@ -537,11 +607,11 @@
       <div class="footer-top">
         <div class="footer-brand">
           <svg viewBox="0 0 40 40" fill="none">
-            <rect x="2" y="16" width="8" height="8"/>
-            <rect x="30" y="16" width="8" height="8"/>
-            <rect x="10" y="10" width="4" height="20"/>
-            <rect x="26" y="10" width="4" height="20"/>
-            <rect x="14" y="18" width="12" height="4"/>
+            <rect x="2" y="16" width="8" height="8" />
+            <rect x="30" y="16" width="8" height="8" />
+            <rect x="10" y="10" width="4" height="20" />
+            <rect x="26" y="10" width="4" height="20" />
+            <rect x="14" y="18" width="12" height="4" />
           </svg>
           <span>W8</span>
         </div>
@@ -579,4 +649,5 @@
   </footer>
 
 </body>
+
 </html>

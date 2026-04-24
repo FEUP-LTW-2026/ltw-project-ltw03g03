@@ -1,0 +1,99 @@
+/* ═══════════════════════════════════════════════════════════════
+   BASE LAYER — CSS Variables, Reset, and HTML Element Defaults
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Custom Properties ─────────────────────────────────────── */
+:root {
+  /* Color palette */
+  --color-black:    #0a0a0a;
+  --color-dark:     #111214;
+  --color-steel:    #1a1c21;
+  --color-border:   #2a2d35;
+  --color-muted:    #3e424f;
+  --color-text:     #e8eaf0;
+  --color-subtle:   #7a7f91;
+  --color-accent:   #f5681a;
+  --color-accent2:  #ff8c42;
+  --color-glow:     rgba(245, 104, 26, 0.18);
+
+  /* Gradients */
+  --grad-accent:    linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent2) 100%);
+
+  /* Tokens */
+  --radius-card:    2px;
+  --radius-field:   2px;
+  --transition:     0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography */
+  --font-display:   'Bebas Neue', sans-serif;
+  --font-ui:        'Barlow Condensed', sans-serif;
+  --font-body:      'Barlow', sans-serif;
+
+  /* Short aliases (for internal use) */
+  --fd:             var(--font-display);
+  --fu:             var(--font-ui);
+  --fb:             var(--font-body);
+  --t:              var(--transition);
+  --accent:         var(--color-accent);
+  --accent2:        var(--color-accent2);
+  --subtle:         var(--color-subtle);
+  --border:         var(--color-border);
+  --steel:          var(--color-steel);
+  --dark:           var(--color-dark);
+  --text:           var(--color-text);
+  --grad:           var(--grad-accent);
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── HTML Element Defaults ─────────────────────────────────── */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--color-black);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--color-accent2);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+fieldset {
+  border: none;
+}
