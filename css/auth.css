@@ -190,6 +190,10 @@ body {
   text-transform: uppercase;
   color: var(--color-muted);
   text-align: center;
+  background: none;
+  border: none;
+  padding: 0;
+  box-shadow: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════
