@@ -1,5 +1,4 @@
 <?php
-// ── config/session.php ─────────────────────────────────────────
 // Session bootstrap. Include at the top of every PHP page.
 
 if (session_status() === PHP_SESSION_NONE) {

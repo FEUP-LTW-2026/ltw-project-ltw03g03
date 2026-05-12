@@ -1,5 +1,4 @@
 <?php
-// ── config/db.php ──────────────────────────────────────────────
 // PDO database connection singleton.
 // Adjust DB_HOST / DB_NAME / DB_USER / DB_PASS for your environment.
 
