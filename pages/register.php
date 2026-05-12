@@ -232,11 +232,5 @@ $flash = get_flash();
     <footer class="auth-footer">&copy; W8 — All rights reserved</footer>
   </main>
 
-  <style>
-    .flash { width:100%; padding:.75rem 1.2rem; font-family:var(--fu); font-size:.82rem;
-             letter-spacing:.06em; border-left:3px solid; }
-    .flash--success { background:rgba(66,168,130,.12); border-color:#42a882; color:#42a882; }
-    .flash--error   { background:rgba(232,64,64,.12);  border-color:#e84040; color:#e84040; }
-  </style>
 </body>
 </html>

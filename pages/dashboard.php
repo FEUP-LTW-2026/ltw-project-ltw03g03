@@ -159,9 +159,6 @@ $type_colors = [
     .quick-link svg { width:22px; height:22px; color:var(--accent); }
     .quick-link span { font-family:var(--fu); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; }
 
-    .flash { padding:.75rem 1.2rem; font-family:var(--fu); font-size:.82rem; letter-spacing:.06em; border-left:3px solid; margin:0 2rem 1rem; max-width:1100px; margin-left:auto; margin-right:auto; }
-    .flash--success { background:rgba(66,168,130,.12); border-color:#42a882; color:#42a882; }
-    .flash--error   { background:rgba(232,64,64,.12);  border-color:#e84040; color:#e84040; }
   </style>
 </head>
 <body>
@@ -205,7 +202,7 @@ $type_colors = [
   </nav>
 
   <?php if ($flash): ?>
-  <div class="flash flash--<?= htmlspecialchars($flash['type']) ?>" style="margin-top:80px;">
+  <div class="flash flash--<?= htmlspecialchars($flash['type']) ?> flash--center" style="margin-top:80px;">
     <?= htmlspecialchars($flash['message']) ?>
   </div>
   <?php endif; ?>
