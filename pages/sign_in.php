@@ -40,7 +40,7 @@ $flash = get_flash();
   <main class="auth-shell">
 
     <div class="brand">
-      <a href="../index.php" class="brand__icon" style="color:inherit;text-decoration:none;">
+      <a href="../index.php" class="brand__icon" style="text-decoration:none;">
         <svg viewBox="0 0 40 40" fill="none" width="54" height="54">
           <rect x="2" y="16" width="8" height="8" rx="1" fill="currentColor"/>
           <rect x="30" y="16" width="8" height="8" rx="1" fill="currentColor"/>
