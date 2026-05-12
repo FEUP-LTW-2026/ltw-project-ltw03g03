@@ -9,11 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $db = get_db();
 
-// ── Sanitise & validate input ──────────────────────────────────
 $first_name = trim($_POST['firstname'] ?? '');
 $last_name  = trim($_POST['lastname']  ?? '');
 $dob        = trim($_POST['dob']       ?? '');
 $phone      = trim($_POST['phone']     ?? '');
+$username   = strtolower(trim($_POST['username'] ?? ''));
 $email      = strtolower(trim($_POST['email']    ?? ''));
 $password   = $_POST['password']         ?? '';
 $confirm    = $_POST['password_confirm'] ?? '';
@@ -25,6 +25,9 @@ $errors = [];
 
 if (!$first_name) $errors[] = 'First name is required.';
 if (!$last_name)  $errors[] = 'Last name is required.';
+if (!$username)   $errors[] = 'Username is required.';
+if ($username && !preg_match('/^[a-z0-9_]{3,30}$/', $username))
+    $errors[] = 'Username must be 3–30 characters (lowercase letters, numbers, underscores).';
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'A valid email is required.';
 if (strlen($password) < 8) $errors[] = 'Password must be at least 8 characters.';
 if ($password !== $confirm) $errors[] = 'Passwords do not match.';
@@ -38,15 +41,11 @@ if (!$errors) {
     if ($stmt->fetch()) $errors[] = 'An account with that email already exists.';
 }
 
-// Build username from name
-$base_username = strtolower(preg_replace('/[^a-z0-9]/i', '', $first_name . $last_name));
-$username = $base_username;
-$suffix = 1;
-while (true) {
+// Check duplicate username
+if (!$errors) {
     $stmt = $db->prepare('SELECT id FROM users WHERE username = ?');
     $stmt->execute([$username]);
-    if (!$stmt->fetch()) break;
-    $username = $base_username . $suffix++;
+    if ($stmt->fetch()) $errors[] = 'That username is already taken.';
 }
 
 if ($errors) {

@@ -157,6 +157,14 @@ $flash = get_flash();
           <p class="form-section-label">Account</p>
 
           <div class="field">
+            <label class="field__label" for="reg-username">Username</label>
+            <div class="field__wrap">
+              <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M10 2a4 4 0 00-4 4c0 2.21 1.79 4 4 4s4-1.79 4-4-1.79-4-4-4zm0 10c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+              <input class="field__input" type="text" id="reg-username" name="username" placeholder="alexstone42" autocomplete="username" required>
+            </div>
+          </div>
+
+          <div class="field">
             <label class="field__label" for="reg-email">Email</label>
             <div class="field__wrap">
               <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M2.5 5.5A1.5 1.5 0 014 4h12a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0116 16H4a1.5 1.5 0 01-1.5-1.5v-9z" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 6l7.5 5 7.5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
