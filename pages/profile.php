@@ -75,62 +75,8 @@ if ($role === 'member') {
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/components.css">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    .page-wrap { max-width:1100px; margin:0 auto; padding:8rem 2rem 6rem; display:grid; grid-template-columns:300px 1fr; gap:2.5rem; align-items:start; }
+  <link rel="stylesheet" href="../css/profile.css">
 
-    /* ── Sidebar ── */
-    .profile-sidebar { display:flex; flex-direction:column; gap:1.2rem; }
-
-    .avatar-card { background:var(--steel); border:1px solid var(--border); padding:2rem; display:flex; flex-direction:column; align-items:center; gap:1rem; position:relative; }
-    .avatar-card::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent); }
-    .avatar-wrap { position:relative; width:100px; height:100px; }
-    .avatar-img { width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid var(--border); background:var(--dark); display:flex; align-items:center; justify-content:center; font-family:var(--fd); font-size:2.5rem; color:var(--subtle); overflow:hidden; }
-    .avatar-img img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-    .avatar-edit-btn { position:absolute; bottom:0; right:0; width:28px; height:28px; background:var(--accent); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#fff; }
-    .avatar-edit-btn svg { width:14px; height:14px; }
-    .avatar-name { font-family:var(--fd); font-size:1.6rem; letter-spacing:.1em; text-align:center; }
-    .avatar-role { font-family:var(--fu); font-size:.65rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); }
-    .avatar-email { font-family:var(--fu); font-size:.72rem; letter-spacing:.06em; color:var(--subtle); text-align:center; }
-
-    .sidebar-card { background:var(--steel); border:1px solid var(--border); padding:1.4rem; }
-    .sidebar-card__title { font-family:var(--fu); font-size:.65rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--subtle); margin-bottom:1rem; }
-    .sidebar-stat { display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid var(--border); font-family:var(--fu); font-size:.78rem; letter-spacing:.06em; }
-    .sidebar-stat:last-child { border-bottom:none; }
-    .sidebar-stat__val { color:var(--accent); font-weight:700; }
-
-    /* ── Main content ── */
-    .profile-main { display:flex; flex-direction:column; gap:1.5rem; }
-
-    .profile-section { background:var(--steel); border:1px solid var(--border); }
-    .profile-section__header { padding:1.2rem 1.6rem; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
-    .profile-section__title { font-family:var(--fd); font-size:1.2rem; letter-spacing:.12em; }
-    .profile-section__body { padding:1.6rem; }
-
-    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
-
-    /* stars */
-    .stars { display:flex; gap:2px; }
-    .star { width:14px; height:14px; color:var(--accent); }
-    .star--empty { color:var(--border); }
-
-    .attended-list { display:flex; flex-direction:column; gap:.7rem; }
-    .attended-item { display:flex; align-items:center; gap:1rem; padding:.8rem; background:var(--dark); border:1px solid var(--border); }
-    .attended-item__info { flex:1; min-width:0; }
-    .attended-item__name { font-family:var(--fd); font-size:1rem; letter-spacing:.08em; }
-    .attended-item__meta { font-family:var(--fu); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--subtle); margin-top:2px; }
-
-    .flash { padding:.75rem 1.2rem; font-family:var(--fu); font-size:.82rem; letter-spacing:.06em; border-left:3px solid; margin-bottom:1.5rem; }
-    .flash--success { background:rgba(66,168,130,.12); border-color:#42a882; color:#42a882; }
-    .flash--error   { background:rgba(232,64,64,.12);  border-color:#e84040; color:#e84040; }
-
-    /* photo upload hidden */
-    #photo-input { display:none; }
-
-    @media(max-width:900px) {
-      .page-wrap { grid-template-columns:1fr; }
-      .info-grid { grid-template-columns:1fr; }
-    }
-  </style>
 </head>
 <body>
 

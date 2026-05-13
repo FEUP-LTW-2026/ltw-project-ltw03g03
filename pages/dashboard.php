@@ -109,57 +109,8 @@ $type_colors = [
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/home.css">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    .dash-hero { padding:8rem 2rem 3rem; max-width:1100px; margin:0 auto; }
-    .dash-hero__greeting { font-family:var(--fu); font-size:.8rem; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem; }
-    .dash-hero__name { font-family:var(--fd); font-size:clamp(2.5rem,6vw,4.5rem); letter-spacing:.08em; line-height:1; }
-    .dash-hero__role { font-family:var(--fu); font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--subtle); margin-top:.4rem; }
+  <link rel="stylesheet" href="../css/dashboard.css">
 
-    .dash-grid { display:grid; gap:1.5rem; max-width:1100px; margin:0 auto; padding:0 2rem 6rem; }
-    .dash-grid--member  { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
-    .dash-grid--trainer { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
-    .dash-grid--admin   { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-
-    .dash-card { background:var(--steel); border:1px solid var(--border); padding:1.6rem; position:relative; }
-    .dash-card__title { font-family:var(--fu); font-size:.68rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--subtle); margin-bottom:1rem; }
-    .dash-card__big { font-family:var(--fd); font-size:3rem; color:var(--accent); line-height:1; }
-    .dash-card__sub { font-family:var(--fu); font-size:.72rem; letter-spacing:.1em; color:var(--subtle); margin-top:.3rem; text-transform:uppercase; }
-
-    .dash-card--wide { grid-column: 1 / -1; }
-
-    .session-list { display:flex; flex-direction:column; gap:.6rem; }
-    .session-item { display:flex; align-items:center; gap:1rem; padding:.7rem; background:var(--dark); border:1px solid var(--border); }
-    .session-item__bar { width:3px; height:40px; flex-shrink:0; border-radius:2px; }
-    .session-item__time { font-family:var(--fd); font-size:1.1rem; letter-spacing:.06em; white-space:nowrap; }
-    .session-item__info { flex:1; min-width:0; }
-    .session-item__name { font-family:var(--fd); font-size:.95rem; letter-spacing:.08em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .session-item__meta { font-family:var(--fu); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--subtle); margin-top:2px; }
-    .session-item__action a { font-family:var(--fu); font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); white-space:nowrap; }
-
-    .stat-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:1px; background:var(--border); }
-    .stat-card { background:var(--steel); padding:1.4rem; text-align:center; }
-    .stat-card__n { font-family:var(--fd); font-size:2.8rem; color:var(--accent); line-height:1; }
-    .stat-card__l { font-family:var(--fu); font-size:.65rem; letter-spacing:.14em; text-transform:uppercase; color:var(--subtle); margin-top:.3rem; }
-
-    .user-list { display:flex; flex-direction:column; gap:.5rem; }
-    .user-row { display:flex; align-items:center; gap:1rem; padding:.6rem; background:var(--dark); border:1px solid var(--border); }
-    .user-row__avatar { width:34px; height:34px; border-radius:50%; background:var(--muted); display:flex; align-items:center; justify-content:center; font-family:var(--fd); font-size:.9rem; color:var(--text); flex-shrink:0; overflow:hidden; }
-    .user-row__avatar img { width:100%; height:100%; object-fit:cover; }
-    .user-row__name { flex:1; font-family:var(--fu); font-size:.82rem; letter-spacing:.06em; }
-    .user-row__badge { font-family:var(--fu); font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; padding:2px 7px; border:1px solid; }
-    .user-row__badge--member  { color:var(--subtle); border-color:var(--border); }
-    .user-row__badge--trainer { color:#c0a030; border-color:rgba(192,160,48,.4); }
-    .user-row__badge--admin   { color:#e84040; border-color:rgba(232,64,64,.4); }
-
-    .quick-links { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:.6rem; }
-    .quick-link { display:flex; flex-direction:column; align-items:center; gap:.5rem; padding:1.1rem .8rem;
-                  border:1px solid var(--border); background:var(--dark); text-decoration:none; color:var(--text);
-                  transition:border-color var(--t), background var(--t); text-align:center; }
-    .quick-link:hover { border-color:var(--accent); background:rgba(245,104,26,.05); color:var(--text); }
-    .quick-link svg { width:22px; height:22px; color:var(--accent); }
-    .quick-link span { font-family:var(--fu); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; }
-
-  </style>
 </head>
 <body>
 

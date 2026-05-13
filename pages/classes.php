@@ -137,37 +137,7 @@ function filter_url(array $overrides): string {
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/classes.css">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    .flash { padding:.75rem 1.2rem; font-family:var(--fu); font-size:.82rem; letter-spacing:.06em; border-left:3px solid;
-             max-width:1100px; margin:0 auto 0; }
-    .flash--success { background:rgba(66,168,130,.12); border-color:#42a882; color:#42a882; }
-    .flash--error   { background:rgba(232,64,64,.12);  border-color:#e84040; color:#e84040; }
 
-    /* Review modal */
-    .modal-backdrop { position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem; }
-    .modal { background:var(--steel);border:1px solid var(--border);width:100%;max-width:480px;position:relative; }
-    .modal::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent); }
-    .modal__header { padding:1.4rem 1.6rem 1rem; border-bottom:1px solid var(--border); }
-    .modal__title { font-family:var(--fd);font-size:1.4rem;letter-spacing:.1em; }
-    .modal__sub { font-family:var(--fu);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle);margin-top:3px; }
-    .modal__body { padding:1.4rem 1.6rem; }
-    .modal__close { position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--subtle);cursor:pointer;font-size:1.2rem;line-height:1; }
-    .star-picker { display:flex;gap:.4rem;margin-bottom:1rem; }
-    .star-picker input { display:none; }
-    .star-picker label { cursor:pointer;font-size:1.8rem;color:var(--border);transition:color var(--t); }
-    .star-picker input:checked ~ label,
-    .star-picker label:hover,
-    .star-picker label:hover ~ label { color:var(--accent); }
-    .star-picker { flex-direction:row-reverse;justify-content:flex-end; }
-    .star-picker label:hover,
-    .star-picker label:hover ~ label { color:var(--accent2); }
-
-    /* Trainer select filter chip */
-    .trainer-select { background:var(--dark);border:1px solid var(--border);color:var(--subtle);
-                      font-family:var(--fu);font-size:.7rem;letter-spacing:.12em;padding:.3rem .75rem;cursor:pointer;
-                      transition:border-color var(--t);outline:none; }
-    .trainer-select:focus { border-color:var(--accent); }
-  </style>
 </head>
 <body>
 
