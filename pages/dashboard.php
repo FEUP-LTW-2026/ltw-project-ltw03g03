@@ -17,14 +17,14 @@ $admin_stats       = [];
 if ($role === 'member') {
     // Next 5 enrolled sessions
     $stmt = $db->prepare(
-        'SELECT cs.id, cs.scheduled_at, c.name, c.type, c.duration_min,
+        "SELECT cs.id, cs.scheduled_at, c.name, c.type, c.duration_min,
                 u.first_name, u.last_name, e.status
          FROM enrollments e
          JOIN class_sessions cs ON cs.id = e.session_id
          JOIN classes c ON c.id = cs.class_id
          LEFT JOIN users u ON u.id = c.trainer_id
-         WHERE e.member_id = ? AND e.status = "enrolled" AND cs.scheduled_at >= NOW()
-         ORDER BY cs.scheduled_at ASC LIMIT 5'
+         WHERE e.member_id = ? AND e.status = 'enrolled' AND cs.scheduled_at >= datetime('now')
+         ORDER BY cs.scheduled_at ASC LIMIT 5"
     );
     $stmt->execute([$user['id']]);
     $upcoming_sessions = $stmt->fetchAll();
@@ -48,26 +48,26 @@ if ($role === 'member') {
 if ($role === 'trainer') {
     // Classes assigned to this trainer
     $stmt = $db->prepare(
-        'SELECT c.id, c.name, c.type, c.level, c.duration_min, c.capacity,
+        "SELECT c.id, c.name, c.type, c.level, c.duration_min, c.capacity,
                 COUNT(e.id) as enrolled
          FROM classes c
-         LEFT JOIN class_sessions cs ON cs.class_id = c.id AND cs.scheduled_at >= NOW()
-         LEFT JOIN enrollments e ON e.session_id = cs.id AND e.status = "enrolled"
+         LEFT JOIN class_sessions cs ON cs.class_id = c.id AND cs.scheduled_at >= datetime('now')
+         LEFT JOIN enrollments e ON e.session_id = cs.id AND e.status = 'enrolled'
          WHERE c.trainer_id = ? AND c.is_active = 1
-         GROUP BY c.id ORDER BY c.name'
+         GROUP BY c.id ORDER BY c.name"
     );
     $stmt->execute([$user['id']]);
     $trainer_classes = $stmt->fetchAll();
 
     // Upcoming sessions for trainer
     $stmt = $db->prepare(
-        'SELECT cs.id, cs.scheduled_at, c.name, c.type,
+        "SELECT cs.id, cs.scheduled_at, c.name, c.type,
                 COUNT(e.id) as enrolled, c.capacity
          FROM class_sessions cs
          JOIN classes c ON c.id = cs.class_id
-         LEFT JOIN enrollments e ON e.session_id = cs.id AND e.status = "enrolled"
-         WHERE c.trainer_id = ? AND cs.scheduled_at >= NOW() AND cs.status = "scheduled"
-         GROUP BY cs.id ORDER BY cs.scheduled_at ASC LIMIT 8'
+         LEFT JOIN enrollments e ON e.session_id = cs.id AND e.status = 'enrolled'
+         WHERE c.trainer_id = ? AND cs.scheduled_at >= datetime('now') AND cs.status = 'scheduled'
+         GROUP BY cs.id ORDER BY cs.scheduled_at ASC LIMIT 8"
     );
     $stmt->execute([$user['id']]);
     $upcoming_sessions = $stmt->fetchAll();

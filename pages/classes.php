@@ -23,7 +23,7 @@ $trainers = $db->query(
 
 // ── Build session query with filters ─────────────────────────
 // Show sessions from today onwards, grouped by date
-$where  = ['cs.scheduled_at >= NOW()', 'cs.status = "scheduled"', 'c.is_active = 1'];
+$where  = ['cs.scheduled_at >= datetime(\'now\')', 'cs.status = "scheduled"', 'c.is_active = 1'];
 $params = [];
 
 if ($filter_type !== 'all') {
@@ -39,9 +39,9 @@ if ($filter_trainer > 0) {
     $params[] = $filter_trainer;
 }
 if ($filter_day !== 'all') {
-    $day_map = ['mon'=>2,'tue'=>3,'wed'=>4,'thu'=>5,'fri'=>6,'sat'=>7,'sun'=>1];
+    $day_map = ['sun'=>'0','mon'=>'1','tue'=>'2','wed'=>'3','thu'=>'4','fri'=>'5','sat'=>'6'];
     if (isset($day_map[$filter_day])) {
-        $where[]  = 'DAYOFWEEK(cs.scheduled_at) = ?';
+        $where[]  = "strftime('%w', cs.scheduled_at) = ?";
         $params[] = $day_map[$filter_day];
     }
 }

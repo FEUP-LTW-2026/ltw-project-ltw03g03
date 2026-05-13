@@ -69,6 +69,8 @@ $flash = get_flash();
 
       <div class="panel panel--active" id="panel-register" role="tabpanel">
         <form class="form" method="post" action="../actions/do_register.php" novalidate>
+          <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+
 
           <!-- Role selector -->
           <fieldset class="role-selector">

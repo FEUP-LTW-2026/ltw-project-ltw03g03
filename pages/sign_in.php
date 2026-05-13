@@ -70,6 +70,8 @@ $flash = get_flash();
 
       <div class="panel panel--active" id="panel-login" role="tabpanel">
         <form class="form" method="post" action="../actions/do_login.php" novalidate>
+          <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+
 
           <div class="field">
             <label class="field__label" for="login-email">Email / Username</label>
