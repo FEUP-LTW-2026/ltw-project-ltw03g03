@@ -264,6 +264,8 @@ if ($role === 'member') {
         <div class="profile-section__body">
           <form class="form" method="post" action="../actions/update_profile.php" enctype="multipart/form-data" novalidate>
 
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+
             <!-- Hidden photo input triggered by avatar button -->
             <input type="file" id="photo-input" name="photo" accept="image/jpeg,image/png,image/webp,image/gif"
                    onchange="this.form.submit()">

@@ -7,6 +7,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    http_response_code(403);
+    exit('Invalid CSRF token');
+}
+
 $db = get_db();
 
 $first_name = trim($_POST['firstname'] ?? '');
@@ -89,5 +94,6 @@ $stmt->execute([$user_id]);
 $_SESSION['user'] = $stmt->fetch();
 
 set_flash('success', 'Welcome to W8, ' . htmlspecialchars($first_name) . '!');
+$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 header('Location: ../pages/dashboard.php');
 exit;

@@ -12,6 +12,47 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(16));
+}
+
+// ── Remember-me auto-login ─────────────────────────────────────
+// If no active session but a remember_token cookie is present,
+// attempt to restore the session from the stored token.
+if (!isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
+    $cookieValue = $_COOKIE['remember_token'];
+    $tokenHash   = hash('sha256', $cookieValue);
+
+    require_once __DIR__ . '/db.php';
+    $db = get_db();
+
+    $stmt = $db->prepare(
+        "SELECT rt.user_id, rt.expires_at,
+                u.id, u.username, u.email, u.first_name, u.last_name,
+                u.photo_path, u.role, u.is_active
+         FROM remember_tokens rt
+         JOIN users u ON u.id = rt.user_id
+         WHERE rt.token_hash = ?
+           AND rt.expires_at > datetime('now')
+         LIMIT 1"
+    );
+    $stmt->execute([$tokenHash]);
+    $row = $stmt->fetch();
+
+    if ($row && $row['is_active']) {
+        $_SESSION['user'] = [
+            'id'         => $row['id'],
+            'username'   => $row['username'],
+            'email'      => $row['email'],
+            'first_name' => $row['first_name'],
+            'last_name'  => $row['last_name'],
+            'photo_path' => $row['photo_path'],
+            'role'       => $row['role'],
+        ];
+        session_regenerate_id(true);
+    }
+}
+
 // ── Auth helpers ───────────────────────────────────────────────
 
 /**

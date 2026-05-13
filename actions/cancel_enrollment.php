@@ -5,7 +5,17 @@ require_once __DIR__ . '/../config/session.php';
 $user = require_login();
 $db   = get_db();
 
-$session_id = (int)($_GET['session_id'] ?? 0);
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../pages/classes.php');
+    exit;
+}
+
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    http_response_code(403);
+    exit('Invalid CSRF token');
+}
+
+$session_id = (int)($_POST['session_id'] ?? 0);
 if (!$session_id) {
     header('Location: ../pages/classes.php');
     exit;
@@ -64,5 +74,6 @@ if ($was_enrolled) {
 }
 
 set_flash('success', 'Your enrollment in "' . $enrollment['name'] . '" has been cancelled.');
+$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 header('Location: ../pages/classes.php');
 exit;

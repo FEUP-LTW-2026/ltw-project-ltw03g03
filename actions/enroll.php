@@ -5,13 +5,23 @@ require_once __DIR__ . '/../config/session.php';
 $user = require_login();
 $db   = get_db();
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../pages/classes.php');
+    exit;
+}
+
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    http_response_code(403);
+    exit('Invalid CSRF token');
+}
+
 if ($user['role'] !== 'member') {
     set_flash('error', 'Only members can enroll in classes.');
     header('Location: ../pages/classes.php');
     exit;
 }
 
-$session_id = (int)($_GET['session_id'] ?? 0);
+$session_id = (int)($_POST['session_id'] ?? 0);
 if (!$session_id) {
     header('Location: ../pages/classes.php');
     exit;
@@ -21,7 +31,7 @@ if (!$session_id) {
 $stmt = $db->prepare(
     'SELECT cs.id, cs.scheduled_at, c.capacity, c.name
      FROM class_sessions cs JOIN classes c ON c.id = cs.class_id
-     WHERE cs.id = ? AND cs.scheduled_at >= NOW() AND cs.status = "scheduled"'
+     WHERE cs.id = ? AND cs.scheduled_at >= datetime(\'now\') AND cs.status = "scheduled"'
 );
 $stmt->execute([$session_id]);
 $session = $stmt->fetch();
@@ -65,5 +75,6 @@ if ($status === 'waitlist') {
     set_flash('success', 'You are enrolled in "' . $session['name'] . '" on ' . date('D d M, H:i', strtotime($session['scheduled_at'])) . '!');
 }
 
+$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 header('Location: ../pages/classes.php');
 exit;

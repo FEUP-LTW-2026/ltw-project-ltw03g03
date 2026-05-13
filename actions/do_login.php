@@ -7,11 +7,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    http_response_code(403);
+    exit('Invalid CSRF token');
+}
+
 $db = get_db();
 
 $identifier = trim($_POST['email']    ?? '');   // email or username
 $password   = $_POST['password']      ?? '';
-$remember   = !empty($_POST['remember']);
+// Support both 'remember_me' (spec field name) and 'remember' (form field name)
+$remember   = !empty($_POST['remember_me']) || !empty($_POST['remember']);
 
 if (!$identifier || !$password) {
     set_flash('error', 'Please enter your email and password.');
@@ -48,12 +54,12 @@ session_regenerate_id(true);
 if ($remember) {
     $token      = bin2hex(random_bytes(32));
     $token_hash = hash('sha256', $token);
-    $expires    = date('Y-m-d H:i:s', strtotime('+30 days'));
     $db->prepare(
-        'INSERT INTO remember_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)'
-    )->execute([$user['id'], $token_hash, $expires]);
+        "INSERT INTO remember_tokens (user_id, token_hash, expires_at)
+         VALUES (?, ?, datetime('now', '+30 days'))"
+    )->execute([$user['id'], $token_hash]);
     setcookie('remember_token', $token, [
-        'expires'  => strtotime('+30 days'),
+        'expires'  => time() + (30 * 24 * 60 * 60),
         'path'     => '/',
         'httponly' => true,
         'samesite' => 'Lax',
@@ -61,5 +67,6 @@ if ($remember) {
 }
 
 set_flash('success', 'Welcome back, ' . htmlspecialchars($user['first_name']) . '!');
+$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 header('Location: ../pages/dashboard.php');
 exit;
