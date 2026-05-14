@@ -1,72 +1,16 @@
 <?php
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/session.php';
+declare(strict_types=1);
 
-$user = require_login();
-$db   = get_db();
+session_start();
 
-require_post('../pages/classes.php');
+if (!isset($_SESSION['id'])) die(header('Location: ../pages/sign_in.php'));
 
-$session_id = (int)($_POST['session_id'] ?? 0);
-if (!$session_id) {
-    header('Location: ../pages/classes.php');
-    exit;
-}
+require_once('../database/connection.db.php');
+require_once('../database/enrollment.class.php');
 
-// Find the enrollment
-$stmt = $db->prepare(
-    'SELECT e.id, e.status, c.name, c.capacity, cs.scheduled_at
-     FROM enrollments e
-     JOIN class_sessions cs ON cs.id = e.session_id
-     JOIN classes c ON c.id = cs.class_id
-     WHERE e.session_id = ? AND e.member_id = ?'
-);
-$stmt->execute([$session_id, $user['id']]);
-$enrollment = $stmt->fetch();
+$db         = getDatabaseConnection();
+$session_id = (int)$_GET['session_id'];
 
-if (!$enrollment) {
-    set_flash('error', 'Enrollment not found.');
-    header('Location: ../pages/classes.php');
-    exit;
-}
+Enrollment::cancel($db, $_SESSION['id'], $session_id);
 
-// Can only cancel future classes
-if (strtotime($enrollment['scheduled_at']) <= time()) {
-    set_flash('error', 'You cannot cancel a class that has already started.');
-    header('Location: ../pages/classes.php');
-    exit;
-}
-
-$was_enrolled = $enrollment['status'] === 'enrolled';
-
-// Cancel the enrollment
-$db->prepare("UPDATE enrollments SET status = 'cancelled' WHERE id = ?")->execute([$enrollment['id']]);
-
-// If this freed a spot, promote the first person on the waitlist
-if ($was_enrolled) {
-    $stmt = $db->prepare(
-        "SELECT id, member_id, waitlist_position FROM enrollments
-         WHERE session_id = ? AND status = 'waitlist'
-         ORDER BY waitlist_position ASC LIMIT 1"
-    );
-    $stmt->execute([$session_id]);
-    $next = $stmt->fetch();
-
-    if ($next) {
-        $db->prepare("UPDATE enrollments SET status = 'enrolled', waitlist_position = NULL WHERE id = ?")->execute([$next['id']]);
-        
-        $db->prepare("UPDATE enrollments SET waitlist_position = waitlist_position - 1 WHERE session_id = ? AND status = 'waitlist' AND waitlist_position > ?")->execute([$session_id, $next['waitlist_position']]);
-
-        // Notify the promoted member
-        $db->prepare(
-            "INSERT INTO notifications (user_id, type, message) VALUES (?, 'waitlist_update', ?)"
-        )->execute([
-            $next['member_id'],
-            'A spot opened up! You have been enrolled in "' . htmlspecialchars($enrollment['name']) . '" on ' . date('D d M, H:i', strtotime($enrollment['scheduled_at'])) . '.'
-        ]);
-    }
-}
-
-set_flash('success', 'Your enrollment in "' . $enrollment['name'] . '" has been cancelled.');
-header('Location: ../pages/classes.php');
-exit;
+header('Location: ' . $_SERVER['HTTP_REFERER']);
