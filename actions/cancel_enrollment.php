@@ -5,15 +5,7 @@ require_once __DIR__ . '/../config/session.php';
 $user = require_login();
 $db   = get_db();
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/classes.php');
-    exit;
-}
-
-if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-    http_response_code(403);
-    exit('Invalid CSRF token');
-}
+require_post('../pages/classes.php');
 
 $session_id = (int)($_POST['session_id'] ?? 0);
 if (!$session_id) {
@@ -53,27 +45,28 @@ $db->prepare("UPDATE enrollments SET status = 'cancelled' WHERE id = ?")->execut
 // If this freed a spot, promote the first person on the waitlist
 if ($was_enrolled) {
     $stmt = $db->prepare(
-        "SELECT id, member_id FROM enrollments
+        "SELECT id, member_id, waitlist_position FROM enrollments
          WHERE session_id = ? AND status = 'waitlist'
-         ORDER BY enrolled_at ASC LIMIT 1"
+         ORDER BY waitlist_position ASC LIMIT 1"
     );
     $stmt->execute([$session_id]);
     $next = $stmt->fetch();
 
     if ($next) {
-        $db->prepare("UPDATE enrollments SET status = 'enrolled' WHERE id = ?")->execute([$next['id']]);
+        $db->prepare("UPDATE enrollments SET status = 'enrolled', waitlist_position = NULL WHERE id = ?")->execute([$next['id']]);
+        
+        $db->prepare("UPDATE enrollments SET waitlist_position = waitlist_position - 1 WHERE session_id = ? AND status = 'waitlist' AND waitlist_position > ?")->execute([$session_id, $next['waitlist_position']]);
 
         // Notify the promoted member
         $db->prepare(
             "INSERT INTO notifications (user_id, type, message) VALUES (?, 'waitlist_update', ?)"
         )->execute([
             $next['member_id'],
-            'A spot opened up! You have been enrolled in "' . $enrollment['name'] . '" on ' . date('D d M, H:i', strtotime($enrollment['scheduled_at'])) . '.'
+            'A spot opened up! You have been enrolled in "' . htmlspecialchars($enrollment['name']) . '" on ' . date('D d M, H:i', strtotime($enrollment['scheduled_at'])) . '.'
         ]);
     }
 }
 
 set_flash('success', 'Your enrollment in "' . $enrollment['name'] . '" has been cancelled.');
-$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 header('Location: ../pages/classes.php');
 exit;

@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
         'lifetime' => 0,
         'path'     => '/',
-        'secure'   => false,        // set true when using HTTPS
+        'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
@@ -50,6 +50,21 @@ if (!isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
             'role'       => $row['role'],
         ];
         session_regenerate_id(true);
+        
+        // Rotate remember-me token
+        $db->prepare('DELETE FROM remember_tokens WHERE token_hash = ?')->execute([$tokenHash]);
+        $newToken = bin2hex(random_bytes(32));
+        $newTokenHash = hash('sha256', $newToken);
+        $db->prepare(
+            "INSERT INTO remember_tokens (user_id, token_hash, expires_at)
+             VALUES (?, ?, datetime('now', '+30 days'))"
+        )->execute([$row['id'], $newTokenHash]);
+        setcookie('remember_token', $newToken, [
+            'expires'  => time() + (30 * 24 * 60 * 60),
+            'path'     => '/',
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
     }
 }
 
@@ -135,4 +150,25 @@ function get_flash(): ?array {
     $flash = $_SESSION['flash'] ?? null;
     unset($_SESSION['flash']);
     return $flash;
+}
+
+/**
+ * Validate the CSRF token from a POST request.
+ */
+function validate_csrf(): void {
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+        http_response_code(403);
+        exit('Invalid CSRF token');
+    }
+}
+
+/**
+ * Ensure the request is a POST and has a valid CSRF token.
+ */
+function require_post(string $redirect = '../pages/index.php'): void {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: ' . $redirect);
+        exit;
+    }
+    validate_csrf();
 }

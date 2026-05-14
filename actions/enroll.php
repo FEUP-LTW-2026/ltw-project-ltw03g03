@@ -5,15 +5,7 @@ require_once __DIR__ . '/../config/session.php';
 $user = require_login();
 $db   = get_db();
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/classes.php');
-    exit;
-}
-
-if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-    http_response_code(403);
-    exit('Invalid CSRF token');
-}
+require_post('../pages/classes.php');
 
 if ($user['role'] !== 'member') {
     set_flash('error', 'Only members can enroll in classes.');
@@ -56,6 +48,8 @@ if ($existing) {
     exit;
 }
 
+$db->beginTransaction();
+
 // Count current enrollments
 $stmt = $db->prepare("SELECT COUNT(*) FROM enrollments WHERE session_id = ? AND status = 'enrolled'");
 $stmt->execute([$session_id]);
@@ -64,10 +58,19 @@ $enrolled_count = (int)$stmt->fetchColumn();
 $is_full = $enrolled_count >= (int)$session['capacity'];
 $status  = $is_full ? 'waitlist' : 'enrolled';
 
+$waitlist_pos = null;
+if ($status === 'waitlist') {
+    $stmt = $db->prepare("SELECT MAX(waitlist_position) FROM enrollments WHERE session_id = ? AND status = 'waitlist'");
+    $stmt->execute([$session_id]);
+    $waitlist_pos = (int)$stmt->fetchColumn() + 1;
+}
+
 // Insert enrollment
 $db->prepare(
-    'INSERT INTO enrollments (session_id, member_id, status) VALUES (?, ?, ?)'
-)->execute([$session_id, $user['id'], $status]);
+    'INSERT INTO enrollments (session_id, member_id, status, waitlist_position) VALUES (?, ?, ?, ?)'
+)->execute([$session_id, $user['id'], $status, $waitlist_pos]);
+
+$db->commit();
 
 if ($status === 'waitlist') {
     set_flash('success', 'Class is full — you have been added to the waitlist for "' . $session['name'] . '".');
@@ -75,6 +78,6 @@ if ($status === 'waitlist') {
     set_flash('success', 'You are enrolled in "' . $session['name'] . '" on ' . date('D d M, H:i', strtotime($session['scheduled_at'])) . '!');
 }
 
-$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 header('Location: ../pages/classes.php');
+
 exit;

@@ -10,10 +10,7 @@ if ($user['role'] !== 'member' || $_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-    http_response_code(403);
-    exit('Invalid CSRF token');
-}
+require_post('../pages/classes.php');
 
 $session_id = (int)($_POST['session_id'] ?? 0);
 $rating     = (int)($_POST['rating']     ?? 0);
@@ -37,12 +34,15 @@ if (!$stmt->fetch()) {
 }
 
 // Insert or update review
+$stmt = $db->prepare("SELECT id FROM class_reviews WHERE session_id = ? AND member_id = ?");
+$stmt->execute([$session_id, $user['id']]);
+$is_update = (bool)$stmt->fetch();
+
 $db->prepare(
     'INSERT OR REPLACE INTO class_reviews (session_id, member_id, rating, comment)
      VALUES (?, ?, ?, ?)'
 )->execute([$session_id, $user['id'], $rating, $comment ?: null]);
 
-set_flash('success', 'Your review has been submitted. Thank you!');
-$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
+set_flash('success', $is_update ? 'Your review has been updated.' : 'Your review has been submitted. Thank you!');
 header('Location: ../pages/profile.php');
 exit;

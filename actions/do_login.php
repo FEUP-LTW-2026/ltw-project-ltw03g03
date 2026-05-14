@@ -2,15 +2,7 @@
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/session.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/sign_in.php');
-    exit;
-}
-
-if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-    http_response_code(403);
-    exit('Invalid CSRF token');
-}
+require_post('../pages/sign_in.php');
 
 $db = get_db();
 
@@ -33,7 +25,15 @@ $stmt = $db->prepare(
 $stmt->execute([$identifier, $identifier]);
 $user = $stmt->fetch();
 
-if (!$user || !password_verify($password, $user['password_hash'])) {
+if (!$user) {
+    // Dummy verify to mitigate timing attacks for username enumeration
+    password_verify('', '$2y$10$dummy......................');
+    set_flash('error', 'Invalid credentials. Please try again.');
+    header('Location: ../pages/sign_in.php');
+    exit;
+}
+
+if (!password_verify($password, $user['password_hash'])) {
     set_flash('error', 'Invalid credentials. Please try again.');
     header('Location: ../pages/sign_in.php');
     exit;
@@ -47,8 +47,8 @@ if (!$user['is_active']) {
 
 // ── Start session ──────────────────────────────────────────────
 unset($user['password_hash'], $user['is_active']);
-$_SESSION['user'] = $user;
 session_regenerate_id(true);
+$_SESSION['user'] = $user;
 
 // ── Remember-me cookie ─────────────────────────────────────────
 if ($remember) {
@@ -67,6 +67,5 @@ if ($remember) {
 }
 
 set_flash('success', 'Welcome back, ' . htmlspecialchars($user['first_name']) . '!');
-$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 header('Location: ../pages/dashboard.php');
 exit;

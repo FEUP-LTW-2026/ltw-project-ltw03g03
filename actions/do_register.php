@@ -2,15 +2,7 @@
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/session.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/register.php');
-    exit;
-}
-
-if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-    http_response_code(403);
-    exit('Invalid CSRF token');
-}
+require_post('../pages/register.php');
 
 $db = get_db();
 
@@ -19,6 +11,10 @@ $last_name  = trim($_POST['lastname']  ?? '');
 $dob        = trim($_POST['dob']       ?? '');
 $phone      = trim($_POST['phone']     ?? '');
 $username   = strtolower(trim($_POST['username'] ?? ''));
+if (!$username && $first_name && $last_name) {
+    // Auto-generate username from first+last name if missing
+    $username = strtolower(preg_replace('/[^a-z0-9]/i', '', $first_name . $last_name) . rand(100, 999));
+}
 $email      = strtolower(trim($_POST['email']    ?? ''));
 $password   = $_POST['password']         ?? '';
 $confirm    = $_POST['password_confirm'] ?? '';
@@ -33,6 +29,15 @@ if (!$last_name)  $errors[] = 'Last name is required.';
 if (!$username)   $errors[] = 'Username is required.';
 if ($username && !preg_match('/^[a-z0-9_]{3,30}$/', $username))
     $errors[] = 'Username must be 3–30 characters (lowercase letters, numbers, underscores).';
+if ($dob) {
+    $d = DateTime::createFromFormat('Y-m-d', $dob);
+    if (!$d || $d->format('Y-m-d') !== $dob) {
+        $errors[] = 'Invalid date of birth format.';
+    }
+}
+if ($phone && !preg_match('/^[0-9+\-\s()]{7,20}$/', $phone)) {
+    $errors[] = 'Invalid phone number format.';
+}
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'A valid email is required.';
 if (strlen($password) < 8) $errors[] = 'Password must be at least 8 characters.';
 if ($password !== $confirm) $errors[] = 'Passwords do not match.';
@@ -94,6 +99,5 @@ $stmt->execute([$user_id]);
 $_SESSION['user'] = $stmt->fetch();
 
 set_flash('success', 'Welcome to W8, ' . htmlspecialchars($first_name) . '!');
-$_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 header('Location: ../pages/dashboard.php');
 exit;
