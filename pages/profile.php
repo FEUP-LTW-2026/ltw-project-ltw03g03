@@ -113,7 +113,7 @@ if ($role === 'member') {
       <?php endif; ?>
       <a href="profile.php" class="nav-link--active">Profile</a>
     </div>
-    <a href="../actions/logout.php" class="nav-cta">Sign Out</a>
+    <a href="../actions/do_logout.php" class="nav-cta">Sign Out</a>
   </nav>
 
   <div class="page-wrap">
@@ -274,11 +274,19 @@ if ($role === 'member') {
                   <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   <select class="field__input field__input--select" id="specialty" name="specialty">
                     <?php
-                    $specialties = ['Strength & Conditioning','Cardio & Endurance','Yoga & Flexibility','CrossFit','Pilates','Martial Arts','Nutrition & Wellness'];
-                    foreach ($specialties as $s):
-                      $sel = ($trainer_profile['specialty'] ?? '') === $s ? 'selected' : '';
+                    $specialties = [
+                      'strength'     => 'Strength & Conditioning',
+                      'cardio'       => 'Cardio & Endurance',
+                      'yoga'         => 'Yoga & Flexibility',
+                      'crossfit'     => 'CrossFit',
+                      'pilates'      => 'Pilates',
+                      'martial_arts' => 'Martial Arts',
+                      'nutrition'    => 'Nutrition & Wellness',
+                    ];
+                    foreach ($specialties as $val => $label):
+                      $sel = ($trainer_profile['specialty'] ?? '') === $val ? 'selected' : '';
                     ?>
-                    <option value="<?= htmlspecialchars($s) ?>" <?= $sel ?>><?= htmlspecialchars($s) ?></option>
+                    <option value="<?= $val ?>" <?= $sel ?>><?= htmlspecialchars($label) ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>

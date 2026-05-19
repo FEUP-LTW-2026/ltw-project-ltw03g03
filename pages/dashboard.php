@@ -83,7 +83,7 @@ if ($role === 'admin') {
     $admin_stats['total_trainers'] = $db->query('SELECT COUNT(*) FROM users WHERE role="trainer" AND is_active=1')->fetchColumn();
     $admin_stats['total_classes']  = $db->query('SELECT COUNT(*) FROM classes WHERE is_active=1')->fetchColumn();
     $admin_stats['open_disputes']  = $db->query('SELECT COUNT(*) FROM disputes WHERE status="open"')->fetchColumn();
-    $admin_stats['total_equipment']= $db->query('SELECT COUNT(*) FROM equipment WHERE status != "retired"')->fetchColumn();
+    $admin_stats['total_equipment'] = $db->query('SELECT COUNT(*) FROM equipment')->fetchColumn();
 
     // Recent registrations
     $recent_users = $db->query(
@@ -149,7 +149,7 @@ $type_colors = [
       <?php endif; ?>
       <a href="profile.php">Profile</a>
     </div>
-    <a href="../actions/logout.php" class="nav-cta">Sign Out</a>
+    <a href="../actions/do_logout.php" class="nav-cta">Sign Out</a>
   </nav>
 
   <?php if ($flash): ?>
@@ -225,7 +225,7 @@ $type_colors = [
               <div class="session-item__meta"><?= $s['duration_min'] ?> min · <?= htmlspecialchars($s['first_name'] . ' ' . $s['last_name']) ?></div>
             </div>
             <div class="session-item__action">
-              <a href="cancel_enrollment.php?session_id=<?= $s['id'] ?>" onclick="return confirm('Cancel this class?')">Cancel</a>
+              <a href="../actions/cancel_enrollment.php?session_id=<?= $s['id'] ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" onclick="return confirm('Cancel this class?')">Cancel</a>
             </div>
           </div>
           <?php endforeach; ?>
