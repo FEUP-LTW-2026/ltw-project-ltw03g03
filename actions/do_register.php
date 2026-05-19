@@ -7,6 +7,12 @@ require_once('../database/user.class.php');
 
 validate_csrf();
 
+if ($_POST['password'] !== $_POST['password_confirm']) {
+    set_flash('error', 'Passwords do not match.');
+    header('Location: ../pages/register.php');
+    exit;
+}
+
 $db = get_db();
 
 $requested_role = $_POST['role'] ?? 'member';

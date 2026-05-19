@@ -114,6 +114,11 @@ if ($role === 'member') {
       <a href="profile.php" class="nav-link--active">Profile</a>
     </div>
     <a href="../actions/do_logout.php" class="nav-cta">Sign Out</a>
+    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <div class="page-wrap">
@@ -197,7 +202,7 @@ if ($role === 'member') {
     <div class="profile-main">
 
       <?php if ($flash): ?>
-      <div class="flash flash--<?= htmlspecialchars($flash['type']) ?>">
+      <div class="flash flash--<?= htmlspecialchars($flash['type']) ?> flash--page">
         <?= htmlspecialchars($flash['message']) ?>
       </div>
       <?php endif; ?>
@@ -423,6 +428,15 @@ if ($role === 'member') {
       </div>
     </div>
   </footer>
+
+  <script>
+    const toggle = document.getElementById('nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('nav-links--open');
+      toggle.classList.toggle('nav-mobile-btn--open');
+    });
+  </script>          
 
 </body>
 </html>

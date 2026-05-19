@@ -114,13 +114,6 @@ $flash = get_flash();
             </svg>
           </button>
 
-          <div class="role-hint">
-            <span class="role-hint__label">Sign in as:</span>
-            <label class="role-chip"><input type="radio" name="role" value="member" checked> Member</label>
-            <label class="role-chip"><input type="radio" name="role" value="trainer"> Trainer</label>
-            <label class="role-chip"><input type="radio" name="role" value="admin"> Admin</label>
-          </div>
-
         </form>
       </div>
     </div>

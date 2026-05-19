@@ -104,18 +104,6 @@ $flash = get_flash();
                 </span>
               </label>
 
-              <label class="role-option">
-                <input type="radio" name="role" value="admin">
-                <span class="role-option__card">
-                  <svg class="role-option__icon" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 3l8 4v5c0 4-3.333 7.333-8 9-4.667-1.667-8-5-8-9V7l8-4z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                    <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <span class="role-option__label">Admin</span>
-                  <span class="role-option__desc">Manage platform operations</span>
-                </span>
-              </label>
-
             </div>
           </fieldset>
 
@@ -159,14 +147,6 @@ $flash = get_flash();
           <p class="form-section-label">Account</p>
 
           <div class="field">
-            <label class="field__label" for="reg-username">Username</label>
-            <div class="field__wrap">
-              <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M10 2a4 4 0 00-4 4c0 2.21 1.79 4 4 4s4-1.79 4-4-1.79-4-4-4zm0 10c-4 0-7 2-7 4v1h14v-1c0-2-3-4-7-4z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
-              <input class="field__input" type="text" id="reg-username" name="username" placeholder="alexstone42" autocomplete="username" required>
-            </div>
-          </div>
-
-          <div class="field">
             <label class="field__label" for="reg-email">Email</label>
             <div class="field__wrap">
               <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M2.5 5.5A1.5 1.5 0 014 4h12a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0116 16H4a1.5 1.5 0 01-1.5-1.5v-9z" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 6l7.5 5 7.5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -200,13 +180,13 @@ $flash = get_flash();
                 <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <select class="field__input field__input--select" id="reg-specialty" name="specialty">
                   <option value="" disabled selected>Select a specialty</option>
-                  <option value="Strength &amp; Conditioning">Strength &amp; Conditioning</option>
-                  <option value="Cardio &amp; Endurance">Cardio &amp; Endurance</option>
-                  <option value="Yoga &amp; Flexibility">Yoga &amp; Flexibility</option>
-                  <option value="CrossFit">CrossFit</option>
-                  <option value="Pilates">Pilates</option>
-                  <option value="Martial Arts">Martial Arts</option>
-                  <option value="Nutrition &amp; Wellness">Nutrition &amp; Wellness</option>
+                  <option value="strength">Strength &amp; Conditioning</option>
+                  <option value="cardio">Cardio &amp; Endurance</option>
+                  <option value="yoga">Yoga &amp; Flexibility</option>
+                  <option value="crossfit">CrossFit</option>
+                  <option value="pilates">Pilates</option>
+                  <option value="martial_arts">Martial Arts</option>
+                  <option value="nutrition">Nutrition &amp; Wellness</option>
                 </select>
               </div>
             </div>

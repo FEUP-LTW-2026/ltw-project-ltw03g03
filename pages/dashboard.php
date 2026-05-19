@@ -150,10 +150,15 @@ $type_colors = [
       <a href="profile.php">Profile</a>
     </div>
     <a href="../actions/do_logout.php" class="nav-cta">Sign Out</a>
+    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <?php if ($flash): ?>
-  <div class="flash flash--<?= htmlspecialchars($flash['type']) ?> flash--center" style="margin-top:80px;">
+  <div class="flash flash--<?= htmlspecialchars($flash['type']) ?> flash--page">
     <?= htmlspecialchars($flash['message']) ?>
   </div>
   <?php endif; ?>
@@ -387,6 +392,15 @@ $type_colors = [
       </div>
     </div>
   </footer>
+  
+  <script>
+    const toggle = document.getElementById('nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => {
+      navLinks.classList.toggle('nav-links--open');
+      toggle.classList.toggle('nav-mobile-btn--open');
+    });
+  </script>
 
 </body>
 </html>
