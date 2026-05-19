@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-session_start();
+require_once('../config/session.php');
 session_destroy();
 
-header('Location: ' . $_SERVER['HTTP_REFERER']);
+header('Location: ../pages/sign_in.php');

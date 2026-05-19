@@ -1,14 +1,16 @@
 <?php
 declare(strict_types=1);
 
-session_start();
+require_once('../config/session.php');
 
 if (!isset($_SESSION['id'])) die(header('Location: ../pages/sign_in.php'));
 
-require_once('../database/connection.db.php');
+require_once('../config/db.php');
 require_once('../database/user.class.php');
 
-$db   = getDatabaseConnection();
+validate_csrf();
+
+$db   = get_db();
 $user = User::getUser($db, $_SESSION['id']);
 
 if ($user) {
@@ -17,11 +19,12 @@ if ($user) {
     $user->username  = $_POST['username'];
     $user->phone     = $_POST['phone'] ?? null;
 
-    if (!empty($_POST['new_password'])) {
-        $user->password = password_hash($_POST['new_password'], PASSWORD_BCRYPT);
-    }
-
     $user->save($db);
+
+    // Handle password separately using the dedicated method
+    if (!empty($_POST['new_password'])) {
+        $user->savePassword($db, $_POST['new_password']);
+    }
 
     $_SESSION['name'] = $user->name();
 }

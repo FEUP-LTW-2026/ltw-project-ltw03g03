@@ -62,11 +62,10 @@ class Equipment {
     // ── Create a new equipment type ───────────────────────────────
     public static function create(PDO $db, array $data): int {
         $db->prepare(
-            'INSERT INTO equipment (name, category, total_units, notes) VALUES (?, ?, ?, ?)'
+            'INSERT INTO equipment (name, category, notes) VALUES (?, ?, ?)'
         )->execute([
             $data['name'],
             $data['category'] ?? 'other',
-            (int)($data['total_units'] ?? 1),
             $data['notes'] ?? null,
         ]);
         return (int) $db->lastInsertId();

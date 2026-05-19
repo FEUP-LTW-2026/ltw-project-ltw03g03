@@ -16,10 +16,32 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(16));
 }
 
-// ── Remember-me auto-login ─────────────────────────────────────
-// If no active session but a remember_token cookie is present,
-// attempt to restore the session from the stored token.
-if (!isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
+// ── MIGRATION: Convert old session format to new format ─────────
+// This runs on every page load and fixes the session for your existing actions
+if (isset($_SESSION['id']) && !isset($_SESSION['user'])) {
+    // Get user data from DB to populate the full user array
+    require_once __DIR__ . '/db.php';
+    $db = get_db();
+    
+    $stmt = $db->prepare('SELECT id, username, email, first_name, last_name, photo_path, role FROM users WHERE id = ?');
+    $stmt->execute([$_SESSION['id']]);
+    $userData = $stmt->fetch();
+    
+    if ($userData) {
+        $_SESSION['user'] = [
+            'id'         => $userData['id'],
+            'username'   => $userData['username'],
+            'email'      => $userData['email'],
+            'first_name' => $userData['first_name'],
+            'last_name'  => $userData['last_name'],
+            'photo_path' => $userData['photo_path'],
+            'role'       => $userData['role'],
+        ];
+    }
+}
+
+// ── Remember-me auto-login (only if no session exists yet) ──────
+if (!isset($_SESSION['id']) && !isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
     $cookieValue = $_COOKIE['remember_token'];
     $tokenHash   = hash('sha256', $cookieValue);
 
@@ -40,6 +62,11 @@ if (!isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
     $row = $stmt->fetch();
 
     if ($row && $row['is_active']) {
+        // Set BOTH formats for compatibility
+        $_SESSION['id']   = $row['id'];
+        $_SESSION['name'] = $row['first_name'] . ' ' . $row['last_name'];
+        $_SESSION['role'] = $row['role'];
+        
         $_SESSION['user'] = [
             'id'         => $row['id'],
             'username'   => $row['username'],
@@ -49,6 +76,7 @@ if (!isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
             'photo_path' => $row['photo_path'],
             'role'       => $row['role'],
         ];
+        
         session_regenerate_id(true);
         
         // Rotate remember-me token
@@ -75,6 +103,26 @@ if (!isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
  */
 function current_user(): ?array {
     return $_SESSION['user'] ?? null;
+}
+
+/**
+ * Get the user ID from either session format.
+ */
+function current_user_id(): ?int {
+    if (isset($_SESSION['user']['id'])) {
+        return $_SESSION['user']['id'];
+    }
+    return $_SESSION['id'] ?? null;
+}
+
+/**
+ * Get the user role from either session format.
+ */
+function current_user_role(): ?string {
+    if (isset($_SESSION['user']['role'])) {
+        return $_SESSION['user']['role'];
+    }
+    return $_SESSION['role'] ?? null;
 }
 
 /**
@@ -127,15 +175,19 @@ function user_has_role(string $role): bool {
  * Refresh the session user from the DB (call after profile edits).
  */
 function refresh_session_user(): void {
-    $user = current_user();
-    if (!$user) return;
+    $userId = current_user_id();
+    if (!$userId) return;
+    
     require_once __DIR__ . '/db.php';
-    $db  = get_db();
+    $db = get_db();
     $stmt = $db->prepare('SELECT id, username, email, first_name, last_name, photo_path, role FROM users WHERE id = ?');
-    $stmt->execute([$user['id']]);
+    $stmt->execute([$userId]);
     $fresh = $stmt->fetch();
+    
     if ($fresh) {
         $_SESSION['user'] = $fresh;
+        // Also update old format name
+        $_SESSION['name'] = $fresh['first_name'] . ' ' . $fresh['last_name'];
     }
 }
 
@@ -157,6 +209,16 @@ function get_flash(): ?array {
  */
 function validate_csrf(): void {
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+        http_response_code(403);
+        exit('Invalid CSRF token');
+    }
+}
+
+/**
+ * Validate CSRF token from GET request (for your enroll/cancel links).
+ */
+function validate_csrf_get(): void {
+    if (!isset($_GET['csrf_token']) || $_GET['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
         http_response_code(403);
         exit('Invalid CSRF token');
     }

@@ -1,14 +1,16 @@
 <?php
 declare(strict_types=1);
 
-session_start();
+require_once('../config/session.php');
 
 if (!isset($_SESSION['id'])) die(header('Location: ../pages/sign_in.php'));
 
-require_once('../database/connection.db.php');
+require_once('../config/db.php');
 require_once('../database/enrollment.class.php');
 
-$db         = getDatabaseConnection();
+validate_csrf_get();
+
+$db         = get_db();
 $session_id = (int)$_GET['session_id'];
 
 Enrollment::cancel($db, $_SESSION['id'], $session_id);

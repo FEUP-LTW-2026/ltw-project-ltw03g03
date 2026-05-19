@@ -1,14 +1,16 @@
 <?php
 declare(strict_types=1);
 
-session_start();
+require_once('../config/session.php');
 
 if (!isset($_SESSION['id'])) die(header('Location: ../pages/sign_in.php'));
 
-require_once('../database/connection.db.php');
+require_once('../config/db.php');
 require_once('../database/review.class.php');
 
-$db = getDatabaseConnection();
+validate_csrf();
+
+$db = get_db();
 
 Review::create($db, [
     'session_id' => (int)$_POST['session_id'],

@@ -95,7 +95,6 @@ CREATE TABLE IF NOT EXISTS equipment (
   name         TEXT    NOT NULL,
   category     TEXT    NOT NULL DEFAULT 'other'
                        CHECK (category IN ('cardio','weights','machines','other')),
-  total_units  INTEGER NOT NULL DEFAULT 1,
   notes        TEXT    DEFAULT NULL,
   added_at     TEXT    NOT NULL DEFAULT (datetime('now')),
   updated_at   TEXT    NOT NULL DEFAULT (datetime('now'))
@@ -353,17 +352,17 @@ INSERT INTO membership_plans (name, price_monthly, description, features) VALUES
    '["Everything in Pro","Unlimited PT sessions","Custom program","Priority booking","Guest passes"]');
 
 -- Equipment types
-INSERT INTO equipment (name, category, total_units) VALUES
-  ('Treadmill',         'cardio',   8),
-  ('Stationary Bike',   'cardio',   6),
-  ('Rowing Machine',    'cardio',   4),
-  ('Barbell (Olympic)', 'weights', 10),
-  ('Dumbbell Set',      'weights', 20),
-  ('Weight Bench',      'machines', 6),
-  ('Squat Rack',        'machines', 4),
-  ('Leg Press Machine', 'machines', 2),
-  ('Cable Machine',     'machines', 3),
-  ('Pull-up Bar',       'other',    4);
+INSERT INTO equipment (name, category) VALUES
+  ('Treadmill',         'cardio'),
+  ('Stationary Bike',   'cardio'),
+  ('Rowing Machine',    'cardio'),
+  ('Barbell (Olympic)', 'weights'),
+  ('Dumbbell Set',      'weights'),
+  ('Weight Bench',      'machines'),
+  ('Squat Rack',        'machines'),
+  ('Leg Press Machine', 'machines'),
+  ('Cable Machine',     'machines'),
+  ('Pull-up Bar',       'other');
 
 -- Equipment units: generate one row per physical unit per type.
 -- Treadmill x8

@@ -1,18 +1,21 @@
 <?php
 declare(strict_types=1);
 
-session_start();
-
-require_once('../database/connection.db.php');
+require_once('../config/session.php');
+require_once('../config/db.php');
 require_once('../database/user.class.php');
 
-$db   = getDatabaseConnection();
+validate_csrf();
+
+$db   = get_db();
 $user = User::getUserWithPassword($db, $_POST['email'], $_POST['password']);
 
 if ($user) {
     $_SESSION['id']   = $user->id;
     $_SESSION['name'] = $user->name();
     $_SESSION['role'] = $user->role;
+    header('Location: ../pages/dashboard.php');
+} else {
+    set_flash('error', 'Invalid email or password. Please try again.');
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
-
-header('Location: ' . $_SERVER['HTTP_REFERER']);

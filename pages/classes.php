@@ -1,11 +1,20 @@
 <?php
-require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/session.php';
+require_once __DIR__ . '/../config/db.php';
 
 $user  = require_login();
 $db    = get_db();
 $flash = get_flash();
 $role  = $user['role'];
+
+// ── Helper functions for CSRF-protected URLs ───────────────────
+function enroll_url($session_id) {
+    return "../actions/enroll.php?session_id={$session_id}&csrf_token=" . $_SESSION['csrf_token'];
+}
+
+function cancel_url($session_id) {
+    return "../actions/cancel_enrollment.php?session_id={$session_id}&csrf_token=" . $_SESSION['csrf_token'];
+}
 
 // ── Filters from GET ──────────────────────────────────────────
 $filter_type    = $_GET['type']       ?? 'all';
@@ -62,8 +71,8 @@ $sql = '
            u.last_name  as trainer_last,
            u.photo_path as trainer_photo,
            COUNT(CASE WHEN e.status = "enrolled" THEN 1 END) as enrolled_count,
-           MAX(CASE WHEN e.member_id = ' . (int)$user['id'] . ' AND e.status = "enrolled" THEN 1 ELSE 0 END) as i_am_enrolled,
-           MAX(CASE WHEN e.member_id = ' . (int)$user['id'] . ' AND e.status = "waitlist" THEN 1 ELSE 0 END) as i_am_waitlisted
+           MAX(CASE WHEN e.member_id = ? AND e.status = "enrolled" THEN 1 ELSE 0 END) as i_am_enrolled,
+           MAX(CASE WHEN e.member_id = ? AND e.status = "waitlist" THEN 1 ELSE 0 END) as i_am_waitlisted
     FROM class_sessions cs
     JOIN classes c ON c.id = cs.class_id
     LEFT JOIN users u ON u.id = c.trainer_id
@@ -75,7 +84,7 @@ $sql = '
 ';
 
 $stmt = $db->prepare($sql);
-$stmt->execute($params);
+$stmt->execute(array_merge($params, [$user['id'], $user['id']]));
 $sessions = $stmt->fetchAll();
 
 // ── Group sessions by date ────────────────────────────────────
@@ -174,7 +183,7 @@ function filter_url(array $overrides): string {
       <?php endif; ?>
       <a href="profile.php">Profile</a>
     </div>
-    <a href="../actions/logout.php" class="nav-cta">Sign Out</a>
+    <a href="../actions/do_logout.php" class="nav-cta">Sign Out</a>
   </nav>
 
   <!-- Flash -->
@@ -315,28 +324,28 @@ function filter_url(array $overrides): string {
                 <?php endif; ?>
               </div>
 
-              <!-- Enroll button (members only) -->
+              <!-- Enroll button (members only) with CSRF-protected URLs -->
               <?php if ($role === 'member'): ?>
                 <?php if ($s['i_am_enrolled']): ?>
-                  <a href="../actions/cancel_enrollment.php?session_id=<?= $s['session_id'] ?>"
+                  <a href="<?= cancel_url($s['session_id']) ?>"
                      class="sched-card__enroll"
                      style="color:#42a882;border-color:rgba(66,168,130,.3);"
                      onclick="return confirm('Cancel your enrollment in this class?')">
                     ✓ Enrolled — Cancel
                   </a>
                 <?php elseif ($s['i_am_waitlisted']): ?>
-                  <a href="../actions/cancel_enrollment.php?session_id=<?= $s['session_id'] ?>"
+                  <a href="<?= cancel_url($s['session_id']) ?>"
                      class="sched-card__enroll sched-card__enroll--waitlist"
                      onclick="return confirm('Leave the waitlist for this class?')">
                     On Waitlist — Leave
                   </a>
                 <?php elseif ($is_full): ?>
-                  <a href="../actions/enroll.php?session_id=<?= $s['session_id'] ?>"
+                  <a href="<?= enroll_url($s['session_id']) ?>"
                      class="sched-card__enroll sched-card__enroll--waitlist">
                     Join Waitlist
                   </a>
                 <?php else: ?>
-                  <a href="../actions/enroll.php?session_id=<?= $s['session_id'] ?>"
+                  <a href="<?= enroll_url($s['session_id']) ?>"
                      class="sched-card__enroll">
                     Enroll
                   </a>
@@ -368,6 +377,7 @@ function filter_url(array $overrides): string {
       </div>
       <div class="modal__body">
         <form class="form" method="post" action="../actions/submit_review.php">
+          <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
           <input type="hidden" name="session_id" value="<?= $review_session['id'] ?>">
 
           <div class="field">
