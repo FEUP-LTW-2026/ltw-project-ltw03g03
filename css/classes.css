@@ -193,11 +193,6 @@
   width: 3px;
 }
 
-.sched-card__bar--powerlifting { background: var(--accent); }
-.sched-card__bar--hiit         { background: #e84040; }
-.sched-card__bar--crossfit     { background: #c0a030; }
-.sched-card__bar--yoga         { background: #42a882; }
-
 /* ── Time block ──────────────────────────────────────────────── */
 .sched-card__time {
   display: flex;

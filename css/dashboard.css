@@ -232,21 +232,6 @@
   border: 1px solid;
 }
 
-.user-row__badge--member {
-  color: var(--subtle);
-  border-color: var(--border);
-}
-
-.user-row__badge--trainer {
-  color: #c0a030;
-  border-color: rgba(192, 160, 48, .4);
-}
-
-.user-row__badge--admin {
-  color: #e84040;
-  border-color: rgba(232, 64, 64, .4);
-}
-
 .quick-links {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
