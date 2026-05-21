@@ -168,7 +168,6 @@ function filter_url(array $overrides): string {
   <?php endif; ?>
 
   <!-- Page Header -->
-  <div class="page-header">
   <main>
     <header class="page-header">
       <div class="page-header__inner">
