@@ -2,7 +2,7 @@
 // includes/nav.php
 // Expected variables: $role (string), $current_page (string), $base_path (string)
 $current_page = $current_page ?? '';
-$role = $role ?? 'member';
+$role = $role ?? null;
 $base_path = $base_path ?? '../';
 
 $is_active = function($page) use ($current_page) {
@@ -21,8 +21,12 @@ $is_active = function($page) use ($current_page) {
     <span>W8</span>
   </a>
   <div class="nav-links">
-    <a href="<?= $base_path ?>pages/dashboard.php" class="<?= $is_active('dashboard') ?>">Dashboard</a>
-    <a href="<?= $base_path ?>pages/classes.php" class="<?= $is_active('classes') ?>">Classes</a>
+    <?php if ($role): ?>
+      <a href="<?= $base_path ?>pages/dashboard.php" class="<?= $is_active('dashboard') ?>">Dashboard</a>
+    <?php endif; ?>
+    <?php if ($current_page !== 'index'): ?>
+      <a href="<?= $base_path ?>pages/classes.php" class="<?= $is_active('classes') ?>">Classes</a>
+    <?php endif; ?>
     <?php if ($role === 'member'): ?>
       <a href="<?= $base_path ?>pages/equipment.php" class="<?= $is_active('equipment') ?>">Equipment</a>
       <a href="<?= $base_path ?>pages/trainers.php" class="<?= $is_active('trainers') ?>">Trainers</a>
@@ -35,15 +39,37 @@ $is_active = function($page) use ($current_page) {
       <a href="<?= $base_path ?>pages/admin_equipment.php" class="<?= $is_active('admin_equipment') ?>">Equipment</a>
       <a href="<?= $base_path ?>pages/admin_disputes.php" class="<?= $is_active('admin_disputes') ?>">Disputes</a>
     <?php endif; ?>
-    <a href="<?= $base_path ?>pages/profile.php" class="<?= $is_active('profile') ?>">Profile</a>
+    <?php if ($role): ?>
+      <a href="<?= $base_path ?>pages/profile.php" class="<?= $is_active('profile') ?>">Profile</a>
+      <a href="<?= $base_path ?>actions/do_logout.php" class="nav-mobile-auth" style="display:none;">Sign Out</a>
+    <?php else: ?>
+      <a href="<?= $base_path ?>pages/sign_in.php" class="nav-mobile-auth" style="display:none;">Sign In</a>
+      <a href="<?= $base_path ?>pages/register.php" class="nav-mobile-auth" style="display:none;">Register</a>
+    <?php endif; ?>
   </div>
-  <a href="<?= $base_path ?>actions/do_logout.php" class="nav-cta">Sign Out</a>
+  
+  <?php if ($role): ?>
+    <a href="<?= $base_path ?>actions/do_logout.php" class="nav-cta nav-desktop-auth">Sign Out</a>
+  <?php else: ?>
+    <div class="nav-desktop-auth" style="display: flex; gap: 1rem; align-items: center;">
+      <a href="<?= $base_path ?>pages/sign_in.php" style="color: var(--subtle); font-family: var(--fu); font-size: .8rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; text-decoration: none;">Sign In</a>
+      <a href="<?= $base_path ?>pages/register.php" class="nav-cta">Register</a>
+    </div>
+  <?php endif; ?>
+
   <button class="nav-mobile-btn" id="nav-toggle" aria-label="Toggle menu">
     <span></span>
     <span></span>
     <span></span>
   </button>
 </nav>
+
+<style>
+@media (max-width: 768px) {
+  .nav-desktop-auth { display: none !important; }
+  .nav-mobile-auth { display: block !important; }
+}
+</style>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {

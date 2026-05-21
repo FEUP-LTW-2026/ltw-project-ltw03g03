@@ -20,11 +20,6 @@ $user = current_user();
 
 <body>
 
-  <div class="bg-fixed bg-grid"></div>
-  <div class="bg-fixed bg-diagonal"></div>
-  <span class="corner corner--tl"></span>
-  <span class="corner corner--br"></span>
-
   <?php 
     $base_path = '';
     $current_page = 'index';
@@ -390,7 +385,7 @@ $user = current_user();
 
         <div class="footer-cols">
           <div class="footer-col">
-            <h4>Gym</h4>
+            <h3>Gym</h3>
             <a href="#about">About</a>
             <a href="pages/classes.php">Classes</a>
             <a href="pages/trainers.php">Trainers</a>
@@ -398,14 +393,14 @@ $user = current_user();
           </div>
 
           <div class="footer-col">
-            <h4>Info</h4>
+            <h3>Info</h3>
             <a href="#hours">Hours</a>
             <a href="#hours">Location</a>
             <a href="#">FAQ</a>
           </div>
 
           <div class="footer-col">
-            <h4>Account</h4>
+            <h3>Account</h3>
             <?php if ($user): ?>
               <a href="pages/dashboard.php">Dashboard</a>
               <a href="pages/profile.php">Profile</a>
