@@ -222,6 +222,19 @@ CREATE INDEX IF NOT EXISTS idx_pt_trainer   ON pt_bookings (trainer_id);
 CREATE INDEX IF NOT EXISTS idx_pt_member    ON pt_bookings (member_id);
 CREATE INDEX IF NOT EXISTS idx_pt_scheduled ON pt_bookings (scheduled_at);
 
+-- ── PT Availability ──────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS pt_availability (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  trainer_id    INTEGER NOT NULL,
+  start_time    TEXT    NOT NULL,   -- ISO-8601: YYYY-MM-DD HH:MM:SS
+  end_time      TEXT    NOT NULL,   -- ISO-8601: YYYY-MM-DD HH:MM:SS
+  is_booked     INTEGER NOT NULL DEFAULT 0,
+  FOREIGN KEY (trainer_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_pt_avail_trainer ON pt_availability (trainer_id);
+CREATE INDEX IF NOT EXISTS idx_pt_avail_start   ON pt_availability (start_time);
+
 -- ── Workout Logs (Member Progress Tracking) ──────────────────────
 CREATE TABLE IF NOT EXISTS workout_logs (
   id        INTEGER PRIMARY KEY AUTOINCREMENT,

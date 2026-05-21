@@ -1,0 +1,424 @@
+/* ═══════════════════════════════════════════════════════════════
+   EQUIPMENT — Styles for equipment.php (member-facing)
+   Requirements: 7.1, 7.6, 7.7
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Equipment Page Layout ─────────────────────────────────── */
+.equipment-layout {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem 4rem;
+}
+
+/* ── Page Header ───────────────────────────────────────────── */
+.equipment-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.equipment-header__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.equipment-header__title span {
+  color: var(--color-accent);
+}
+
+.equipment-header__sub {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+  margin-top: 0.4rem;
+}
+
+/* ── Summary Row ───────────────────────────────────────────── */
+/*
+ * Displays available count vs total non-retired count.
+ * Unaffected by active filters (Requirement 7.6).
+ */
+.equipment-summary {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+  margin-bottom: 2rem;
+}
+
+.equipment-summary__item {
+  flex: 1;
+  background: var(--color-steel);
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--transition);
+}
+
+.equipment-summary__item:hover {
+  background: #1e2026;
+}
+
+.equipment-summary__item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--grad-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.equipment-summary__item:hover::after {
+  transform: scaleX(1);
+}
+
+.equipment-summary__label {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+.equipment-summary__value {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.equipment-summary__value--available {
+  color: #42a882;
+}
+
+.equipment-summary__sub {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+/* ── Filter Controls ───────────────────────────────────────── */
+/*
+ * Category and status filter bar (Requirement 7.7).
+ * Sticky below the nav so it stays visible while scrolling.
+ */
+.equipment-filters {
+  position: sticky;
+  top: 64px; /* matches nav height */
+  z-index: 50;
+  background: rgba(10, 10, 10, 0.94);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(14px);
+  margin-bottom: 2rem;
+}
+
+.equipment-filters__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.9rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2.5rem;
+  align-items: center;
+}
+
+.equipment-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.equipment-filter-group__label {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+  white-space: nowrap;
+}
+
+.equipment-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+/* ── Equipment Card Grid ───────────────────────────────────── */
+/*
+ * Responsive card grid for equipment.php (Requirement 7.1).
+ * Each card shows name, category, quantity, and status badge.
+ */
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+}
+
+/* ── Equipment Card ────────────────────────────────────────── */
+.equipment-card {
+  position: relative;
+  background: var(--color-steel);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.equipment-card:hover {
+  background: #1e2026;
+  transform: translateY(-2px);
+  z-index: 2;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Accent bar at the top of each card */
+.equipment-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--grad-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.equipment-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* ── Card Body ─────────────────────────────────────────────── */
+.equipment-card__body {
+  padding: 1.2rem 1.3rem 0.8rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.equipment-card__category {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 0.1rem;
+}
+
+.equipment-card__name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  color: var(--color-text);
+}
+
+.equipment-card__quantity {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--color-subtle);
+  margin-top: 0.2rem;
+}
+
+.equipment-card__quantity strong {
+  color: var(--color-text);
+}
+
+/* ── Card Footer (status badge) ────────────────────────────── */
+.equipment-card__footer {
+  border-top: 1px solid var(--color-border);
+  padding: 0.7rem 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+/* ── Status Badges ─────────────────────────────────────────── */
+/*
+ * Inline status badges used on equipment cards and in tables.
+ * Classes: status--available, status--in-use, status--maintenance
+ * (Requirements 7.6, 7.7). Also inherits .badge variants from
+ * admin.css for the admin equipment table.
+ */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.status-badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* Available — green */
+.status--available {
+  color: #42a882;
+  border-color: rgba(66, 168, 130, 0.35);
+  background: rgba(66, 168, 130, 0.08);
+}
+
+/* In use — amber */
+.status--in-use {
+  color: #c0a030;
+  border-color: rgba(192, 160, 48, 0.35);
+  background: rgba(192, 160, 48, 0.08);
+}
+
+/* Under maintenance — orange */
+.status--maintenance {
+  color: #e87840;
+  border-color: rgba(232, 120, 64, 0.35);
+  background: rgba(232, 120, 64, 0.08);
+}
+
+/* Retired — muted (hidden from member view, shown in admin) */
+.status--retired {
+  color: var(--color-subtle);
+  border-color: var(--color-border);
+  background: rgba(255, 255, 255, 0.03);
+  opacity: 0.7;
+}
+
+/* ── Empty State ───────────────────────────────────────────── */
+.equipment-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-subtle);
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px dashed var(--color-border);
+}
+
+.equipment-empty__icon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-muted);
+  margin: 0 auto 1rem;
+  opacity: 0.5;
+}
+
+/* ── Section Heading ───────────────────────────────────────── */
+.equipment-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.equipment-section-heading__title {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+  white-space: nowrap;
+}
+
+.equipment-section-heading__line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .equipment-layout {
+    padding: 5.5rem 1.5rem 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .equipment-layout {
+    padding: 5rem 1.2rem 2.5rem;
+  }
+
+  .equipment-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .equipment-filters__inner {
+    padding: 0.8rem 1.2rem;
+    gap: 0.9rem 1.5rem;
+  }
+
+  .equipment-summary {
+    flex-wrap: wrap;
+  }
+
+  .equipment-summary__item {
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 560px) {
+  .equipment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-card:hover {
+    transform: none;
+  }
+
+  .equipment-filter-group {
+    width: 100%;
+  }
+
+  .equipment-summary {
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .equipment-summary__item {
+    width: 100%;
+  }
+}

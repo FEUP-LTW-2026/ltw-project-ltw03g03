@@ -1,0 +1,875 @@
+/* ═══════════════════════════════════════════════════════════════
+   TRAINERS — Styles for trainers.php, trainer_profile.php,
+              and pt_bookings.php
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Trainers Page Layout ──────────────────────────────────── */
+.trainers-layout {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem 4rem;
+}
+
+/* ── Trainer Card Grid ─────────────────────────────────────── */
+/*
+ * Responsive grid for trainers.php — each card shows photo/avatar,
+ * name, specialty, years of experience, and a "Book a Session" link.
+ */
+.trainers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+}
+
+.trainer-card {
+  position: relative;
+  background: var(--color-steel);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.trainer-card:hover {
+  background: #1e2026;
+  transform: translateY(-2px);
+  z-index: 2;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Accent bar at the top of each card */
+.trainer-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--grad-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.trainer-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* ── Trainer Card Photo ────────────────────────────────────── */
+.trainer-card__photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-dark);
+  flex-shrink: 0;
+}
+
+.trainer-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.trainer-card:hover .trainer-card__photo img {
+  transform: scale(1.04);
+}
+
+/* ── Default Avatar (no photo_path) ───────────────────────── */
+/*
+ * Shown when a trainer has no photo_path set (Requirement 6.6).
+ * Renders a centred initials/icon placeholder.
+ */
+.trainer-avatar--default {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-dark);
+  color: var(--color-muted);
+}
+
+.trainer-avatar--default svg {
+  width: 64px;
+  height: 64px;
+  opacity: 0.4;
+}
+
+/* ── Trainer Card Body ─────────────────────────────────────── */
+.trainer-card__body {
+  padding: 1.2rem 1.3rem 0.8rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.trainer-card__specialty {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 0.1rem;
+}
+
+.trainer-card__name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  color: var(--color-text);
+}
+
+.trainer-card__experience {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--color-subtle);
+  margin-top: 0.2rem;
+}
+
+.trainer-card__experience strong {
+  color: var(--color-text);
+}
+
+/* ── Trainer Card Footer (Book a Session link) ─────────────── */
+.trainer-card__footer {
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: 0;
+}
+
+.trainer-card__book {
+  flex: 1;
+  display: block;
+  text-align: center;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+  background: none;
+  border: none;
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+}
+
+.trainer-card__book:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.trainer-card__book:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.trainer-card__profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 0.9rem;
+  border-left: 1px solid var(--color-border);
+  color: var(--color-subtle);
+  text-decoration: none;
+  transition: color var(--transition), background var(--transition);
+}
+
+.trainer-card__profile:hover {
+  color: var(--color-accent);
+  background: rgba(245, 104, 26, 0.06);
+}
+
+.trainer-card__profile svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Trainer Profile Page Layout ───────────────────────────── */
+/*
+ * Full-page layout for trainer_profile.php (Requirement 6.2).
+ * Two-column on desktop: photo + info side by side.
+ */
+.trainer-profile {
+  position: relative;
+  z-index: 10;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 6rem 2rem 4rem;
+}
+
+/* ── Profile Header (photo + key info) ────────────────────── */
+.trainer-profile__header {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 3rem;
+  align-items: start;
+  margin-bottom: 3rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── Profile Photo ─────────────────────────────────────────── */
+.trainer-profile__photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--color-dark);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.trainer-profile__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Default avatar variant for profile page */
+.trainer-profile__photo .trainer-avatar--default {
+  position: absolute;
+  inset: 0;
+}
+
+.trainer-profile__photo .trainer-avatar--default svg {
+  width: 80px;
+  height: 80px;
+}
+
+/* ── Profile Info (name, specialty, experience, bio) ───────── */
+.trainer-profile__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.trainer-profile__specialty {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.trainer-profile__name {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  letter-spacing: 0.06em;
+  line-height: 0.95;
+  color: var(--color-text);
+}
+
+/* Meta row: years experience, certifications label */
+.trainer-profile__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.trainer-profile__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.trainer-profile__meta-label {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+.trainer-profile__meta-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.trainer-profile__meta-value--text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+/* ── Bio ───────────────────────────────────────────────────── */
+.trainer-profile__bio {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--color-subtle);
+  max-width: 60ch;
+}
+
+/* ── Certifications ────────────────────────────────────────── */
+.trainer-profile__certs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.trainer-profile__cert-tag {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 1px solid var(--color-border);
+  color: var(--color-subtle);
+  background: var(--color-dark);
+}
+
+/* ── Profile Book CTA ──────────────────────────────────────── */
+.trainer-profile__cta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+/* ── Profile Classes Section ───────────────────────────────── */
+/*
+ * Lists active classes assigned to the trainer with avg rating
+ * and review count (Requirement 6.2, 6.3).
+ */
+.trainer-profile__classes {
+  margin-bottom: 3rem;
+}
+
+.trainer-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.trainer-section-heading__title {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+  white-space: nowrap;
+}
+
+.trainer-section-heading__line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* Grid of class cards on the profile page */
+.trainer-classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+}
+
+.trainer-class-card {
+  background: var(--color-steel);
+  padding: 1.2rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: background var(--transition);
+}
+
+.trainer-class-card:hover {
+  background: #1e2026;
+}
+
+.trainer-class-card__type {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+.trainer-class-card__name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text);
+  line-height: 1.1;
+}
+
+.trainer-class-card__level {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.trainer-class-card__level--beginner     { color: #42a882; border: 1px solid rgba(66,168,130,.4); }
+.trainer-class-card__level--intermediate { color: #c0a030; border: 1px solid rgba(192,160,48,.4); }
+.trainer-class-card__level--advanced     { color: #e84040; border: 1px solid rgba(232,64,64,.4); }
+
+.trainer-class-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Rating Display ────────────────────────────────────────── */
+/*
+ * Used on trainer_profile.php to show star ratings per class
+ * (Requirement 6.3).
+ */
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rating__stars {
+  display: flex;
+  gap: 2px;
+}
+
+.rating__star {
+  width: 12px;
+  height: 12px;
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+
+.rating__star--filled {
+  color: #c0a030;
+}
+
+.rating__star--half {
+  color: #c0a030;
+  opacity: 0.55;
+}
+
+.rating__value {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
+}
+
+.rating__count {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--color-subtle);
+}
+
+.rating--no-reviews {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* ── PT Availability Slots ─────────────────────────────────── */
+/*
+ * Grid of available time slots shown on trainer_profile.php
+ * and pt_bookings.php (Requirements 6.2, 13.1, 13.2).
+ */
+.trainer-profile__slots {
+  margin-bottom: 3rem;
+}
+
+.pt-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem;
+}
+
+.pt-slot {
+  position: relative;
+  background: var(--color-steel);
+  border: 1px solid var(--color-border);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+}
+
+.pt-slot:hover {
+  border-color: var(--color-accent);
+  background: rgba(245, 104, 26, 0.05);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+/* Selected state (JS-toggled) */
+.pt-slot.is-selected {
+  border-color: var(--color-accent);
+  background: rgba(245, 104, 26, 0.1);
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+.pt-slot.is-selected::after {
+  content: '✓';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* Booked / unavailable slot */
+.pt-slot--booked {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  border-style: dashed;
+}
+
+.pt-slot__date {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+.pt-slot__time {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.pt-slot__duration {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+}
+
+.pt-slot--booked .pt-slot__time {
+  color: var(--color-muted);
+}
+
+/* Empty state when no slots are available */
+.pt-slots-empty {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  padding: 2rem;
+  text-align: center;
+  border: 1px dashed var(--color-border);
+}
+
+/* ── PT Booking Form ───────────────────────────────────────── */
+/*
+ * Form to submit a PT booking request (Requirements 13.1, 13.3).
+ * Wraps the slot selection and the submit action.
+ */
+.booking-form {
+  background: var(--color-steel);
+  border: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Accent bar at top */
+.booking-form::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), var(--color-accent2), transparent);
+}
+
+.booking-form__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-dark);
+}
+
+.booking-form__title {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.booking-form__body {
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Hidden input that receives the selected slot id */
+.booking-form__slot-input {
+  display: none;
+}
+
+/* Summary of the selected slot shown above the submit button */
+.booking-form__slot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-dark);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--color-subtle);
+  min-height: 52px;
+}
+
+.booking-form__slot--selected {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.booking-form__slot-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.booking-form__slot-text {
+  flex: 1;
+}
+
+/* Submit button row */
+.booking-form__submit {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.booking-form__submit .btn {
+  flex: 1;
+  min-width: 160px;
+}
+
+/* Disabled state when no slot is selected */
+.booking-form__submit .btn:disabled,
+.booking-form__submit .btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Existing Bookings List ────────────────────────────────── */
+/*
+ * Shows a member's current PT bookings on pt_bookings.php.
+ */
+.pt-bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+}
+
+.pt-booking-item {
+  background: var(--color-steel);
+  padding: 1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  transition: background var(--transition);
+}
+
+.pt-booking-item:hover {
+  background: #1e2026;
+}
+
+.pt-booking-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.pt-booking-item__trainer {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text);
+}
+
+.pt-booking-item__time {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--color-subtle);
+}
+
+/* Booking status badges */
+.pt-booking-item__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.pt-booking-item__status::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.pt-booking-item__status--pending {
+  color: #c0a030;
+  border-color: rgba(192, 160, 48, 0.35);
+  background: rgba(192, 160, 48, 0.08);
+}
+
+.pt-booking-item__status--confirmed {
+  color: #42a882;
+  border-color: rgba(66, 168, 130, 0.35);
+  background: rgba(66, 168, 130, 0.08);
+}
+
+.pt-booking-item__status--cancelled {
+  color: var(--color-subtle);
+  border-color: var(--color-border);
+  background: rgba(255, 255, 255, 0.03);
+  opacity: 0.7;
+}
+
+/* ── Empty State ───────────────────────────────────────────── */
+.trainers-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-subtle);
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px dashed var(--color-border);
+}
+
+.trainers-empty__icon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-muted);
+  margin: 0 auto 1rem;
+  opacity: 0.5;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .trainers-layout {
+    padding: 5.5rem 1.5rem 3rem;
+  }
+
+  .trainer-profile {
+    padding: 5.5rem 1.5rem 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .trainers-layout {
+    padding: 5rem 1.2rem 2.5rem;
+  }
+
+  .trainer-profile {
+    padding: 5rem 1.2rem 2.5rem;
+  }
+
+  /* Stack photo above info on mobile */
+  .trainer-profile__header {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .trainer-profile__photo {
+    aspect-ratio: 16 / 9;
+    max-height: 280px;
+  }
+
+  .trainer-profile__name {
+    font-size: clamp(2.2rem, 8vw, 3.5rem);
+  }
+
+  .pt-slots {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .trainers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trainer-classes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trainer-card:hover {
+    transform: none;
+  }
+
+  .pt-slots {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pt-booking-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .booking-form__submit .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .pt-slots {
+    grid-template-columns: 1fr;
+  }
+}

@@ -118,43 +118,10 @@ $type_colors = [
   <span class="corner corner--tl"></span>
   <span class="corner corner--br"></span>
 
-  <!-- Nav -->
-  <nav>
-    <a href="../index.php" class="nav-brand">
-      <svg viewBox="0 0 40 40" fill="none">
-        <rect x="2" y="16" width="8" height="8" rx="1" fill="currentColor"/>
-        <rect x="30" y="16" width="8" height="8" rx="1" fill="currentColor"/>
-        <rect x="10" y="10" width="4" height="20" rx="1" fill="currentColor"/>
-        <rect x="26" y="10" width="4" height="20" rx="1" fill="currentColor"/>
-        <rect x="14" y="18" width="12" height="4" rx="1" fill="currentColor"/>
-      </svg>
-      <span>W8</span>
-    </a>
-    <div class="nav-links">
-      <a href="dashboard.php" class="nav-link--active">Dashboard</a>
-      <a href="classes.php">Classes</a>
-      <?php if ($role === 'member'): ?>
-        <a href="equipment.php">Equipment</a>
-        <a href="trainers.php">Trainers</a>
-      <?php endif; ?>
-      <?php if ($role === 'trainer'): ?>
-        <a href="my_schedule.php">My Schedule</a>
-        <a href="my_roster.php">Roster</a>
-      <?php endif; ?>
-      <?php if ($role === 'admin'): ?>
-        <a href="admin_users.php">Users</a>
-        <a href="admin_classes.php">Classes</a>
-        <a href="admin_equipment.php">Equipment</a>
-      <?php endif; ?>
-      <a href="profile.php">Profile</a>
-    </div>
-    <a href="../actions/do_logout.php" class="nav-cta">Sign Out</a>
-    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+  <?php 
+    $current_page = 'dashboard';
+    require_once __DIR__ . '/../includes/nav.php'; 
+  ?>
 
   <?php if ($flash): ?>
   <div class="flash flash--<?= htmlspecialchars($flash['type']) ?> flash--page">
@@ -162,16 +129,17 @@ $type_colors = [
   </div>
   <?php endif; ?>
 
-  <!-- Hero greeting -->
-  <div class="dash-hero">
-    <div class="dash-hero__greeting">Welcome back</div>
-    <div class="dash-hero__name"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></div>
-    <div class="dash-hero__role"><?= ucfirst($role) ?> Account</div>
-  </div>
+  <main>
+    <!-- Hero greeting -->
+    <header class="dash-hero">
+      <div class="dash-hero__greeting">Welcome back</div>
+      <div class="dash-hero__name"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></div>
+      <div class="dash-hero__role"><?= ucfirst($role) ?> Account</div>
+    </header>
 
-  <!-- ═══════════════════ MEMBER DASHBOARD ══════════════════════ -->
-  <?php if ($role === 'member'): ?>
-  <div class="dash-grid dash-grid--member">
+    <!-- ═══════════════════ MEMBER DASHBOARD ══════════════════════ -->
+    <?php if ($role === 'member'): ?>
+    <section class="dash-grid dash-grid--member">
 
     <div class="dash-card">
       <div class="dash-card__title">Active Enrollments</div>
@@ -240,12 +208,12 @@ $type_colors = [
       <?php endif; ?>
     </div>
 
-  </div>
-  <?php endif; ?>
+    </section>
+    <?php endif; ?>
 
-  <!-- ═══════════════════ TRAINER DASHBOARD ════════════════════ -->
-  <?php if ($role === 'trainer'): ?>
-  <div class="dash-grid dash-grid--trainer">
+    <!-- ═══════════════════ TRAINER DASHBOARD ════════════════════ -->
+    <?php if ($role === 'trainer'): ?>
+    <section class="dash-grid dash-grid--trainer">
 
     <div class="dash-card">
       <div class="dash-card__title">Your Classes</div>
@@ -302,13 +270,13 @@ $type_colors = [
       <?php endif; ?>
     </div>
 
-  </div>
-  <?php endif; ?>
+    </section>
+    <?php endif; ?>
 
-  <!-- ════════════════════ ADMIN DASHBOARD ═════════════════════ -->
-  <?php if ($role === 'admin'): ?>
+    <!-- ════════════════════ ADMIN DASHBOARD ═════════════════════ -->
+    <?php if ($role === 'admin'): ?>
 
-  <div style="max-width:1100px;margin:0 auto;padding:0 2rem 2rem;">
+    <section style="max-width:1100px;margin:0 auto;padding:0 2rem 2rem;">
     <div class="stat-cards">
       <div class="stat-card">
         <div class="stat-card__n"><?= $admin_stats['total_members'] ?></div>
@@ -330,10 +298,10 @@ $type_colors = [
         <div class="stat-card__n" style="<?= $admin_stats['open_disputes'] > 0 ? 'color:#e84040' : '' ?>"><?= $admin_stats['open_disputes'] ?></div>
         <div class="stat-card__l">Open Disputes</div>
       </div>
-    </div>
-  </div>
+      </div>
+    </section>
 
-  <div class="dash-grid dash-grid--admin" style="grid-template-columns:1fr 1fr;">
+    <section class="dash-grid dash-grid--admin" style="grid-template-columns:1fr 1fr;">
 
     <div class="dash-card">
       <div class="dash-card__title">Manage</div>
@@ -379,8 +347,11 @@ $type_colors = [
       </div>
     </div>
 
-  </div>
-  <?php endif; ?>
+      </div>
+    </section>
+    <?php endif; ?>
+
+  </main>
 
   <!-- Footer -->
   <footer>
@@ -391,15 +362,6 @@ $type_colors = [
       </div>
     </div>
   </footer>
-  
-  <script>
-    const toggle = document.getElementById('nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    toggle.addEventListener('click', () => {
-      navLinks.classList.toggle('nav-links--open');
-      toggle.classList.toggle('nav-mobile-btn--open');
-    });
-  </script>
 
 </body>
 </html>

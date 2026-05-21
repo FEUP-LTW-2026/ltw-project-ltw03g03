@@ -45,7 +45,7 @@ INSERT INTO trainer_profiles (user_id, bio, specialty, certifications, years_exp
  10),
 ((SELECT id FROM users WHERE username = 'emmar'),
  'High-energy HIIT and CrossFit coach. Let''s push your limits together.',
- 'hiit',
+ 'cardio',
  'CrossFit L2, F45 Certified, CPR/AED',
  6),
 ((SELECT id FROM users WHERE username = 'davidw'),
@@ -180,4 +180,14 @@ INSERT INTO equipment_reservations (unit_id, member_id, reserved_from, reserved_
  datetime('now', '+1 day', '10:00:00'),
  datetime('now', '+1 day', '11:00:00'),
  'active');
+
+-- =====================================================
+-- PT AVAILABILITY
+-- =====================================================
+INSERT INTO pt_availability (trainer_id, start_time, end_time, is_booked) VALUES
+((SELECT id FROM users WHERE username = 'mikec'), datetime('now', '+1 day', '10:00:00'), datetime('now', '+1 day', '11:00:00'), 0),
+((SELECT id FROM users WHERE username = 'mikec'), datetime('now', '+1 day', '11:00:00'), datetime('now', '+1 day', '12:00:00'), 0),
+((SELECT id FROM users WHERE username = 'sarahj'), datetime('now', '+2 days', '14:00:00'), datetime('now', '+2 days', '15:00:00'), 0),
+((SELECT id FROM users WHERE username = 'emmar'), datetime('now', '+3 days', '09:00:00'), datetime('now', '+3 days', '10:00:00'), 0);
+
  

@@ -85,43 +85,12 @@ if ($role === 'member') {
   <span class="corner corner--tl"></span>
   <span class="corner corner--br"></span>
 
-  <!-- Nav -->
-  <nav>
-    <a href="../index.php" class="nav-brand">
-      <svg viewBox="0 0 40 40" fill="none">
-        <rect x="2" y="16" width="8" height="8" rx="1" fill="currentColor"/>
-        <rect x="30" y="16" width="8" height="8" rx="1" fill="currentColor"/>
-        <rect x="10" y="10" width="4" height="20" rx="1" fill="currentColor"/>
-        <rect x="26" y="10" width="4" height="20" rx="1" fill="currentColor"/>
-        <rect x="14" y="18" width="12" height="4" rx="1" fill="currentColor"/>
-      </svg>
-      <span>W8</span>
-    </a>
-    <div class="nav-links">
-      <a href="dashboard.php">Dashboard</a>
-      <a href="classes.php">Classes</a>
-      <?php if ($role === 'member'): ?>
-        <a href="equipment.php">Equipment</a>
-        <a href="trainers.php">Trainers</a>
-      <?php elseif ($role === 'trainer'): ?>
-        <a href="my_schedule.php">My Schedule</a>
-        <a href="my_roster.php">Roster</a>
-      <?php elseif ($role === 'admin'): ?>
-        <a href="admin_users.php">Users</a>
-        <a href="admin_classes.php">Classes</a>
-        <a href="admin_equipment.php">Equipment</a>
-      <?php endif; ?>
-      <a href="profile.php" class="nav-link--active">Profile</a>
-    </div>
-    <a href="../actions/do_logout.php" class="nav-cta">Sign Out</a>
-    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+  <?php 
+    $current_page = 'profile';
+    require_once __DIR__ . '/../includes/nav.php'; 
+  ?>
 
-  <div class="page-wrap">
+  <main class="page-wrap">
 
     <!-- ── Sidebar ── -->
     <aside class="profile-sidebar">
@@ -418,7 +387,7 @@ if ($role === 'member') {
       <?php endif; ?>
 
     </div>
-  </div>
+  </main>
 
   <footer>
     <div class="footer-inner">

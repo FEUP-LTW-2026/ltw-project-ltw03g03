@@ -155,41 +155,10 @@ function filter_url(array $overrides): string {
   <span class="corner corner--tl"></span>
   <span class="corner corner--br"></span>
 
-  <!-- Nav -->
-  <nav>
-    <a href="../index.php" class="nav-brand">
-      <svg viewBox="0 0 40 40" fill="none">
-        <rect x="2" y="16" width="8" height="8" rx="1" fill="currentColor"/>
-        <rect x="30" y="16" width="8" height="8" rx="1" fill="currentColor"/>
-        <rect x="10" y="10" width="4" height="20" rx="1" fill="currentColor"/>
-        <rect x="26" y="10" width="4" height="20" rx="1" fill="currentColor"/>
-        <rect x="14" y="18" width="12" height="4" rx="1" fill="currentColor"/>
-      </svg>
-      <span>W8</span>
-    </a>
-    <div class="nav-links">
-      <a href="dashboard.php">Dashboard</a>
-      <a href="classes.php" class="nav-link--active">Classes</a>
-      <?php if ($role === 'member'): ?>
-        <a href="equipment.php">Equipment</a>
-        <a href="trainers.php">Trainers</a>
-      <?php elseif ($role === 'trainer'): ?>
-        <a href="my_schedule.php">My Schedule</a>
-        <a href="my_roster.php">Roster</a>
-      <?php elseif ($role === 'admin'): ?>
-        <a href="admin_users.php">Users</a>
-        <a href="admin_classes.php">Classes</a>
-        <a href="admin_equipment.php">Equipment</a>
-      <?php endif; ?>
-      <a href="profile.php">Profile</a>
-    </div>
-    <a href="../actions/do_logout.php" class="nav-cta">Sign Out</a>
-    <button class="nav-mobile-btn" id="nav-toggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
+  <?php 
+    $current_page = 'classes';
+    require_once __DIR__ . '/../includes/nav.php'; 
+  ?>
 
   <!-- Flash -->
   <?php if ($flash): ?>
@@ -200,80 +169,76 @@ function filter_url(array $overrides): string {
 
   <!-- Page Header -->
   <div class="page-header">
-    <div class="page-header__inner">
-      <div class="tag">Schedule</div>
-      <h1 class="page-header__title">Class<br><span>Schedule</span></h1>
-      <p class="page-header__sub">Browse, filter, and book your next session</p>
-    </div>
-    <div class="page-header__deco">CLASSES</div>
-  </div>
-
-  <!-- Filters Bar -->
-  <div class="filters-bar">
-    <div class="filters-bar__inner">
-
-      <!-- Type -->
-      <div class="filter-group">
-        <span class="filter-group__label">Type</span>
-        <div class="filter-chips">
-          <a href="<?= filter_url(['type'=>'all']) ?>" class="chip <?= is_active_filter('type','all') ?>">All</a>
-          <a href="<?= filter_url(['type'=>'powerlifting']) ?>" class="chip <?= is_active_filter('type','powerlifting') ?>">Powerlifting</a>
-          <a href="<?= filter_url(['type'=>'hiit']) ?>" class="chip <?= is_active_filter('type','hiit') ?>">HIIT</a>
-          <a href="<?= filter_url(['type'=>'crossfit']) ?>" class="chip <?= is_active_filter('type','crossfit') ?>">CrossFit</a>
-          <a href="<?= filter_url(['type'=>'yoga']) ?>" class="chip <?= is_active_filter('type','yoga') ?>">Yoga</a>
-        </div>
+  <main>
+    <header class="page-header">
+      <div class="page-header__inner">
+        <div class="tag">Schedule</div>
+        <h1 class="page-header__title">Class<br><span>Schedule</span></h1>
+        <p class="page-header__sub">Browse, filter, and book your next session</p>
       </div>
+      <div class="page-header__deco">CLASSES</div>
+    </header>
 
-      <!-- Level -->
-      <div class="filter-group">
-        <span class="filter-group__label">Level</span>
-        <div class="filter-chips">
-          <a href="<?= filter_url(['level'=>'all']) ?>" class="chip <?= is_active_filter('level','all') ?>">All</a>
-          <a href="<?= filter_url(['level'=>'beginner']) ?>" class="chip <?= is_active_filter('level','beginner') ?>">Beginner</a>
-          <a href="<?= filter_url(['level'=>'intermediate']) ?>" class="chip <?= is_active_filter('level','intermediate') ?>">Intermediate</a>
-          <a href="<?= filter_url(['level'=>'advanced']) ?>" class="chip <?= is_active_filter('level','advanced') ?>">Advanced</a>
+    <section class="sched-controls">
+      <div class="filters-bar__inner">
+        <!-- Type -->
+        <div class="filter-group">
+          <span class="filter-group__label">Type</span>
+          <div class="filter-chips">
+            <a href="<?= filter_url(['type'=>'all']) ?>" class="chip <?= is_active_filter('type','all') ?>">All</a>
+            <a href="<?= filter_url(['type'=>'powerlifting']) ?>" class="chip <?= is_active_filter('type','powerlifting') ?>">Powerlifting</a>
+            <a href="<?= filter_url(['type'=>'hiit']) ?>" class="chip <?= is_active_filter('type','hiit') ?>">HIIT</a>
+            <a href="<?= filter_url(['type'=>'crossfit']) ?>" class="chip <?= is_active_filter('type','crossfit') ?>">CrossFit</a>
+            <a href="<?= filter_url(['type'=>'yoga']) ?>" class="chip <?= is_active_filter('type','yoga') ?>">Yoga</a>
+          </div>
         </div>
-      </div>
 
-      <!-- Day -->
-      <div class="filter-group">
-        <span class="filter-group__label">Day</span>
-        <div class="filter-chips">
-          <a href="<?= filter_url(['day'=>'all']) ?>" class="chip <?= is_active_filter('day','all') ?>">All</a>
-          <?php foreach (['mon'=>'Mon','tue'=>'Tue','wed'=>'Wed','thu'=>'Thu','fri'=>'Fri','sat'=>'Sat','sun'=>'Sun'] as $k=>$v): ?>
-          <a href="<?= filter_url(['day'=>$k]) ?>" class="chip <?= is_active_filter('day',$k) ?>"><?= $v ?></a>
-          <?php endforeach; ?>
+        <!-- Level -->
+        <div class="filter-group">
+          <span class="filter-group__label">Level</span>
+          <div class="filter-chips">
+            <a href="<?= filter_url(['level'=>'all']) ?>" class="chip <?= is_active_filter('level','all') ?>">All</a>
+            <a href="<?= filter_url(['level'=>'beginner']) ?>" class="chip <?= is_active_filter('level','beginner') ?>">Beginner</a>
+            <a href="<?= filter_url(['level'=>'intermediate']) ?>" class="chip <?= is_active_filter('level','intermediate') ?>">Intermediate</a>
+            <a href="<?= filter_url(['level'=>'advanced']) ?>" class="chip <?= is_active_filter('level','advanced') ?>">Advanced</a>
+          </div>
         </div>
-      </div>
 
-      <!-- Trainer -->
-      <?php if ($trainers): ?>
-      <div class="filter-group">
-        <span class="filter-group__label">Trainer</span>
-        <form method="get" action="classes.php" style="display:contents;">
-          <?php foreach ($_GET as $k => $v): if ($k === 'trainer') continue; ?>
-            <input type="hidden" name="<?= htmlspecialchars($k) ?>" value="<?= htmlspecialchars($v) ?>">
-          <?php endforeach; ?>
-          <select name="trainer" class="trainer-select" onchange="this.form.submit()">
-            <option value="0">All Trainers</option>
-            <?php foreach ($trainers as $t): ?>
-            <option value="<?= $t['id'] ?>" <?= $filter_trainer === (int)$t['id'] ? 'selected' : '' ?>>
-              <?= htmlspecialchars($t['first_name'] . ' ' . $t['last_name']) ?>
-            </option>
+        <!-- Day -->
+        <div class="filter-group">
+          <span class="filter-group__label">Day</span>
+          <div class="filter-chips">
+            <a href="<?= filter_url(['day'=>'all']) ?>" class="chip <?= is_active_filter('day','all') ?>">All</a>
+            <?php foreach (['mon'=>'Mon','tue'=>'Tue','wed'=>'Wed','thu'=>'Thu','fri'=>'Fri','sat'=>'Sat','sun'=>'Sun'] as $k=>$v): ?>
+            <a href="<?= filter_url(['day'=>$k]) ?>" class="chip <?= is_active_filter('day',$k) ?>"><?= $v ?></a>
             <?php endforeach; ?>
-          </select>
-        </form>
+          </div>
+        </div>
+
+        <!-- Trainer -->
+        <?php if ($trainers): ?>
+        <div class="filter-group">
+          <span class="filter-group__label">Trainer</span>
+          <form method="get" action="classes.php" style="display:contents;">
+            <?php foreach ($_GET as $k => $v): if ($k === 'trainer') continue; ?>
+              <input type="hidden" name="<?= htmlspecialchars($k) ?>" value="<?= htmlspecialchars($v) ?>">
+            <?php endforeach; ?>
+            <select name="trainer" class="trainer-select" onchange="this.form.submit()">
+              <option value="0">All Trainers</option>
+              <?php foreach ($trainers as $t): ?>
+              <option value="<?= $t['id'] ?>" <?= $filter_trainer === (int)$t['id'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($t['first_name'] . ' ' . $t['last_name']) ?>
+              </option>
+              <?php endforeach; ?>
+            </select>
+          </form>
+        </div>
+        <?php endif; ?>
       </div>
-      <?php endif; ?>
+    </section>
 
-    </div>
-  </div>
-
-  <!-- Schedule -->
-  <section class="schedule-section">
-    <div class="inner" style="padding-top:3rem;padding-bottom:6rem;">
-      <div class="schedule-section .inner">
-
+    <section class="sched-layout">
+      <div class="inner" style="padding-top:3rem;padding-bottom:6rem;">
         <?php if (empty($by_day)): ?>
           <p style="color:var(--subtle);font-size:1rem;text-align:center;padding:4rem 0;">
             No classes match your filters. <a href="classes.php">Clear all filters →</a>
@@ -295,17 +260,11 @@ function filter_url(array $overrides): string {
               $low_spots  = !$is_full && $spots_left <= 3;
             ?>
             <div class="sched-card <?= $is_full ? 'sched-card--full' : '' ?>">
-
-              <!-- Colour bar -->
               <div class="sched-card__bar sched-card__bar--<?= $s['type'] ?>"></div>
-
-              <!-- Time -->
               <div class="sched-card__time">
                 <span class="sched-card__hour"><?= date('H:i', strtotime($s['scheduled_at'])) ?></span>
                 <span class="sched-card__dur"><?= $s['duration_min'] ?>min</span>
               </div>
-
-              <!-- Body -->
               <div class="sched-card__body">
                 <div class="sched-card__type"><?= ucfirst($s['type']) ?></div>
                 <div class="sched-card__name"><?= htmlspecialchars($s['name']) ?></div>
@@ -314,8 +273,6 @@ function filter_url(array $overrides): string {
                   <?= htmlspecialchars($s['trainer_first'] . ' ' . $s['trainer_last']) ?>
                 </div>
               </div>
-
-              <!-- Meta row -->
               <div class="sched-card__meta">
                 <span class="sched-card__level <?= $level_classes[$s['level']] ?? '' ?>">
                   <?= ucfirst($s['level']) ?>
@@ -328,90 +285,69 @@ function filter_url(array $overrides): string {
                   <span class="sched-card__spots"><?= $spots_left ?> / <?= $s['capacity'] ?> spots</span>
                 <?php endif; ?>
               </div>
-
-              <!-- Enroll button (members only) with CSRF-protected URLs -->
               <?php if ($role === 'member'): ?>
                 <?php if ($s['i_am_enrolled']): ?>
-                  <a href="<?= cancel_url($s['session_id']) ?>"
-                     class="sched-card__enroll"
-                     style="color:#42a882;border-color:rgba(66,168,130,.3);"
-                     onclick="return confirm('Cancel your enrollment in this class?')">
-                    ✓ Enrolled — Cancel
-                  </a>
+                  <a href="<?= cancel_url($s['session_id']) ?>" class="sched-card__enroll" style="color:#42a882;border-color:rgba(66,168,130,.3);" onclick="return confirm('Cancel your enrollment in this class?')">✓ Enrolled — Cancel</a>
                 <?php elseif ($s['i_am_waitlisted']): ?>
-                  <a href="<?= cancel_url($s['session_id']) ?>"
-                     class="sched-card__enroll sched-card__enroll--waitlist"
-                     onclick="return confirm('Leave the waitlist for this class?')">
-                    On Waitlist — Leave
-                  </a>
+                  <a href="<?= cancel_url($s['session_id']) ?>" class="sched-card__enroll sched-card__enroll--waitlist" onclick="return confirm('Leave the waitlist for this class?')">On Waitlist — Leave</a>
                 <?php elseif ($is_full): ?>
-                  <a href="<?= enroll_url($s['session_id']) ?>"
-                     class="sched-card__enroll sched-card__enroll--waitlist">
-                    Join Waitlist
-                  </a>
+                  <a href="<?= enroll_url($s['session_id']) ?>" class="sched-card__enroll sched-card__enroll--waitlist">Join Waitlist</a>
                 <?php else: ?>
-                  <a href="<?= enroll_url($s['session_id']) ?>"
-                     class="sched-card__enroll">
-                    Enroll
-                  </a>
+                  <a href="<?= enroll_url($s['session_id']) ?>" class="sched-card__enroll">Enroll</a>
                 <?php endif; ?>
               <?php elseif ($role === 'trainer' || $role === 'admin'): ?>
-                <a href="my_roster.php?session_id=<?= $s['session_id'] ?>" class="sched-card__enroll">
-                  View Roster (<?= $s['enrolled_count'] ?>)
-                </a>
+                <a href="my_roster.php?session_id=<?= $s['session_id'] ?>" class="sched-card__enroll">View Roster (<?= $s['enrolled_count'] ?>)</a>
               <?php endif; ?>
-
             </div>
             <?php endforeach; ?>
           </div>
         </div>
         <?php endforeach; ?>
-
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- ── Review Modal ── -->
+  <!-- Review Modal Overlay -->
   <?php if ($review_session): ?>
-  <div class="modal-backdrop" id="review-modal">
+  <div class="overlay overlay--visible">
     <div class="modal">
-      <button class="modal__close" onclick="document.getElementById('review-modal').remove()">✕</button>
-      <div class="modal__header">
-        <div class="modal__title">Leave a Review</div>
-        <div class="modal__sub"><?= htmlspecialchars($review_session['name']) ?> · <?= date('d M Y', strtotime($review_session['scheduled_at'])) ?></div>
-      </div>
-      <div class="modal__body">
-        <form class="form" method="post" action="../actions/submit_review.php">
-          <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-          <input type="hidden" name="session_id" value="<?= $review_session['id'] ?>">
+      <h2>Review Class</h2>
+      <p style="margin-bottom:1rem;color:var(--subtle);font-size:.9rem;">
+        <?= htmlspecialchars($review_session['name']) ?> on <?= date('D d M', strtotime($review_session['scheduled_at'])) ?>
+      </p>
+      <form action="../actions/do_review.php" method="POST">
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+        <input type="hidden" name="session_id" value="<?= $review_session['id'] ?>">
 
-          <div class="field">
-            <label class="field__label">Your Rating</label>
-            <div class="star-picker">
-              <?php for ($i = 5; $i >= 1; $i--): ?>
-              <input type="radio" name="rating" id="star<?= $i ?>" value="<?= $i ?>" <?= $i === 5 ? 'checked' : '' ?>>
-              <label for="star<?= $i ?>">★</label>
-              <?php endfor; ?>
-            </div>
-          </div>
+        <label class="form-label">Rating (1-5)</label>
+        <div style="display:flex;gap:.5rem;margin-bottom:1rem;justify-content:center;">
+          <?php for($i=1;$i<=5;$i++): ?>
+            <label style="cursor:pointer;font-size:1.5rem;">
+              <input type="radio" name="rating" value="<?= $i ?>" required style="display:none;" onchange="updateStars(this.value)">
+              <span class="star-icon" id="star-<?= $i ?>" style="color:var(--surface-3);">★</span>
+            </label>
+          <?php endfor; ?>
+        </div>
 
-          <div class="field">
-            <label class="field__label" for="review-comment">Comment <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">(optional)</span></label>
-            <div class="field__wrap">
-              <textarea class="field__input" id="review-comment" name="comment" rows="3"
-                        style="padding-left:1rem;resize:vertical;"
-                        placeholder="What did you think of the class?"></textarea>
-            </div>
-          </div>
+        <label class="form-label">Comment (optional)</label>
+        <textarea name="comment" class="form-input" rows="3" style="resize:vertical;" placeholder="How was the class?"></textarea>
 
-          <button class="btn btn-primary btn-block" type="submit">Submit Review</button>
-        </form>
-      </div>
+        <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+          <a href="classes.php" class="btn btn-ghost" style="flex:1;">Cancel</a>
+          <button type="submit" class="btn btn-primary" style="flex:1;">Submit Review</button>
+        </div>
+      </form>
     </div>
   </div>
+  <script>
+    function updateStars(val) {
+      for(let i=1;i<=5;i++) {
+        document.getElementById('star-'+i).style.color = i<=val ? '#c0a030' : 'var(--surface-3)';
+      }
+    }
+  </script>
   <?php endif; ?>
 
-  <!-- Footer -->
   <footer>
     <div class="footer-inner">
       <div class="footer-bottom">
@@ -424,10 +360,12 @@ function filter_url(array $overrides): string {
   <script>
     const toggle = document.getElementById('nav-toggle');
     const navLinks = document.querySelector('.nav-links');
-    toggle.addEventListener('click', () => {
-      navLinks.classList.toggle('nav-links--open');
-      toggle.classList.toggle('nav-mobile-btn--open');
-    });
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        navLinks.classList.toggle('nav-links--open');
+        toggle.classList.toggle('nav-mobile-btn--open');
+      });
+    }
   </script>
 
 </body>
