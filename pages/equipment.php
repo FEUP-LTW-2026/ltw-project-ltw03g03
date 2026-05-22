@@ -106,23 +106,23 @@ function equipment_chip_active(string $param, string $value): string {
 
     <section class="equipment-layout">
       <!-- Summary Row -->
-      <article class="equipment-summary">
-        <div class="equipment-summary__item">
+      <section class="equipment-summary">
+        <article class="equipment-summary__item">
           <span class="equipment-summary__label">Available</span>
           <span class="equipment-summary__value equipment-summary__value--available" id="summary-available">0</span>
           <span class="equipment-summary__sub">items ready to use</span>
-        </div>
-        <div class="equipment-summary__item">
+        </article>
+        <article class="equipment-summary__item">
           <span class="equipment-summary__label">Total (Active)</span>
           <span class="equipment-summary__value" id="summary-total">0</span>
           <span class="equipment-summary__sub">non-retired items</span>
-        </div>
-        <div class="equipment-summary__item">
+        </article>
+        <article class="equipment-summary__item">
           <span class="equipment-summary__label">In Use / Maintenance</span>
           <span class="equipment-summary__value" id="summary-unavailable">0</span>
           <span class="equipment-summary__sub">currently unavailable</span>
-        </div>
-      </article>
+        </article>
+      </section>
     </section>
 
     <section class="equipment-filters">
@@ -221,13 +221,13 @@ function equipment_chip_active(string $param, string $value): string {
             let html = '';
             for (const [cat, eqItems] of Object.entries(byCategory)) {
                 html += `
-                  <div class="equipment-section-heading">
+                  <header class="equipment-section-heading">
                     <span class="equipment-section-heading__title">${escapeHtml(cat)}</span>
                     <div class="equipment-section-heading__line"></div>
                     <span style="font-family:var(--font-ui);font-size:.65rem;letter-spacing:.14em;color:var(--color-muted);white-space:nowrap;">
                       ${eqItems.length} item${eqItems.length !== 1 ? 's' : ''}
                     </span>
-                  </div>
+                  </header>
                   <div class="equipment-grid" style="margin-bottom:2rem;">
                 `;
 

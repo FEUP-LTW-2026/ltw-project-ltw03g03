@@ -79,7 +79,7 @@ $trainers = $stmt->fetchAll();
     <?php else: ?>
       <div class="trainers-grid">
         <?php foreach ($trainers as $t): ?>
-        <div class="trainer-card">
+        <article class="trainer-card">
 
           <!-- Photo or default avatar -->
           <div class="trainer-card__photo">
@@ -98,7 +98,7 @@ $trainers = $stmt->fetchAll();
           </div>
 
           <!-- Card body -->
-          <div class="trainer-card__body">
+          <section class="trainer-card__body">
             <?php if (!empty($t['specialty'])): ?>
               <div class="trainer-card__specialty">
                 <?= htmlspecialchars($t['specialty'], ENT_QUOTES, 'UTF-8') ?>
@@ -111,7 +111,7 @@ $trainers = $stmt->fetchAll();
               <strong><?= (int)$t['years_experience'] ?></strong>
               yr<?= (int)$t['years_experience'] !== 1 ? 's' : '' ?> experience
             </div>
-          </div>
+          </section>
 
           <!-- Card footer -->
           <div class="trainer-card__footer">
@@ -130,7 +130,7 @@ $trainers = $stmt->fetchAll();
             </a>
           </div>
 
-        </div>
+        </article>
         <?php endforeach; ?>
       </div>
     <?php endif; ?>

@@ -60,7 +60,7 @@ $flash = get_flash();
     </div>
     <?php endif; ?>
 
-    <div class="auth-card">
+    <section class="auth-card">
 
       <div class="tabs" role="tablist">
         <a class="tab tab--active" href="sign_in.php">Sign In</a>
@@ -68,7 +68,7 @@ $flash = get_flash();
         <span class="tab-indicator tab-indicator--left"></span>
       </div>
 
-      <div class="panel panel--active" id="panel-login" role="tabpanel">
+      <section class="panel panel--active" id="panel-login" role="tabpanel">
         <form class="form" method="post" action="../actions/do_login.php" novalidate>
           <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
@@ -115,8 +115,8 @@ $flash = get_flash();
           </button>
 
         </form>
-      </div>
-    </div>
+      </section>
+    </section>
 
     <footer class="auth-footer">&copy; W8 — All rights reserved</footer>
   </main>

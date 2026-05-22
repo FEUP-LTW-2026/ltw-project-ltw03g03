@@ -245,7 +245,7 @@ function filter_url(array $overrides): string {
         <?php endif; ?>
 
         <?php foreach ($by_day as $date => $day_sessions): ?>
-        <div class="day-block">
+        <section class="day-block">
           <div class="day-label">
             <span class="day-label__name"><?= date('l, d F', strtotime($date)) ?></span>
             <div class="day-label__line"></div>
@@ -258,7 +258,7 @@ function filter_url(array $overrides): string {
               $is_full    = $spots_left <= 0;
               $low_spots  = !$is_full && $spots_left <= 3;
             ?>
-            <div class="sched-card <?= $is_full ? 'sched-card--full' : '' ?>">
+            <article class="sched-card <?= $is_full ? 'sched-card--full' : '' ?>">
               <div class="sched-card__bar sched-card__bar--<?= $s['type'] ?>"></div>
               <div class="sched-card__time">
                 <span class="sched-card__hour"><?= date('H:i', strtotime($s['scheduled_at'])) ?></span>
@@ -297,10 +297,10 @@ function filter_url(array $overrides): string {
               <?php elseif ($role === 'trainer' || $role === 'admin'): ?>
                 <a href="my_roster.php?session_id=<?= $s['session_id'] ?>" class="sched-card__enroll">View Roster (<?= $s['enrolled_count'] ?>)</a>
               <?php endif; ?>
-            </div>
+            </article>
             <?php endforeach; ?>
           </div>
-        </div>
+        </section>
         <?php endforeach; ?>
       </div>
     </section>

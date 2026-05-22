@@ -141,13 +141,13 @@ $type_colors = [
     <?php if ($role === 'member'): ?>
     <section class="dash-grid dash-grid--member">
 
-    <div class="dash-card">
+    <article class="dash-card">
       <div class="dash-card__title">Active Enrollments</div>
       <div class="dash-card__big"><?= $enrolled_count ?></div>
       <div class="dash-card__sub">upcoming classes</div>
-    </div>
+    </article>
 
-    <div class="dash-card">
+    <article class="dash-card">
       <div class="dash-card__title">Membership</div>
       <?php if (!empty($member_plan['name'])): ?>
         <div class="dash-card__big"><?= htmlspecialchars($member_plan['name']) ?></div>
@@ -156,9 +156,9 @@ $type_colors = [
         <div class="dash-card__big" style="font-size:1.5rem;color:var(--subtle);">No Plan</div>
         <div class="dash-card__sub"><a href="../index.php#pricing">Browse plans →</a></div>
       <?php endif; ?>
-    </div>
+    </article>
 
-    <div class="dash-card">
+    <article class="dash-card">
       <div class="dash-card__title">Quick Actions</div>
       <div class="quick-links">
         <a href="classes.php" class="quick-link">
@@ -182,14 +182,14 @@ $type_colors = [
           <span>My Profile</span>
         </a>
       </div>
-    </div>
+    </article>
 
-    <div class="dash-card dash-card--wide">
+    <article class="dash-card dash-card--wide">
       <div class="dash-card__title">Upcoming Classes</div>
       <?php if ($upcoming_sessions): ?>
         <div class="session-list">
           <?php foreach ($upcoming_sessions as $s): ?>
-          <div class="session-item">
+          <article class="session-item">
             <div class="session-item__bar" style="background:<?= $type_colors[$s['type']] ?? '#7a7f91' ?>"></div>
             <div class="session-item__time"><?= date('D d M, H:i', strtotime($s['scheduled_at'])) ?></div>
             <div class="session-item__info">
@@ -199,14 +199,14 @@ $type_colors = [
             <div class="session-item__action">
               <a href="../actions/cancel_enrollment.php?session_id=<?= $s['id'] ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" onclick="return confirm('Cancel this class?')">Cancel</a>
             </div>
-          </div>
+          </article>
           <?php endforeach; ?>
         </div>
         <a href="classes.php" style="display:inline-block;margin-top:1rem;font-family:var(--fu);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Browse more classes →</a>
       <?php else: ?>
         <p style="color:var(--subtle);font-size:.9rem;">You have no upcoming classes. <a href="classes.php">Browse the schedule →</a></p>
       <?php endif; ?>
-    </div>
+    </article>
 
     </section>
     <?php endif; ?>
@@ -215,21 +215,21 @@ $type_colors = [
     <?php if ($role === 'trainer'): ?>
     <section class="dash-grid dash-grid--trainer">
 
-    <div class="dash-card">
+    <article class="dash-card">
       <div class="dash-card__title">Your Classes</div>
       <div class="dash-card__big"><?= count($trainer_classes) ?></div>
       <div class="dash-card__sub">active class types</div>
-    </div>
+    </article>
 
-    <div class="dash-card">
+    <article class="dash-card">
       <div class="dash-card__title">Specialty</div>
       <div class="dash-card__big" style="font-size:1.4rem;color:var(--text);">
         <?= htmlspecialchars($trainer_profile['specialty'] ?? 'Not set') ?>
       </div>
       <div class="dash-card__sub"><a href="profile.php">Edit profile →</a></div>
-    </div>
+    </article>
 
-    <div class="dash-card">
+    <article class="dash-card">
       <div class="dash-card__title">Quick Actions</div>
       <div class="quick-links">
         <a href="my_schedule.php" class="quick-link">
@@ -245,14 +245,14 @@ $type_colors = [
           <span>My Profile</span>
         </a>
       </div>
-    </div>
+    </article>
 
-    <div class="dash-card dash-card--wide">
+    <article class="dash-card dash-card--wide">
       <div class="dash-card__title">Upcoming Sessions</div>
       <?php if ($upcoming_sessions): ?>
         <div class="session-list">
           <?php foreach ($upcoming_sessions as $s): ?>
-          <div class="session-item">
+          <article class="session-item">
             <div class="session-item__bar" style="background:<?= $type_colors[$s['type']] ?? '#7a7f91' ?>"></div>
             <div class="session-item__time"><?= date('D d M, H:i', strtotime($s['scheduled_at'])) ?></div>
             <div class="session-item__info">
@@ -262,13 +262,13 @@ $type_colors = [
             <div class="session-item__action">
               <a href="my_roster.php?session_id=<?= $s['id'] ?>">View Roster</a>
             </div>
-          </div>
+          </article>
           <?php endforeach; ?>
         </div>
       <?php else: ?>
         <p style="color:var(--subtle);font-size:.9rem;">No upcoming sessions scheduled.</p>
       <?php endif; ?>
-    </div>
+    </article>
 
     </section>
     <?php endif; ?>
@@ -278,32 +278,32 @@ $type_colors = [
 
     <section style="max-width:1100px;margin:0 auto;padding:0 2rem 2rem;">
     <div class="stat-cards">
-      <div class="stat-card">
+      <article class="stat-card">
         <div class="stat-card__n"><?= $admin_stats['total_members'] ?></div>
         <div class="stat-card__l">Active Members</div>
-      </div>
-      <div class="stat-card">
+      </article>
+      <article class="stat-card">
         <div class="stat-card__n"><?= $admin_stats['total_trainers'] ?></div>
         <div class="stat-card__l">Trainers</div>
-      </div>
-      <div class="stat-card">
+      </article>
+      <article class="stat-card">
         <div class="stat-card__n"><?= $admin_stats['total_classes'] ?></div>
         <div class="stat-card__l">Active Classes</div>
-      </div>
-      <div class="stat-card">
+      </article>
+      <article class="stat-card">
         <div class="stat-card__n"><?= $admin_stats['total_equipment'] ?></div>
         <div class="stat-card__l">Equipment Items</div>
-      </div>
-      <div class="stat-card">
+      </article>
+      <article class="stat-card">
         <div class="stat-card__n" style="<?= $admin_stats['open_disputes'] > 0 ? 'color:#e84040' : '' ?>"><?= $admin_stats['open_disputes'] ?></div>
         <div class="stat-card__l">Open Disputes</div>
-      </div>
+      </article>
       </div>
     </section>
 
     <section class="dash-grid dash-grid--admin" style="grid-template-columns:1fr 1fr;">
 
-    <div class="dash-card">
+    <article class="dash-card">
       <div class="dash-card__title">Manage</div>
       <div class="quick-links">
         <a href="admin_users.php" class="quick-link">
@@ -323,13 +323,13 @@ $type_colors = [
           <span>Disputes</span>
         </a>
       </div>
-    </div>
+    </article>
 
-    <div class="dash-card">
+    <article class="dash-card">
       <div class="dash-card__title">Recent Registrations</div>
       <div class="user-list">
         <?php foreach ($recent_users as $u): ?>
-        <div class="user-row">
+        <article class="user-row">
           <div class="user-row__avatar">
             <?php if ($u['photo_path']): ?>
               <img src="../<?= htmlspecialchars($u['photo_path']) ?>" alt="">
@@ -342,12 +342,10 @@ $type_colors = [
           </div>
           <span class="user-row__badge user-row__badge--<?= $u['role'] ?>"><?= $u['role'] ?></span>
           <a href="admin_users.php?edit=<?= $u['id'] ?>" style="font-family:var(--fu);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">Edit</a>
-        </div>
+        </article>
         <?php endforeach; ?>
       </div>
-    </div>
-
-      </div>
+    </article>
     </section>
     <?php endif; ?>
 

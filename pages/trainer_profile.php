@@ -142,7 +142,7 @@ function render_stars(float $rating): string {
       </div>
 
       <!-- Info -->
-      <div class="trainer-profile__info">
+      <section class="trainer-profile__info">
 
         <?php if (!empty($trainer['specialty'])): ?>
           <div class="trainer-profile__specialty">
@@ -190,15 +190,15 @@ function render_stars(float $rating): string {
           </a>
         </div>
 
-      </div>
+      </section>
     </header>
 
     <!-- ── Active Classes with ratings ── -->
     <section class="trainer-profile__classes">
-      <div class="trainer-section-heading">
+      <header class="trainer-section-heading">
         <span class="trainer-section-heading__title">Classes</span>
         <div class="trainer-section-heading__line"></div>
-      </div>
+      </header>
 
       <?php if (empty($classes)): ?>
         <div class="trainers-empty">
@@ -211,7 +211,7 @@ function render_stars(float $rating): string {
       <?php else: ?>
         <div class="trainer-classes-grid">
           <?php foreach ($classes as $c): ?>
-          <div class="trainer-class-card">
+          <article class="trainer-class-card">
             <div class="trainer-class-card__type"><?= ucfirst(htmlspecialchars($c['type'])) ?></div>
             <div class="trainer-class-card__name"><?= htmlspecialchars($c['name']) ?></div>
             <?php if (!empty($c['description'])): ?>
@@ -237,7 +237,7 @@ function render_stars(float $rating): string {
                 <?= $c['duration_min'] ?> min
               </span>
             </div>
-          </div>
+          </article>
           <?php endforeach; ?>
         </div>
       <?php endif; ?>
@@ -245,10 +245,10 @@ function render_stars(float $rating): string {
 
     <!-- ── Available PT Slots (Requirement 6.2, 13.2) ── -->
     <section class="trainer-profile__slots">
-      <div class="trainer-section-heading">
+      <header class="trainer-section-heading">
         <span class="trainer-section-heading__title">Available PT Slots</span>
         <div class="trainer-section-heading__line"></div>
-      </div>
+      </header>
 
       <?php if (empty($pt_slots)): ?>
         <div class="pt-slots-empty">No available slots at this time.</div>
@@ -260,13 +260,13 @@ function render_stars(float $rating): string {
             $end_ts    = strtotime($slot['end_time']);
             $duration  = round(($end_ts - $start_ts) / 60);
           ?>
-          <div class="pt-slot">
+          <article class="pt-slot">
             <div class="pt-slot__date"><?= date('D, d M Y', $start_ts) ?></div>
             <div class="pt-slot__time"><?= date('H:i', $start_ts) ?></div>
             <div class="pt-slot__duration">
               <?= date('H:i', $end_ts) ?> · <?= $duration ?> min
             </div>
-          </div>
+          </article>
           <?php endforeach; ?>
         </div>
 

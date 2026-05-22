@@ -59,12 +59,12 @@ $user = current_user();
   </section>
 
   <!-- Stats -->
-  <div class="stats-bar" id="about">
-    <div class="stat"><span class="stat-n">2,400+</span><span class="stat-l">Active Members</span></div>
-    <div class="stat"><span class="stat-n">48</span><span class="stat-l">Weekly Classes</span></div>
-    <div class="stat"><span class="stat-n">12</span><span class="stat-l">Elite Trainers</span></div>
-    <div class="stat"><span class="stat-n">8yr</span><span class="stat-l">In The Game</span></div>
-  </div>
+  <section class="stats-bar" id="about">
+    <article class="stat"><span class="stat-n">2,400+</span><span class="stat-l">Active Members</span></article>
+    <article class="stat"><span class="stat-n">48</span><span class="stat-l">Weekly Classes</span></article>
+    <article class="stat"><span class="stat-n">12</span><span class="stat-l">Elite Trainers</span></article>
+    <article class="stat"><span class="stat-n">8yr</span><span class="stat-l">In The Game</span></article>
+  </section>
 
   <!-- About -->
   <section>
@@ -82,7 +82,7 @@ $user = current_user();
         </div>
       </div>
 
-      <div class="about-text">
+      <section class="about-text">
         <div class="tag">Who We Are</div>
 
         <h2 class="title">
@@ -98,13 +98,13 @@ $user = current_user();
         </p>
 
         <div class="perks">
-          <div class="perk">Olympic Free Weights</div>
-          <div class="perk">High Quality Machines</div>
-          <div class="perk">Cardio Zone</div>
-          <div class="perk">Recovery Room</div>
-          <div class="perk">Nutrition Bar</div>
-          <div class="perk">Private Coaching</div>
-          <div class="perk">Open 7 Days</div>
+          <span class="perk">Olympic Free Weights</span>
+          <span class="perk">High Quality Machines</span>
+          <span class="perk">Cardio Zone</span>
+          <span class="perk">Recovery Room</span>
+          <span class="perk">Nutrition Bar</span>
+          <span class="perk">Private Coaching</span>
+          <span class="perk">Open 7 Days</span>
         </div>
 
         <?php if (!$user): ?>
@@ -112,7 +112,7 @@ $user = current_user();
         <?php else: ?>
           <a href="pages/profile.php" class="btn btn-primary">My Profile</a>
         <?php endif; ?>
-      </div>
+      </section>
 
     </div>
   </div>
@@ -126,16 +126,16 @@ $user = current_user();
 
       <div class="classes-grid">
 
-        <div class="class-card">
+        <article class="class-card">
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M6 4v16M18 4v16M3 8h3M18 8h3M3 16h3M18 16h3M6 12h12" stroke="currentColor" stroke-width="1.5"/>
           </svg>
           <h3>Powerlifting</h3>
           <p>Master the squat, bench, and deadlift under expert supervision. Build raw strength that lasts.</p>
           <div class="class-meta">60 min &nbsp; All levels</div>
-        </div>
+        </article>
 
-        <div class="class-card">
+        <article class="class-card">
           <svg viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/>
             <path d="M12 8v4l3 3" stroke="currentColor" stroke-width="1.5"/>
@@ -143,25 +143,25 @@ $user = current_user();
           <h3>HIIT</h3>
           <p>High-intensity intervals designed to torch calories and build conditioning fast.</p>
           <div class="class-meta">45 min &nbsp; Intermediate</div>
-        </div>
+        </article>
 
-        <div class="class-card">
+        <article class="class-card">
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M12 3c-1.5 3-4 5-4 8a4 4 0 008 0c0-3-2.5-5-4-8z" stroke="currentColor" stroke-width="1.5"/>
           </svg>
           <h3>CrossFit</h3>
           <p>Functional movements at high intensity. Build endurance and toughness.</p>
           <div class="class-meta">50 min &nbsp; Advanced</div>
-        </div>
+        </article>
 
-        <div class="class-card">
+        <article class="class-card">
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M4 18l4-8 4 5 3-3 5 6" stroke="currentColor" stroke-width="1.5"/>
           </svg>
           <h3>Yoga</h3>
           <p>Recovery, flexibility, and mental focus. Balance your training.</p>
           <div class="class-meta">60 min &nbsp; All levels</div>
-        </div>
+        </article>
 
       </div>
 
@@ -179,7 +179,7 @@ $user = current_user();
 
       <div class="trainers-grid">
 
-      <div class="trainer">
+      <article class="trainer">
         <div class="trainer-photo">
          <img src="images/ronnie.jpg" alt="Ronnie Coleman">
         </div>
@@ -188,9 +188,9 @@ $user = current_user();
         <div class="trainer-role">Head Coach</div>
         <p>8 time Mr.Olympia, now focused on strength training.</p>
        </div>
-      </div>
+      </article>
 
-      <div class="trainer">
+      <article class="trainer">
         <div class="trainer-photo">
          <img src="images/sportacus.jpg" alt="Sportacus">
         </div>
@@ -199,9 +199,9 @@ $user = current_user();
         <div class="trainer-role">HIIT & Conditioning</div>
         <p>Aerobics world champion focused on performance and conditioning.</p>
        </div>
-      </div>
+      </article>
 
-      <div class="trainer">
+      <article class="trainer">
         <div class="trainer-photo">
          <img src="images/popeye.jpg" alt="Popeye">
         </div>
@@ -210,9 +210,9 @@ $user = current_user();
         <div class="trainer-role">CrossFit</div>
         <p>Specialist in movement quality and injury prevention.</p>
        </div>
-      </div>
+      </article>
 
-      <div class="trainer">
+      <article class="trainer">
         <div class="trainer-photo">
          <img src="images/oogway.jpg" alt="Oogway">
         </div>
@@ -221,7 +221,7 @@ $user = current_user();
         <div class="trainer-role">Yoga & Recovery</div>
         <p>Yoga instructor focused on recovery, breathwork and relaxation.</p>
        </div>
-      </div>
+      </article>
 
       </div>
 
@@ -239,7 +239,7 @@ $user = current_user();
 
       <div class="pricing-grid">
 
-        <div class="price-card">
+        <article class="price-card">
           <h3>Starter</h3>
           <div class="price-amount">
             <span class="price-cur">€</span>
@@ -253,9 +253,9 @@ $user = current_user();
             <li>Off-peak hours</li>
           </ul>
           <a href="pages/register.php" class="price-btn">Get Started</a>
-        </div>
+        </article>
 
-        <div class="price-card featured">
+        <article class="price-card featured">
           <div class="price-badge">Most Popular</div>
           <h3>Pro</h3>
           <div class="price-amount">
@@ -271,9 +271,9 @@ $user = current_user();
             <li>1 PT session</li>
           </ul>
           <a href="pages/register.php" class="price-btn">Join Pro</a>
-        </div>
+        </article>
 
-        <div class="price-card">
+        <article class="price-card">
           <h3>Elite</h3>
           <div class="price-amount">
             <span class="price-cur">€</span>
@@ -288,7 +288,7 @@ $user = current_user();
             <li>Guest passes</li>
           </ul>
           <a href="pages/register.php" class="price-btn">Go Elite</a>
-        </div>
+        </article>
 
       </div>
     </div>
@@ -312,7 +312,7 @@ $user = current_user();
         <tr><td>Sunday</td><td>09:00 – 18:00</td></tr>
       </table>
 
-      <div class="location">
+      <address class="location">
         <div class="loc-item">
           <svg viewBox="0 0 20 20" fill="none">
             <path d="M10 2a6 6 0 016 6c0 4-6 10-6 10S4 12 4 8a6 6 0 016-6z" stroke="currentColor"/>
@@ -348,14 +348,14 @@ $user = current_user();
           <img src="images/map.jpg" alt="Gym Location Map">
         </div>
 
-      </div>
+      </address>
 
     </div>
   </div>
 </section>
 
   <!-- CTA -->
-  <div class="cta-band">
+  <section class="cta-band">
     <h2>READY TO START?</h2>
     <p>First week is on us. No contracts.</p>
     <?php if ($user): ?>
@@ -363,7 +363,7 @@ $user = current_user();
     <?php else: ?>
       <a href="pages/register.php">Claim Free Week</a>
     <?php endif; ?>
-  </div>
+  </section>
 
   </main>
 

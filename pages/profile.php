@@ -95,7 +95,7 @@ if ($role === 'member') {
     <!-- ── Sidebar ── -->
     <aside class="profile-sidebar">
 
-      <div class="avatar-card">
+      <aside class="avatar-card">
         <div class="avatar-wrap">
           <div class="avatar-img">
             <?php if ($u['photo_path']): ?>
@@ -111,10 +111,10 @@ if ($role === 'member') {
         <div class="avatar-name"><?= htmlspecialchars($u['first_name'] . ' ' . $u['last_name']) ?></div>
         <div class="avatar-role"><?= ucfirst($u['role']) ?></div>
         <div class="avatar-email"><?= htmlspecialchars($u['email']) ?></div>
-      </div>
+      </aside>
 
       <?php if ($role === 'member' && $member_plan): ?>
-      <div class="sidebar-card">
+      <aside class="sidebar-card">
         <div class="sidebar-card__title">Membership</div>
         <div class="sidebar-stat">
           <span>Plan</span>
@@ -130,11 +130,11 @@ if ($role === 'member') {
           <span class="sidebar-stat__val"><?= date('d M Y', strtotime($member_plan['plan_end'])) ?></span>
         </div>
         <?php endif; ?>
-      </div>
+      </aside>
       <?php endif; ?>
 
       <?php if ($role === 'trainer' && $trainer_profile): ?>
-      <div class="sidebar-card">
+      <aside class="sidebar-card">
         <div class="sidebar-card__title">Trainer Info</div>
         <div class="sidebar-stat">
           <span>Specialty</span>
@@ -144,10 +144,10 @@ if ($role === 'member') {
           <span>Experience</span>
           <span class="sidebar-stat__val"><?= $trainer_profile['years_experience'] ?? 0 ?> yrs</span>
         </div>
-      </div>
+      </aside>
       <?php endif; ?>
 
-      <div class="sidebar-card">
+      <aside class="sidebar-card">
         <div class="sidebar-card__title">Account Info</div>
         <div class="sidebar-stat">
           <span>Username</span>
@@ -163,7 +163,7 @@ if ($role === 'member') {
           <span class="sidebar-stat__val"><?= htmlspecialchars($u['phone']) ?></span>
         </div>
         <?php endif; ?>
-      </div>
+      </aside>
 
     </aside>
 
@@ -177,10 +177,10 @@ if ($role === 'member') {
       <?php endif; ?>
 
       <!-- Edit profile form -->
-      <div class="profile-section">
-        <div class="profile-section__header">
+      <section class="profile-section">
+        <header class="profile-section__header">
           <div class="profile-section__title">Edit Profile</div>
-        </div>
+        </header>
         <div class="profile-section__body">
           <form class="form" method="post" action="../actions/update_profile.php" enctype="multipart/form-data" novalidate>
 
@@ -314,18 +314,18 @@ if ($role === 'member') {
 
           </form>
         </div>
-      </div>
+      </section>
 
       <!-- Classes attended + reviews (members only) -->
       <?php if ($role === 'member' && $attended): ?>
-      <div class="profile-section">
-        <div class="profile-section__header">
+      <section class="profile-section">
+        <header class="profile-section__header">
           <div class="profile-section__title">Classes Attended</div>
-        </div>
+        </header>
         <div class="profile-section__body">
           <div class="attended-list">
             <?php foreach ($attended as $a): ?>
-            <div class="attended-item">
+            <article class="attended-item">
               <div class="attended-item__info">
                 <div class="attended-item__name"><?= htmlspecialchars($a['name']) ?></div>
                 <div class="attended-item__meta">
@@ -347,27 +347,27 @@ if ($role === 'member') {
                   Leave Review
                 </a>
               <?php endif; ?>
-            </div>
+            </article>
             <?php endforeach; ?>
           </div>
         </div>
-      </div>
+      </section>
       <?php endif; ?>
 
       <!-- Recent workout logs (members only) -->
       <?php if ($role === 'member'): ?>
-      <div class="profile-section">
-        <div class="profile-section__header">
+      <section class="profile-section">
+        <header class="profile-section__header">
           <div class="profile-section__title">Recent Workout Logs</div>
           <a href="workout_log.php" style="font-family:var(--fu);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">
             View All / Log New →
           </a>
-        </div>
+        </header>
         <div class="profile-section__body">
           <?php if ($workout_logs): ?>
             <div class="attended-list">
               <?php foreach ($workout_logs as $log): ?>
-              <div class="attended-item">
+              <article class="attended-item">
                 <div class="attended-item__info">
                   <div class="attended-item__name"><?= date('d M Y, H:i', strtotime($log['logged_at'])) ?></div>
                   <div class="attended-item__meta"><?= $log['exercise_count'] ?> exercise<?= $log['exercise_count'] != 1 ? 's' : '' ?>
@@ -376,14 +376,14 @@ if ($role === 'member') {
                 </div>
                 <a href="workout_log.php?id=<?= $log['id'] ?>"
                    style="font-family:var(--fu);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">View</a>
-              </div>
+              </article>
               <?php endforeach; ?>
             </div>
           <?php else: ?>
             <p style="color:var(--subtle);font-size:.9rem;">No workouts logged yet. <a href="workout_log.php">Log your first →</a></p>
           <?php endif; ?>
         </div>
-      </div>
+      </section>
       <?php endif; ?>
 
     </div>

@@ -59,7 +59,7 @@ $flash = get_flash();
     </div>
     <?php endif; ?>
 
-    <div class="auth-card">
+    <section class="auth-card">
 
       <div class="tabs" role="tablist">
         <a class="tab" href="sign_in.php">Sign In</a>
@@ -67,7 +67,7 @@ $flash = get_flash();
         <span class="tab-indicator tab-indicator--right"></span>
       </div>
 
-      <div class="panel panel--active" id="panel-register" role="tabpanel">
+      <section class="panel panel--active" id="panel-register" role="tabpanel">
         <form class="form" method="post" action="../actions/do_register.php" novalidate>
           <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
@@ -172,7 +172,7 @@ $flash = get_flash();
           </div>
 
           <!-- Trainer-specific fields -->
-          <div class="trainer-section">
+          <section class="trainer-section">
             <p class="form-section-label">Trainer Details</p>
             <div class="field">
               <label class="field__label" for="reg-specialty">Specialty</label>
@@ -190,7 +190,7 @@ $flash = get_flash();
                 </select>
               </div>
             </div>
-          </div>
+          </section>
 
           <label class="checkbox checkbox--terms">
             <input type="checkbox" id="terms" name="terms" required>
@@ -208,8 +208,8 @@ $flash = get_flash();
           </button>
 
         </form>
-      </div>
-    </div>
+      </section>
+    </section>
 
     <footer class="auth-footer">&copy; W8 — All rights reserved</footer>
   </main>
