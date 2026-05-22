@@ -19,7 +19,15 @@ $stmt = $db->query(
      JOIN trainer_profiles tp ON tp.user_id = u.id
      WHERE u.role = \'trainer\'
        AND u.is_active = 1
-     ORDER BY u.first_name ASC, u.last_name ASC'
+     ORDER BY CASE u.username
+                WHEN \'sarahj\' THEN 1
+                WHEN \'mikec\' THEN 2
+                WHEN \'emmar\' THEN 3
+                WHEN \'davidw\' THEN 4
+                ELSE 5
+              END,
+              u.first_name ASC,
+              u.last_name ASC'
 );
 $trainers = $stmt->fetchAll();
 
