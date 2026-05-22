@@ -22,6 +22,17 @@ $stmt = $db->query(
      ORDER BY u.first_name ASC, u.last_name ASC'
 );
 $trainers = $stmt->fetchAll();
+
+function trainer_specialty_label(?string $specialty): string {
+    $labels = [
+        'strength' => 'Head Coach',
+        'cardio'   => 'HIIT & Conditioning',
+        'crossfit' => 'CrossFit',
+        'yoga'     => 'Yoga & Recovery',
+    ];
+
+    return $labels[$specialty] ?? ucfirst(str_replace('_', ' ', (string)$specialty));
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -101,7 +112,7 @@ $trainers = $stmt->fetchAll();
           <section class="trainer-card__body">
             <?php if (!empty($t['specialty'])): ?>
               <div class="trainer-card__specialty">
-                <?= htmlspecialchars($t['specialty'], ENT_QUOTES, 'UTF-8') ?>
+                <?= htmlspecialchars(trainer_specialty_label($t['specialty']), ENT_QUOTES, 'UTF-8') ?>
               </div>
             <?php endif; ?>
             <div class="trainer-card__name">

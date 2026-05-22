@@ -34,23 +34,23 @@ INSERT INTO users (username, email, password_hash, first_name, last_name, phone,
 -- =====================================================
 INSERT INTO trainer_profiles (user_id, bio, specialty, certifications, years_experience) VALUES
 ((SELECT id FROM users WHERE username = 'sarahj'), 
- 'Certified yoga instructor with 8+ years of experience. Focus on alignment, breath work, and building strength mindfully.',
- 'yoga',
+ '8 time Mr.Olympia, now focused on strength training.',
+ 'strength',
  'RYT-200, Yin Yoga Certified, Yoga Nidra Facilitator',
  8),
 ((SELECT id FROM users WHERE username = 'mikec'),
- 'Former competitive powerlifter turned coach. I help members build functional strength safely.',
- 'strength',
+ 'Aerobics world champion focused on performance and conditioning.',
+ 'cardio',
  'NASM CPT, USA Powerlifting Coach, FRC Mobility',
  10),
 ((SELECT id FROM users WHERE username = 'emmar'),
- 'High-energy HIIT and CrossFit coach. Let''s push your limits together.',
- 'cardio',
+ 'Specialist in movement quality and injury prevention.',
+ 'crossfit',
  'CrossFit L2, F45 Certified, CPR/AED',
  6),
 ((SELECT id FROM users WHERE username = 'davidw'),
- 'Nutrition specialist and body transformation coach. I combine strength training with dietary guidance.',
- 'nutrition',
+ 'Yoga instructor focused on recovery, breathwork and relaxation.',
+ 'yoga',
  'Precision Nutrition L1, ISSA Nutritionist, Kettlebell Certified',
  12);
 
@@ -190,4 +190,3 @@ INSERT INTO pt_availability (trainer_id, start_time, end_time, is_booked) VALUES
 ((SELECT id FROM users WHERE username = 'sarahj'), datetime('now', '+2 days', '14:00:00'), datetime('now', '+2 days', '15:00:00'), 0),
 ((SELECT id FROM users WHERE username = 'emmar'), datetime('now', '+3 days', '09:00:00'), datetime('now', '+3 days', '10:00:00'), 0);
 
- 

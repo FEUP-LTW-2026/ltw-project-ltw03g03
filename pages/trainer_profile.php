@@ -68,6 +68,17 @@ $level_classes = [
     'advanced'     => 'trainer-class-card__level--advanced',
 ];
 
+function trainer_specialty_label(?string $specialty): string {
+    $labels = [
+        'strength' => 'Head Coach',
+        'cardio'   => 'HIIT & Conditioning',
+        'crossfit' => 'CrossFit',
+        'yoga'     => 'Yoga & Recovery',
+    ];
+
+    return $labels[$specialty] ?? ucfirst(str_replace('_', ' ', (string)$specialty));
+}
+
 /**
  * Render filled/half/empty stars for a given numeric rating (0–5).
  * Returns an HTML string.
@@ -146,7 +157,7 @@ function render_stars(float $rating): string {
 
         <?php if (!empty($trainer['specialty'])): ?>
           <div class="trainer-profile__specialty">
-            <?= htmlspecialchars($trainer['specialty']) ?>
+            <?= htmlspecialchars(trainer_specialty_label($trainer['specialty'])) ?>
           </div>
         <?php endif; ?>
 
