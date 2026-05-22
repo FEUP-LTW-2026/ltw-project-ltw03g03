@@ -33,20 +33,6 @@ if ($role === 'member') {
     $member_plan = $stmt->fetch();
 }
 
-// Fetch recent workout logs for members
-$workout_logs = [];
-if ($role === 'member') {
-    $stmt = $db->prepare(
-        'SELECT wl.id, wl.logged_at, wl.notes, COUNT(we.id) as exercise_count
-         FROM workout_logs wl
-         LEFT JOIN workout_exercises we ON we.log_id = wl.id
-         WHERE wl.member_id = ?
-         GROUP BY wl.id ORDER BY wl.logged_at DESC LIMIT 5'
-    );
-    $stmt->execute([$user['id']]);
-    $workout_logs = $stmt->fetchAll();
-}
-
 // Classes attended (for reviews)
 $attended = [];
 if ($role === 'member') {
@@ -350,38 +336,6 @@ if ($role === 'member') {
             </article>
             <?php endforeach; ?>
           </div>
-        </div>
-      </section>
-      <?php endif; ?>
-
-      <!-- Recent workout logs (members only) -->
-      <?php if ($role === 'member'): ?>
-      <section class="profile-section">
-        <header class="profile-section__header">
-          <div class="profile-section__title">Recent Workout Logs</div>
-          <a href="workout_log.php" style="font-family:var(--fu);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">
-            View All / Log New →
-          </a>
-        </header>
-        <div class="profile-section__body">
-          <?php if ($workout_logs): ?>
-            <div class="attended-list">
-              <?php foreach ($workout_logs as $log): ?>
-              <article class="attended-item">
-                <div class="attended-item__info">
-                  <div class="attended-item__name"><?= date('d M Y, H:i', strtotime($log['logged_at'])) ?></div>
-                  <div class="attended-item__meta"><?= $log['exercise_count'] ?> exercise<?= $log['exercise_count'] != 1 ? 's' : '' ?>
-                    <?= $log['notes'] ? '· ' . htmlspecialchars(substr($log['notes'], 0, 60)) . (strlen($log['notes']) > 60 ? '…' : '') : '' ?>
-                  </div>
-                </div>
-                <a href="workout_log.php?id=<?= $log['id'] ?>"
-                   style="font-family:var(--fu);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);">View</a>
-              </article>
-              <?php endforeach; ?>
-            </div>
-          <?php else: ?>
-            <p style="color:var(--subtle);font-size:.9rem;">No workouts logged yet. <a href="workout_log.php">Log your first →</a></p>
-          <?php endif; ?>
         </div>
       </section>
       <?php endif; ?>
