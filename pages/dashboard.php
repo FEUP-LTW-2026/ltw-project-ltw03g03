@@ -87,7 +87,7 @@ if ($role === 'admin') {
 
     // Recent registrations
     $recent_users = $db->query(
-        'SELECT id, first_name, last_name, email, role, created_at FROM users ORDER BY created_at DESC LIMIT 6'
+        'SELECT id, first_name, last_name, email, role, photo_path, created_at FROM users ORDER BY created_at DESC LIMIT 6'
     )->fetchAll();
 }
 

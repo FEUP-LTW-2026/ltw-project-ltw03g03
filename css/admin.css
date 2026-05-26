@@ -414,6 +414,25 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
+.badge--open {
+  color: #e84040;
+  border-color: rgba(232, 64, 64, 0.35);
+  background: rgba(232, 64, 64, 0.08);
+}
+
+.badge--in_review {
+  color: #c0a030;
+  border-color: rgba(192, 160, 48, 0.35);
+  background: rgba(192, 160, 48, 0.08);
+}
+
+.badge--resolved,
+.badge--closed {
+  color: #42a882;
+  border-color: rgba(66, 168, 130, 0.35);
+  background: rgba(66, 168, 130, 0.08);
+}
+
 /* Role badges */
 .badge--role-admin {
   color: var(--color-accent);

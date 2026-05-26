@@ -3,8 +3,10 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/session.php';
 
 $trainer = require_trainer();
+$role = $trainer['role'];
 $db = get_db();
 $uid = current_user_id();
+$selected_session_id = isset($_GET['session_id']) ? (int)$_GET['session_id'] : 0;
 
 $stmt = $db->prepare(
     'SELECT cs.id AS session_id, cs.scheduled_at, c.name, u.id as member_id, u.first_name, u.last_name
@@ -35,31 +37,51 @@ foreach ($rows as $r) {
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/trainers.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="bg-fixed bg-grid"></div>
+  <div class="bg-fixed bg-diagonal"></div>
+  <span class="corner corner--tl"></span>
+  <span class="corner corner--br"></span>
+
   <?php $current_page = 'my_roster'; require_once __DIR__ . '/../includes/nav.php'; ?>
-  <main>
-    <header>
-      <h1>My Roster</h1>
-      <p>Enrolled members for upcoming sessions</p>
+
+  <main class="trainers-layout trainer-workspace">
+    <header class="trainer-workspace__header">
+      <div>
+        <div class="tag">Trainer Area</div>
+        <h1 class="title">My Roster</h1>
+      </div>
+      <a href="my_schedule.php" class="btn btn-primary">My Schedule</a>
     </header>
 
-    <section>
+    <section class="trainer-roster-grid">
       <?php if (empty($by_session)): ?>
-        <p>No roster entries found.</p>
+        <div class="trainers-empty">No roster entries found.</div>
       <?php else: ?>
         <?php foreach ($by_session as $sid => $data): ?>
-          <article>
-            <h2><?= htmlspecialchars($data['meta']['name'], ENT_QUOTES, 'UTF-8') ?></h2>
-            <p><time datetime="<?= htmlspecialchars($data['meta']['scheduled_at']) ?>"><?= date('D, d M Y H:i', strtotime($data['meta']['scheduled_at'])) ?></time></p>
+          <?php if ($selected_session_id && $selected_session_id !== (int)$sid) continue; ?>
+          <article class="trainer-roster-card">
+            <header class="trainer-roster-card__header">
+              <div>
+                <div class="trainer-session-card__type">Session</div>
+                <h2><?= htmlspecialchars($data['meta']['name'], ENT_QUOTES, 'UTF-8') ?></h2>
+              </div>
+              <time datetime="<?= htmlspecialchars($data['meta']['scheduled_at'], ENT_QUOTES, 'UTF-8') ?>"><?= date('D, d M H:i', strtotime($data['meta']['scheduled_at'])) ?></time>
+            </header>
+
             <?php if (empty($data['members'])): ?>
-              <p>No members enrolled yet.</p>
+              <div class="trainer-roster-card__empty">No members enrolled yet.</div>
             <?php else: ?>
-              <ul>
+              <div class="trainer-member-list">
                 <?php foreach ($data['members'] as $m): ?>
-                  <li><?= htmlspecialchars($m['first_name'] . ' ' . $m['last_name'], ENT_QUOTES, 'UTF-8') ?></li>
+                  <div class="trainer-member">
+                    <span><?= htmlspecialchars(substr($m['first_name'], 0, 1) . substr($m['last_name'], 0, 1), ENT_QUOTES, 'UTF-8') ?></span>
+                    <?= htmlspecialchars($m['first_name'] . ' ' . $m['last_name'], ENT_QUOTES, 'UTF-8') ?>
+                  </div>
                 <?php endforeach; ?>
-              </ul>
+              </div>
             <?php endif; ?>
           </article>
         <?php endforeach; ?>

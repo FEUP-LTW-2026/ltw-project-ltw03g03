@@ -24,7 +24,7 @@ $is_active = function($page) use ($current_page) {
     <?php if ($role): ?>
       <a href="<?= $base_path ?>pages/dashboard.php" class="<?= $is_active('dashboard') ?>">Dashboard</a>
     <?php endif; ?>
-    <?php if ($current_page !== 'index'): ?>
+    <?php if ($current_page !== 'index' && ($role === null || $role === 'member')): ?>
       <a href="<?= $base_path ?>pages/classes.php" class="<?= $is_active('classes') ?>">Classes</a>
     <?php endif; ?>
     <?php if ($role === 'member'): ?>

@@ -139,6 +139,12 @@
   width: 3px;
 }
 
+.sched-card__bar--powerlifting { background: #f5681a; }
+.sched-card__bar--hiit { background: #e84040; }
+.sched-card__bar--crossfit { background: #c0a030; }
+.sched-card__bar--yoga { background: #42a882; }
+.sched-card__bar--other { background: #7a7f91; }
+
 /* ── Time block ──────────────────────────────────────────────── */
 .sched-card__time {
   display: flex;
@@ -271,6 +277,16 @@
   background: var(--muted);
   border-color: var(--muted);
   color: var(--text);
+}
+
+.day-empty {
+  border: 1px dashed var(--border);
+  color: var(--subtle);
+  font-family: var(--fu);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  padding: 1rem;
+  text-transform: uppercase;
 }
 
 

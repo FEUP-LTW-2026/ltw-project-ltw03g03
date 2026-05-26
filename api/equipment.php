@@ -36,11 +36,11 @@ try {
 
     $sql = "
         SELECT
-            e.id, e.name, e.category, e.updated_at,
-            COUNT(u.id) as quantity,
-            SUM(CASE WHEN u.status = 'maintenance' THEN 1 ELSE 0 END) as maintenance_qty,
-            SUM(CASE WHEN u.status = 'available' AND res.id IS NOT NULL THEN 1 ELSE 0 END) as in_use_qty,
-            SUM(CASE WHEN u.status = 'available' AND res.id IS NULL THEN 1 ELSE 0 END) as available_qty
+            MIN(e.id) AS id, e.name, e.category, MAX(e.updated_at) AS updated_at,
+            COUNT(DISTINCT u.id) as quantity,
+            COUNT(DISTINCT CASE WHEN u.status = 'maintenance' THEN u.id END) as maintenance_qty,
+            COUNT(DISTINCT CASE WHEN u.status = 'available' AND res.id IS NOT NULL THEN u.id END) as in_use_qty,
+            COUNT(DISTINCT CASE WHEN u.status = 'available' AND res.id IS NULL THEN u.id END) as available_qty
         FROM equipment e
         LEFT JOIN equipment_units u ON u.equipment_id = e.id AND u.status != 'retired'
         LEFT JOIN equipment_reservations res ON res.unit_id = u.id
@@ -48,7 +48,7 @@ try {
             AND res.reserved_from <= datetime('now')
             AND res.reserved_to >= datetime('now')
         WHERE " . implode(' AND ', $where_clauses) . "
-        GROUP BY e.id
+        GROUP BY lower(trim(e.name)), e.category
         ORDER BY e.category ASC, e.name ASC
     ";
 

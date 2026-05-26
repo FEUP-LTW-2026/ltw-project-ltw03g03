@@ -800,6 +800,192 @@
   opacity: 0.5;
 }
 
+/* Trainer workspace pages */
+.trainer-workspace {
+  max-width: 1100px;
+}
+
+.trainer-workspace__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trainer-workspace__panel {
+  position: relative;
+  z-index: 2;
+}
+
+.trainer-session-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
+}
+
+.trainer-session-card {
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  align-items: stretch;
+  background: var(--color-steel);
+  transition: background var(--transition);
+}
+
+.trainer-session-card:hover {
+  background: #1e2026;
+}
+
+.trainer-session-card__date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 1rem 1.2rem;
+  background: var(--color-dark);
+  border-right: 1px solid var(--color-border);
+  font-family: var(--font-ui);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+.trainer-session-card__date span {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.trainer-session-card__body {
+  padding: 1rem 1.25rem;
+}
+
+.trainer-session-card__type {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 0.35rem;
+}
+
+.trainer-session-card__body h2,
+.trainer-roster-card__header h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.trainer-session-card__body p {
+  margin-top: 0.35rem;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+.trainer-session-card__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.25rem;
+  border-left: 1px solid var(--color-border);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+  transition: background var(--transition), color var(--transition);
+}
+
+.trainer-session-card__action:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.trainer-roster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.trainer-roster-card {
+  background: var(--color-steel);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.trainer-roster-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: var(--color-dark);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trainer-roster-card__header time {
+  flex-shrink: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
+.trainer-roster-card__empty {
+  padding: 1.2rem;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.trainer-member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--color-border);
+}
+
+.trainer-member {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: var(--color-steel);
+  color: var(--color-text);
+}
+
+.trainer-member span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  background: rgba(245, 104, 26, 0.1);
+  border: 1px solid rgba(245, 104, 26, 0.35);
+  color: var(--color-accent);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .trainers-layout {
@@ -860,6 +1046,25 @@
   .pt-booking-item {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .trainer-session-card {
+    grid-template-columns: 1fr;
+  }
+
+  .trainer-session-card__date,
+  .trainer-session-card__action {
+    border-right: 0;
+    border-left: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .trainer-session-card__action {
+    min-height: 44px;
+  }
+
+  .trainer-roster-card__header {
+    flex-direction: column;
   }
 
   .booking-form__submit .btn {

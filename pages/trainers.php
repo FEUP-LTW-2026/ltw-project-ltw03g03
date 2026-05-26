@@ -20,6 +20,10 @@ $stmt = $db->query(
      WHERE u.role = \'trainer\'
        AND u.is_active = 1
      ORDER BY CASE u.username
+                WHEN \'ronniec\' THEN 1
+                WHEN \'sportacus\' THEN 2
+                WHEN \'popeye\' THEN 3
+                WHEN \'oogway\' THEN 4
                 WHEN \'sarahj\' THEN 1
                 WHEN \'mikec\' THEN 2
                 WHEN \'emmar\' THEN 3
