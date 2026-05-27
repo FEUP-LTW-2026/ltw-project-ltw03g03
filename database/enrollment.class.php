@@ -29,6 +29,13 @@ class Enrollment {
 
         $isFull = $enrolledCount >= $capacity;
 
+        // Check if a cancelled enrollment already exists for this member+session
+        $stmt = $db->prepare(
+            "SELECT id FROM enrollments WHERE session_id = ? AND member_id = ? AND status = 'cancelled'"
+        );
+        $stmt->execute([$sessionId, $memberId]);
+        $existing = $stmt->fetch();
+
         if ($isFull) {
             // Get next waitlist position
             $stmt = $db->prepare(
@@ -38,15 +45,27 @@ class Enrollment {
             $stmt->execute([$sessionId]);
             $position = (int) $stmt->fetchColumn();
 
-            $db->prepare(
-                "INSERT INTO enrollments (session_id, member_id, status, waitlist_position)
-                 VALUES (?, ?, 'waitlist', ?)"
-            )->execute([$sessionId, $memberId, $position]);
+            if ($existing) {
+                $db->prepare(
+                    "UPDATE enrollments SET status = 'waitlist', waitlist_position = ?, enrolled_at = CURRENT_TIMESTAMP WHERE id = ?"
+                )->execute([$position, $existing['id']]);
+            } else {
+                $db->prepare(
+                    "INSERT INTO enrollments (session_id, member_id, status, waitlist_position)
+                     VALUES (?, ?, 'waitlist', ?)"
+                )->execute([$sessionId, $memberId, $position]);
+            }
         } else {
-            $db->prepare(
-                "INSERT INTO enrollments (session_id, member_id, status)
-                 VALUES (?, ?, 'enrolled')"
-            )->execute([$sessionId, $memberId]);
+            if ($existing) {
+                $db->prepare(
+                    "UPDATE enrollments SET status = 'enrolled', waitlist_position = NULL, enrolled_at = CURRENT_TIMESTAMP WHERE id = ?"
+                )->execute([$existing['id']]);
+            } else {
+                $db->prepare(
+                    "INSERT INTO enrollments (session_id, member_id, status)
+                     VALUES (?, ?, 'enrolled')"
+                )->execute([$sessionId, $memberId]);
+            }
         }
 
         return self::get($db, $memberId, $sessionId);
