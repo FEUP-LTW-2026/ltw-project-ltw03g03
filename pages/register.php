@@ -72,43 +72,8 @@ $flash = get_flash();
           <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
 
 
-          <!-- Role selector -->
-          <fieldset class="role-selector">
-            <legend class="role-selector__legend">I am joining as</legend>
-            <div class="role-selector__options">
+          <input type="hidden" name="role" value="member">
 
-              <label class="role-option">
-                <input type="radio" name="role" value="member" checked>
-                <span class="role-option__card">
-                  <svg class="role-option__icon" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                  </svg>
-                  <span class="role-option__label">Member</span>
-                  <span class="role-option__desc">Access classes &amp; facilities</span>
-                </span>
-              </label>
-
-              <label class="role-option">
-                <input type="radio" name="role" value="trainer">
-                <span class="role-option__card">
-                  <svg class="role-option__icon" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="11" width="4" height="4" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
-                    <rect x="17" y="11" width="4" height="4" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
-                    <rect x="7" y="7" width="2.5" height="10" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
-                    <rect x="14.5" y="7" width="2.5" height="10" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
-                    <rect x="9.5" y="11" width="5" height="2" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
-                  </svg>
-                  <span class="role-option__label">Trainer</span>
-                  <span class="role-option__desc">Teach classes &amp; personal training</span>
-                </span>
-              </label>
-
-            </div>
-          </fieldset>
-
-          <hr class="form-divider">
-          <p class="form-section-label">Personal Information</p>
 
           <div class="form__row">
             <div class="field">
@@ -171,26 +136,7 @@ $flash = get_flash();
             </div>
           </div>
 
-          <!-- Trainer-specific fields -->
-          <section class="trainer-section">
-            <p class="form-section-label">Trainer Details</p>
-            <div class="field">
-              <label class="field__label" for="reg-specialty">Specialty</label>
-              <div class="field__wrap field__wrap--select">
-                <svg class="field__icon" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <select class="field__input field__input--select" id="reg-specialty" name="specialty">
-                  <option value="" disabled selected>Select a specialty</option>
-                  <option value="strength">Strength &amp; Conditioning</option>
-                  <option value="cardio">Cardio &amp; Endurance</option>
-                  <option value="yoga">Yoga &amp; Flexibility</option>
-                  <option value="crossfit">CrossFit</option>
-                  <option value="pilates">Pilates</option>
-                  <option value="martial_arts">Martial Arts</option>
-                  <option value="nutrition">Nutrition &amp; Wellness</option>
-                </select>
-              </div>
-            </div>
-          </section>
+
 
           <label class="checkbox checkbox--terms">
             <input type="checkbox" id="terms" name="terms" required>

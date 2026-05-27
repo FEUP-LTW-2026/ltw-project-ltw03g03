@@ -123,14 +123,6 @@ body {
   z-index: 1;
 }
 
-/* ── Trainer section (register page) ──────────────────────── */
-.trainer-section {
-  display: none;
-}
-
-.form:has(input[value="trainer"]:checked) .trainer-section {
-  display: contents;
-}
 
 /* ── Footer ────────────────────────────────────────────────── */
 .auth-footer {
