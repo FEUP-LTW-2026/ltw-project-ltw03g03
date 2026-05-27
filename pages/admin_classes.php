@@ -19,6 +19,21 @@ $stmt = $db->query(
      ORDER BY c.name'
 );
 $classes = $stmt->fetchAll();
+
+$flash = get_flash();
+$editClass = null;
+$trainers = $db->query(
+    'SELECT id, first_name, last_name FROM users WHERE role = "trainer" AND is_active = 1 ORDER BY first_name, last_name'
+)->fetchAll();
+
+if (isset($_GET['edit_class'])) {
+    $editId = (int) $_GET['edit_class'];
+    if ($editId > 0) {
+        $editStmt = $db->prepare('SELECT * FROM classes WHERE id = ?');
+        $editStmt->execute([$editId]);
+        $editClass = $editStmt->fetch();
+    }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -54,6 +69,73 @@ $classes = $stmt->fetchAll();
         <span class="admin-section__line"></span>
       </div>
 
+      <?php if ($flash): ?>
+      <div class="flash flash--<?= htmlspecialchars($flash['type'], ENT_QUOTES, 'UTF-8') ?>">
+        <?= htmlspecialchars($flash['message'], ENT_QUOTES, 'UTF-8') ?>
+      </div>
+      <?php endif; ?>
+
+      <div class="admin-section__forms">
+        <div class="admin-panel admin-panel--split">
+          <div class="admin-panel__block">
+            <h2 class="admin-panel__title"><?= $editClass ? 'Edit Class' : 'Create Class' ?></h2>
+            <form class="form" method="post" action="../actions/admin_save_class.php" novalidate>
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+              <?php if ($editClass): ?>
+                <input type="hidden" name="class_id" value="<?= (int)$editClass['id'] ?>">
+              <?php endif; ?>
+
+              <div class="field">
+                <label class="field__label" for="class-name">Class Name</label>
+                <input class="field__input" id="class-name" name="name" type="text" value="<?= htmlspecialchars($editClass['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+              </div>
+
+              <div class="form__row">
+                <div class="field">
+                  <label class="field__label" for="class-type">Type</label>
+                  <select class="field__input" id="class-type" name="type" required>
+                    <?php foreach (['powerlifting','hiit','crossfit','yoga','other'] as $typeOption): ?>
+                      <option value="<?= $typeOption ?>" <?= isset($editClass['type']) && $editClass['type'] === $typeOption ? 'selected' : '' ?>><?= ucfirst($typeOption) ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="class-level">Level</label>
+                  <select class="field__input" id="class-level" name="level" required>
+                    <?php foreach (['all','beginner','intermediate','advanced'] as $levelOption): ?>
+                      <option value="<?= $levelOption ?>" <?= isset($editClass['level']) && $editClass['level'] === $levelOption ? 'selected' : '' ?>><?= ucfirst($levelOption) ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form__row">
+                <div class="field">
+                  <label class="field__label" for="class-capacity">Capacity</label>
+                  <input class="field__input" id="class-capacity" name="capacity" type="number" min="1" value="<?= htmlspecialchars($editClass['capacity'] ?? '20', ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="class-trainer">Assigned Trainer</label>
+                  <select class="field__input" id="class-trainer" name="trainer_id">
+                    <option value="">Unassigned</option>
+                    <?php foreach ($trainers as $trainer): ?>
+                      <option value="<?= (int)$trainer['id'] ?>" <?= isset($editClass['trainer_id']) && $editClass['trainer_id'] === $trainer['id'] ? 'selected' : '' ?>><?= htmlspecialchars($trainer['first_name'] . ' ' . $trainer['last_name'], ENT_QUOTES, 'UTF-8') ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="class-description">Description</label>
+                <textarea class="field__input" id="class-description" name="description"><?= htmlspecialchars($editClass['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+              </div>
+
+              <button class="btn btn-primary" type="submit"><?= $editClass ? 'Save Changes' : 'Create Class' ?></button>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <div class="admin-table-wrap">
         <table class="admin-table">
           <thead>
@@ -66,6 +148,7 @@ $classes = $stmt->fetchAll();
               <th>Trainer</th>
               <th>Upcoming</th>
               <th>Active</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -79,6 +162,14 @@ $classes = $stmt->fetchAll();
               <td><?= $c['trainer_id'] ? htmlspecialchars($c['first_name'] . ' ' . $c['last_name'], ENT_QUOTES, 'UTF-8') : '<span class="muted">Unassigned</span>' ?></td>
               <td class="num"><?= (int)$c['upcoming_sessions'] ?></td>
               <td><span class="badge <?= $c['is_active'] ? 'badge--active' : 'badge--inactive' ?>"><?= $c['is_active'] ? 'Active' : 'Inactive' ?></span></td>
+              <td>
+                <a class="btn btn-secondary" href="?edit_class=<?= (int)$c['id'] ?>">Edit</a>
+                <form method="post" action="../actions/admin_toggle_class.php" style="display:inline; margin:0;">
+                  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                  <input type="hidden" name="class_id" value="<?= (int)$c['id'] ?>">
+                  <button class="btn btn-ghost" type="submit"><?= $c['is_active'] ? 'Deactivate' : 'Reactivate' ?></button>
+                </form>
+              </td>
             </tr>
             <?php endforeach; ?>
           </tbody>

@@ -33,15 +33,29 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
+// Validate and prepare specialty (only applicable for trainers)
+$specialty = null;
+if ($requested_role === 'trainer') {
+    $allowedSpecialties = ['strength', 'cardio', 'yoga', 'crossfit', 'pilates', 'martial_arts', 'nutrition', ''];
+    $specialty = (in_array($_POST['specialty'] ?? '', $allowedSpecialties)) ? ($_POST['specialty'] ?: null) : null;
+}
+
 try {
     User::create($db, [
         'first_name' => $firstname,
         'last_name'  => $lastname,
         'email'      => $email,
         'password'   => $password,
+<<<<<<< Updated upstream
         'phone'      => $_POST['phone'] ?? null,
         'dob'        => $_POST['dob']   ?? null,
         'role'       => 'member',
+=======
+        'phone'      => $_POST['phone']      ?? null,
+        'dob'        => $_POST['dob']        ?? null,
+        'role'       => $requested_role,
+        'specialty'  => $specialty,
+>>>>>>> Stashed changes
     ]);
 } catch (PDOException $e) {
     $msg = 'Registration failed.';
@@ -61,6 +75,7 @@ try {
 // Auto-login the newly registered member
 $user = User::getUserWithPassword($db, $email, $password);
 
+<<<<<<< Updated upstream
 if ($user) {
     $_SESSION['user'] = [
         'id'       => $user->id,
@@ -68,6 +83,19 @@ if ($user) {
         'username' => $user->username
     ];
     refresh_session_user();
+=======
+    if ($user) {
+        $_SESSION['user'] = [
+            'id' => $user->id,
+            'role' => $user->role,
+            'username' => $user->username
+        ];
+        refresh_session_user();
+    }
+    header('Location: ../pages/dashboard.php');
+} else {
+    // Admin created the account; redirect back to admin users page
+    set_flash('success', 'User account created successfully.');
+    header('Location: ../pages/admin_users.php');
+>>>>>>> Stashed changes
 }
-
-header('Location: ../pages/dashboard.php');

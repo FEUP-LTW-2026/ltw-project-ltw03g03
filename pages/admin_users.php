@@ -7,11 +7,13 @@ $role = $admin['role'];
 $db = get_db();
 
 $stmt = $db->query(
-    'SELECT id, username, first_name, last_name, email, role, is_active, created_at
+    'SELECT id, username, first_name, last_name, email, phone, role, is_active, created_at
      FROM users
      ORDER BY created_at DESC'
 );
 $users = $stmt->fetchAll();
+
+$flash = get_flash();
 ?>
 <!doctype html>
 <html lang="en">
@@ -45,7 +47,14 @@ $users = $stmt->fetchAll();
       <div class="admin-section__heading">
         <span class="admin-section__title">Registered Users</span>
         <span class="admin-section__line"></span>
+        <a href="admin_create_user.php" class="btn btn-primary">+ Create User</a>
       </div>
+
+      <?php if ($flash): ?>
+      <div class="flash flash--<?= htmlspecialchars($flash['type'], ENT_QUOTES, 'UTF-8') ?>">
+        <?= htmlspecialchars($flash['message'], ENT_QUOTES, 'UTF-8') ?>
+      </div>
+      <?php endif; ?>
 
       <div class="admin-table-wrap">
         <table class="admin-table">
@@ -57,6 +66,7 @@ $users = $stmt->fetchAll();
               <th>Role</th>
               <th>Active</th>
               <th>Joined</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -68,6 +78,16 @@ $users = $stmt->fetchAll();
               <td><span class="badge badge--role-<?= htmlspecialchars($u['role'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($u['role'], ENT_QUOTES, 'UTF-8') ?></span></td>
               <td><span class="badge <?= $u['is_active'] ? 'badge--active' : 'badge--inactive' ?>"><?= $u['is_active'] ? 'Active' : 'Inactive' ?></span></td>
               <td class="muted"><?= htmlspecialchars(date('d M Y', strtotime($u['created_at'])), ENT_QUOTES, 'UTF-8') ?></td>
+              <td class="admin-table__actions">
+                <a class="btn btn-secondary" href="admin_edit_user.php?id=<?= (int)$u['id'] ?>">Edit</a>
+                <?php if ((int)$u['id'] !== (int)$admin['id']): ?>
+                <form method="post" action="../actions/admin_toggle_user.php" style="display:inline; margin:0;">
+                  <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                  <input type="hidden" name="user_id" value="<?= (int)$u['id'] ?>">
+                  <button class="btn btn-ghost" type="submit"><?= $u['is_active'] ? 'Deactivate' : 'Reactivate' ?></button>
+                </form>
+                <?php endif; ?>
+              </td>
             </tr>
             <?php endforeach; ?>
           </tbody>

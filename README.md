@@ -20,11 +20,11 @@
 - [ ] Track and manage their assigned class schedule.
 
 **Admins:**
-- [ ] Manage members and trainers (create, update, and deactivate accounts).
-- [ ] Manage the class catalog (create, edit, and remove classes) and assign trainers to them.
-- [ ] Manage equipment in the main training area (add, update availability status, and remove items).
-- [ ] Elevate a user to admin status.
-- [ ] Oversee and ensure the smooth operation of the entire system.
+- [x] Manage members and trainers (create, update, and deactivate accounts).
+- [x] Manage the class catalog (create, edit, and remove classes) and assign trainers to them.
+- [x] Manage equipment in the main training area (add, update availability status, and remove items).
+- [x] Elevate a user to admin status.
+- [x] Oversee and ensure the smooth operation of the entire system.
 
 **Extra:**
 - [ ] Something extra (e.g., personal training bookings, membership plans, waitlist, ...).
