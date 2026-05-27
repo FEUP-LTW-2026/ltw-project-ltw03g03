@@ -557,6 +557,15 @@
   color: var(--color-subtle);
 }
 
+.pt-slot__trainer {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
 .pt-slot__time {
   font-family: var(--font-display);
   font-size: 1.3rem;

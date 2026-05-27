@@ -10,6 +10,7 @@ $role  = $user['role'];
 // ── Fetch role-specific data ───────────────────────────────────
 $upcoming_sessions = [];
 $enrolled_count    = 0;
+$upcoming_pt_count = 0;
 $trainer_classes   = [];
 $roster_count      = 0;
 $admin_stats       = [];
@@ -29,10 +30,42 @@ if ($role === 'member') {
     $stmt->execute([$user['id']]);
     $upcoming_sessions = $stmt->fetchAll();
 
-    // Total enrollments
-    $stmt = $db->prepare('SELECT COUNT(*) FROM enrollments WHERE member_id = ? AND status = "enrolled"');
+    // Upcoming PT sessions
+    $stmt = $db->prepare(
+        "SELECT pb.id, pb.scheduled_at, pb.duration_min, pb.status,
+                u.first_name, u.last_name
+         FROM pt_bookings pb
+         JOIN users u ON u.id = pb.trainer_id
+         WHERE pb.member_id = ?
+           AND pb.scheduled_at >= datetime('now')
+           AND pb.status != 'cancelled'
+         ORDER BY pb.scheduled_at ASC LIMIT 5"
+    );
     $stmt->execute([$user['id']]);
-    $enrolled_count = $stmt->fetchColumn();
+    $pt_bookings = $stmt->fetchAll();
+
+    // Upcoming PT session count
+    $stmt = $db->prepare(
+        "SELECT COUNT(*)
+         FROM pt_bookings
+         WHERE member_id = ?
+           AND scheduled_at >= datetime('now')
+           AND status != 'cancelled'"
+    );
+    $stmt->execute([$user['id']]);
+    $upcoming_pt_count = (int)$stmt->fetchColumn();
+
+    // Upcoming class enrollments
+    $stmt = $db->prepare(
+        "SELECT COUNT(*)
+         FROM enrollments e
+         JOIN class_sessions cs ON cs.id = e.session_id
+         WHERE e.member_id = ?
+           AND e.status = 'enrolled'
+           AND cs.scheduled_at >= datetime('now')"
+    );
+    $stmt->execute([$user['id']]);
+    $enrolled_count = (int)$stmt->fetchColumn();
 
     // Current plan
     $stmt = $db->prepare(
@@ -145,6 +178,8 @@ $type_colors = [
       <div class="dash-card__title">Active Enrollments</div>
       <div class="dash-card__big"><?= $enrolled_count ?></div>
       <div class="dash-card__sub">upcoming classes</div>
+      <div class="dash-card__big"><?= $upcoming_pt_count ?></div>
+      <div class="dash-card__sub">upcoming PT <?= $upcoming_pt_count === 1 ? 'session' : 'sessions' ?></div>
     </article>
 
     <article class="dash-card">
@@ -201,6 +236,30 @@ $type_colors = [
         <a href="classes.php" style="display:inline-block;margin-top:1rem;font-family:var(--fu);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Browse more classes →</a>
       <?php else: ?>
         <p style="color:var(--subtle);font-size:.9rem;">You have no upcoming classes. <a href="classes.php">Browse the schedule →</a></p>
+      <?php endif; ?>
+    </article>
+
+    <article class="dash-card dash-card--wide">
+      <div class="dash-card__title">Upcoming PT Sessions</div>
+      <?php if (!empty($pt_bookings)): ?>
+        <div class="session-list">
+          <?php foreach ($pt_bookings as $pb): ?>
+          <article class="session-item">
+            <div class="session-item__bar" style="background:var(--accent)"></div>
+            <div class="session-item__time"><?= date('D d M, H:i', strtotime($pb['scheduled_at'])) ?></div>
+            <div class="session-item__info">
+              <div class="session-item__name">PT with <?= htmlspecialchars($pb['first_name'] . ' ' . $pb['last_name']) ?></div>
+              <div class="session-item__meta"><?= $pb['duration_min'] ?> min · Status: <?= ucfirst($pb['status']) ?></div>
+            </div>
+            <div class="session-item__action">
+              <a href="../actions/cancel_pt_booking.php?booking_id=<?= $pb['id'] ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" onclick="return confirm('Cancel this PT session?')">Cancel</a>
+            </div>
+          </article>
+          <?php endforeach; ?>
+        </div>
+        <a href="pt_bookings.php" style="display:inline-block;margin-top:1rem;font-family:var(--fu);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">View all PT bookings →</a>
+      <?php else: ?>
+        <p style="color:var(--subtle);font-size:.9rem;">You have no upcoming PT sessions. <a href="trainers.php">Book a trainer →</a></p>
       <?php endif; ?>
     </article>
 
