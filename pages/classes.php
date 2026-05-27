@@ -578,13 +578,7 @@ function toggle_trainer_url(int $trainer_id): string {
       </form>
     </div>
   </div>
-  <script>
-    function updateStars(val) {
-      for(let i=1;i<=5;i++) {
-        document.getElementById('star-'+i).style.color = i<=val ? '#c0a030' : 'var(--surface-3)';
-      }
-    }
-  </script>
+  <script src="../js/classes.js"></script>
   <?php endif; ?>
 
   <footer>

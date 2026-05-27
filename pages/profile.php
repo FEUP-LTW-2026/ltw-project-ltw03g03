@@ -352,14 +352,6 @@ if ($role === 'member') {
     </div>
   </footer>
 
-  <script>
-    const toggle = document.getElementById('nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    toggle.addEventListener('click', () => {
-      navLinks.classList.toggle('nav-links--open');
-      toggle.classList.toggle('nav-mobile-btn--open');
-    });
-  </script>          
 
 </body>
 </html>

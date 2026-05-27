@@ -71,15 +71,4 @@ $is_active = function($page) use ($current_page) {
 }
 </style>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const toggle = document.getElementById('nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    if (toggle && navLinks) {
-      toggle.addEventListener('click', () => {
-        navLinks.classList.toggle('nav-links--open');
-        toggle.classList.toggle('nav-mobile-btn--open');
-      });
-    }
-  });
-</script>
+<script src="<?= $base_path ?>js/nav.js"></script>
