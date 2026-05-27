@@ -16,10 +16,22 @@ $role = current_user()['role'] ?? null;
 $user = User::getUser($db, $uid);
 
 if ($user) {
-    $user->firstName = $_POST['first_name'] ?? $user->firstName;
-    $user->lastName  = $_POST['last_name']  ?? $user->lastName;
-    $user->username  = $_POST['username']   ?? $user->username;
-    $user->phone     = $_POST['phone']      ?? $user->phone;
+    $user->firstName = trim($_POST['first_name'] ?? $user->firstName);
+    $user->lastName  = trim($_POST['last_name']  ?? $user->lastName);
+    $user->phone     = $_POST['phone'] ?? $user->phone;
+
+    // Validate username uniqueness
+    $newUsername = trim($_POST['username'] ?? $user->username);
+    if ($newUsername !== $user->username) {
+        $stmt = $db->prepare('SELECT id FROM users WHERE username = ? AND id != ?');
+        $stmt->execute([$newUsername, $uid]);
+        if ($stmt->fetch()) {
+            set_flash('error', 'That username is already taken.');
+            header('Location: ../pages/profile.php');
+            exit;
+        }
+    }
+    $user->username = $newUsername;
 
     // Handle photo upload
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
@@ -40,6 +52,10 @@ if ($user) {
             if (move_uploaded_file($file['tmp_name'], $upload_dir . $new_name)) {
                 $user->photoPath = 'uploads/profiles/' . $new_name;
             }
+        } else {
+            set_flash('error', 'Invalid photo. Use JPG, PNG or WebP under 5 MB.');
+            header('Location: ../pages/profile.php');
+            exit;
         }
     }
 

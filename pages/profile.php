@@ -173,7 +173,7 @@ if ($role === 'member') {
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
             <!-- Hidden photo input triggered by avatar button -->
-            <input type="file" id="photo-input" name="photo" accept="image/jpeg,image/png,image/webp,image/gif"
+            <input type="file" id="photo-input" name="photo" accept="image/jpeg,image/png,image/webp"
                    onchange="this.form.submit()">
 
             <div class="info-grid">
