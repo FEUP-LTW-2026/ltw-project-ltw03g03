@@ -77,6 +77,10 @@
   line-height: 1;
 }
 
+.dash-card__big:not(:first-of-type) {
+  margin-top: 1.2rem;
+}
+
 .dash-card__sub {
   font-family: var(--fu);
   font-size: .72rem;
