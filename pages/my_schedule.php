@@ -193,28 +193,31 @@ ksort($sessions_by_day);
         <span class="trainer-section-heading__title">Open PT Slots</span>
         <div class="trainer-section-heading__line"></div>
       </header>
-      <div class="pt-bookings-list">
+      <div class="trainer-session-list">
         <?php foreach ($pt_slots as $slot): ?>
           <?php
             $start_ts = strtotime($slot['start_time']);
             $end_ts = strtotime($slot['end_time']);
             $duration = (int)round(($end_ts - $start_ts) / 60);
           ?>
-          <article class="pt-booking-item">
-            <div class="pt-booking-item__info">
-              <div class="pt-booking-item__trainer"><?= date('D, d M H:i', $start_ts) ?></div>
-              <div class="pt-booking-item__time"><?= date('H:i', $end_ts) ?> &middot; <?= $duration ?> min</div>
+          <article class="trainer-session-card trainer-session-card--pt">
+            <div class="trainer-session-card__date">
+              <time datetime="<?= htmlspecialchars($slot['start_time'], ENT_QUOTES, 'UTF-8') ?>"><?= date('H:i', $start_ts) ?></time>
+              <span><?= (int)$duration ?> min</span>
             </div>
-            <?php if ((int)$slot['is_booked'] === 1): ?>
-              <span class="pt-booking-item__status pt-booking-item__status--confirmed">Booked</span>
-            <?php else: ?>
+            <div class="trainer-session-card__body">
+              <div class="trainer-session-card__type trainer-session-card__type--pt">Personal Training</div>
+              <h2>Open Slot</h2>
+              <p>Available</p>
+            </div>
+            <div class="trainer-session-card__actions">
               <form method="post" action="../actions/trainer_schedule_action.php">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="action" value="cancel_pt_slot">
                 <input type="hidden" name="slot_id" value="<?= (int)$slot['id'] ?>">
                 <button class="trainer-session-card__action trainer-session-card__action--danger" type="submit">Remove</button>
               </form>
-            <?php endif; ?>
+            </div>
           </article>
         <?php endforeach; ?>
       </div>

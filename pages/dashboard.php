@@ -105,6 +105,20 @@ if ($role === 'trainer') {
     $stmt->execute([$user['id']]);
     $upcoming_sessions = $stmt->fetchAll();
 
+    // Upcoming PT sessions for trainer
+    $stmt = $db->prepare(
+        "SELECT pb.id, pb.scheduled_at, pb.duration_min, pb.status,
+                u.first_name, u.last_name
+         FROM pt_bookings pb
+         JOIN users u ON u.id = pb.member_id
+         WHERE pb.trainer_id = ?
+           AND pb.scheduled_at >= datetime('now')
+           AND pb.status != 'cancelled'
+         ORDER BY pb.scheduled_at ASC LIMIT 8"
+    );
+    $stmt->execute([$user['id']]);
+    $upcoming_pt_sessions = $stmt->fetchAll();
+
     // Trainer profile
     $stmt = $db->prepare('SELECT * FROM trainer_profiles WHERE user_id = ?');
     $stmt->execute([$user['id']]);
@@ -304,6 +318,29 @@ $type_colors = [
           <span>My Profile</span>
         </a>
       </div>
+    </article>
+
+    <article class="dash-card dash-card--wide">
+      <div class="dash-card__title">Upcoming PT Sessions</div>
+      <?php if (!empty($upcoming_pt_sessions)): ?>
+        <div class="session-list">
+          <?php foreach ($upcoming_pt_sessions as $pt): ?>
+          <article class="session-item">
+            <div class="session-item__bar" style="background:var(--accent)"></div>
+            <div class="session-item__time"><?= date('D d M, H:i', strtotime($pt['scheduled_at'])) ?></div>
+            <div class="session-item__info">
+              <div class="session-item__name">PT with <?= htmlspecialchars($pt['first_name'] . ' ' . $pt['last_name']) ?></div>
+              <div class="session-item__meta"><?= $pt['duration_min'] ?> min · Status: <?= ucfirst($pt['status']) ?></div>
+            </div>
+            <div class="session-item__action">
+              <a href="my_schedule.php">Manage</a>
+            </div>
+          </article>
+          <?php endforeach; ?>
+        </div>
+      <?php else: ?>
+        <p style="color:var(--subtle);font-size:.9rem;">No upcoming PT sessions.</p>
+      <?php endif; ?>
     </article>
 
     <article class="dash-card dash-card--wide">

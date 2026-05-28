@@ -836,6 +836,10 @@
   z-index: 2;
 }
 
+.trainer-workspace__panel--compact {
+  margin-bottom: 3rem;
+}
+
 .trainer-workspace__manager {
   display: grid;
   gap: 1rem;
