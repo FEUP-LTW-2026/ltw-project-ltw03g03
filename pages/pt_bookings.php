@@ -10,7 +10,23 @@ $role = $user['role'];
 $trainer_id = (int)($_GET['trainer_id'] ?? 0);
 $trainer = null;
 $slots = [];
+$my_bookings = [];
 $back_href = 'trainers.php';
+
+if ($role === 'member') {
+    $stmt = $db->prepare(
+        'SELECT pb.id, pb.scheduled_at, pb.duration_min, pb.status,
+                u.first_name, u.last_name
+         FROM pt_bookings pb
+         JOIN users u ON u.id = pb.trainer_id
+         WHERE pb.member_id = ?
+           AND pb.scheduled_at >= datetime("now", "-1 day")
+           AND pb.status != "cancelled"
+         ORDER BY pb.scheduled_at ASC'
+    );
+    $stmt->execute([$user['id']]);
+    $my_bookings = $stmt->fetchAll();
+}
 
 if ($trainer_id > 0) {
     $stmt = $db->prepare('SELECT users.id, first_name, last_name, photo_path, specialty FROM users LEFT JOIN trainer_profiles ON users.id = trainer_profiles.user_id WHERE users.id = ? AND role = "trainer"');
@@ -89,6 +105,42 @@ if ($trainer_id > 0) {
     </header>
 
     <section class="trainers-layout" style="padding-top: 2rem; max-width: 800px; margin: 0 auto;">
+      <?php if ($my_bookings): ?>
+        <section style="margin-bottom:2rem;">
+          <header class="trainer-section-heading">
+            <span class="trainer-section-heading__title">Your PT Sessions</span>
+            <div class="trainer-section-heading__line"></div>
+          </header>
+          <div class="pt-bookings-list">
+            <?php foreach ($my_bookings as $booking): ?>
+              <article class="pt-booking-item">
+                <div class="pt-booking-item__info">
+                  <div class="pt-booking-item__trainer">
+                    <?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name'], ENT_QUOTES, 'UTF-8') ?>
+                  </div>
+                  <div class="pt-booking-item__time">
+                    <?= date('D, d M H:i', strtotime($booking['scheduled_at'])) ?>
+                    &middot;
+                    <?= (int)$booking['duration_min'] ?> min
+                  </div>
+                </div>
+                <span class="pt-booking-item__status pt-booking-item__status--<?= htmlspecialchars($booking['status'], ENT_QUOTES, 'UTF-8') ?>">
+                  <?= htmlspecialchars($booking['status'], ENT_QUOTES, 'UTF-8') ?>
+                </span>
+                <?php if (in_array($booking['status'], ['pending', 'confirmed'], true)): ?>
+                  <a
+                    class="trainer-session-card__action trainer-session-card__action--danger"
+                    href="../actions/cancel_pt_booking.php?booking_id=<?= (int)$booking['id'] ?>&csrf_token=<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
+                    onclick="return confirm('Cancel this PT session?')">
+                    Cancel
+                  </a>
+                <?php endif; ?>
+              </article>
+            <?php endforeach; ?>
+          </div>
+        </section>
+      <?php endif; ?>
+
       <?php if ($trainer_id > 0 && !$trainer): ?>
         <div class="trainers-empty">
           Trainer not found. <a href="trainers.php" style="color: var(--accent);">Return to Trainers</a>

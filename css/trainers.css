@@ -789,6 +789,12 @@
   opacity: 0.7;
 }
 
+.pt-booking-item__status--completed {
+  color: #42a882;
+  border-color: rgba(66, 168, 130, 0.35);
+  background: rgba(66, 168, 130, 0.08);
+}
+
 /* ── Empty State ───────────────────────────────────────────── */
 .trainers-empty {
   text-align: center;
@@ -831,6 +837,8 @@
 }
 
 .trainer-workspace__manager {
+  display: grid;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 

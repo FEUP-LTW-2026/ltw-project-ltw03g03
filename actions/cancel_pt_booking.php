@@ -14,20 +14,31 @@ $db         = get_db();
 $booking_id = (int)$_GET['booking_id'];
 
 // Verify the booking belongs to the current user and get booking details
-$stmt = $db->prepare('SELECT id, trainer_id, scheduled_at FROM pt_bookings WHERE id = ? AND member_id = ?');
+$stmt = $db->prepare(
+    'SELECT id, trainer_id, scheduled_at, status
+     FROM pt_bookings
+     WHERE id = ? AND member_id = ?
+     LIMIT 1'
+);
 $stmt->execute([$booking_id, $uid]);
 $booking = $stmt->fetch();
 
 if (!$booking) {
     set_flash('error', 'Booking not found.');
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '../pages/dashboard.php'));
+    exit;
+}
+
+if (!in_array($booking['status'], ['pending', 'confirmed'], true)) {
+    set_flash('error', 'This PT booking can no longer be cancelled.');
+    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '../pages/dashboard.php'));
     exit;
 }
 
 $db->beginTransaction();
 try {
     // Cancel the booking
-    $stmt = $db->prepare('UPDATE pt_bookings SET status = "cancelled" WHERE id = ?');
+    $stmt = $db->prepare('UPDATE pt_bookings SET status = "cancelled" WHERE id = ? AND status IN ("pending", "confirmed")');
     $stmt->execute([$booking_id]);
 
     // Make the availability slot bookable again
@@ -38,9 +49,9 @@ try {
 } catch (Exception $e) {
     $db->rollBack();
     set_flash('error', 'Failed to cancel session. Please try again.');
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
+    header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '../pages/dashboard.php'));
     exit;
 }
 
 set_flash('success', 'PT Session cancelled successfully!');
-header('Location: ' . $_SERVER['HTTP_REFERER']);
+header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '../pages/dashboard.php'));

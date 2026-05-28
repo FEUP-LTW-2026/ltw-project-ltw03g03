@@ -71,6 +71,80 @@ try {
         redirect_schedule();
     }
 
+    if ($action === 'create_pt_slot') {
+        $startRaw = trim($_POST['start_time'] ?? '');
+        $endRaw = trim($_POST['end_time'] ?? '');
+        $startTimestamp = strtotime($startRaw);
+        $endTimestamp = strtotime($endRaw);
+
+        if (!$startTimestamp || !$endTimestamp) {
+            set_flash('error', 'Choose a valid PT start and end time.');
+            redirect_schedule();
+        }
+
+        $startTime = date('Y-m-d H:i:00', $startTimestamp);
+        $endTime = date('Y-m-d H:i:00', $endTimestamp);
+        $durationMinutes = (int)(($endTimestamp - $startTimestamp) / 60);
+
+        if ($startTimestamp <= time()) {
+            set_flash('error', 'PT slots must start in the future.');
+            redirect_schedule();
+        }
+
+        if ($durationMinutes < 30 || $durationMinutes > 180) {
+            set_flash('error', 'PT slots must be between 30 and 180 minutes.');
+            redirect_schedule();
+        }
+
+        $stmt = $db->prepare(
+            'SELECT id FROM pt_availability
+             WHERE trainer_id = ?
+               AND start_time < ?
+               AND end_time > ?
+             LIMIT 1'
+        );
+        $stmt->execute([$trainerId, $endTime, $startTime]);
+        if ($stmt->fetch()) {
+            set_flash('error', 'That PT slot overlaps another availability slot.');
+            redirect_schedule();
+        }
+
+        $db->prepare(
+            'INSERT INTO pt_availability (trainer_id, start_time, end_time, is_booked)
+             VALUES (?, ?, ?, 0)'
+        )->execute([$trainerId, $startTime, $endTime]);
+
+        set_flash('success', 'PT availability added.');
+        redirect_schedule();
+    }
+
+    if ($action === 'cancel_pt_slot') {
+        $slotId = (int)($_POST['slot_id'] ?? 0);
+
+        $stmt = $db->prepare(
+            'SELECT id, is_booked
+             FROM pt_availability
+             WHERE id = ? AND trainer_id = ?'
+        );
+        $stmt->execute([$slotId, $trainerId]);
+        $slot = $stmt->fetch();
+
+        if (!$slot) {
+            set_flash('error', 'PT slot not found.');
+            redirect_schedule();
+        }
+
+        if ((int)$slot['is_booked'] === 1) {
+            set_flash('error', 'Booked PT slots must be cancelled from the booking card.');
+            redirect_schedule();
+        }
+
+        $db->prepare('DELETE FROM pt_availability WHERE id = ?')->execute([$slotId]);
+
+        set_flash('success', 'PT availability removed.');
+        redirect_schedule();
+    }
+
     if ($action === 'cancel_class_session' || $action === 'complete_class_session') {
         $sessionId = (int)($_POST['session_id'] ?? 0);
         $status = $action === 'cancel_class_session' ? 'cancelled' : 'completed';

@@ -44,6 +44,16 @@ $stmt = $db->prepare(
 $stmt->execute([$uid]);
 $pt_sessions = $stmt->fetchAll();
 
+$stmt = $db->prepare(
+    'SELECT id, start_time, end_time, is_booked
+     FROM pt_availability
+     WHERE trainer_id = ?
+       AND start_time >= datetime("now")
+     ORDER BY start_time ASC'
+);
+$stmt->execute([$uid]);
+$pt_slots = $stmt->fetchAll();
+
 // Combine all sessions and sort by date/time
 $all_sessions = [];
 foreach ($class_sessions as $s) {
@@ -159,7 +169,57 @@ ksort($sessions_by_day);
           </p>
         <?php endif; ?>
       </form>
+
+      <form class="trainer-schedule-form" method="post" action="../actions/trainer_schedule_action.php">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+        <input type="hidden" name="action" value="create_pt_slot">
+        <div class="trainer-schedule-form__body">
+          <div class="field">
+            <label class="field__label" for="pt_start_time">PT Start</label>
+            <input class="field__input" id="pt_start_time" name="start_time" type="datetime-local" required>
+          </div>
+          <div class="field">
+            <label class="field__label" for="pt_end_time">PT End</label>
+            <input class="field__input" id="pt_end_time" name="end_time" type="datetime-local" required>
+          </div>
+          <button class="btn btn-primary" type="submit">Add PT Slot</button>
+        </div>
+      </form>
     </section>
+
+    <?php if ($pt_slots): ?>
+    <section class="trainer-workspace__panel trainer-workspace__panel--compact">
+      <header class="trainer-section-heading">
+        <span class="trainer-section-heading__title">Open PT Slots</span>
+        <div class="trainer-section-heading__line"></div>
+      </header>
+      <div class="pt-bookings-list">
+        <?php foreach ($pt_slots as $slot): ?>
+          <?php
+            $start_ts = strtotime($slot['start_time']);
+            $end_ts = strtotime($slot['end_time']);
+            $duration = (int)round(($end_ts - $start_ts) / 60);
+          ?>
+          <article class="pt-booking-item">
+            <div class="pt-booking-item__info">
+              <div class="pt-booking-item__trainer"><?= date('D, d M H:i', $start_ts) ?></div>
+              <div class="pt-booking-item__time"><?= date('H:i', $end_ts) ?> &middot; <?= $duration ?> min</div>
+            </div>
+            <?php if ((int)$slot['is_booked'] === 1): ?>
+              <span class="pt-booking-item__status pt-booking-item__status--confirmed">Booked</span>
+            <?php else: ?>
+              <form method="post" action="../actions/trainer_schedule_action.php">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="action" value="cancel_pt_slot">
+                <input type="hidden" name="slot_id" value="<?= (int)$slot['id'] ?>">
+                <button class="trainer-session-card__action trainer-session-card__action--danger" type="submit">Remove</button>
+              </form>
+            <?php endif; ?>
+          </article>
+        <?php endforeach; ?>
+      </div>
+    </section>
+    <?php endif; ?>
 
     <section class="trainer-workspace__panel">
       <?php if (empty($sessions_by_day)): ?>
