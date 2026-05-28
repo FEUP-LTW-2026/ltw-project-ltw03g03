@@ -206,9 +206,11 @@ function add_in_filter(array &$where, array &$params, string $column, array $val
 $valid_types = ['powerlifting', 'hiit', 'crossfit', 'yoga'];
 $valid_levels = ['beginner', 'intermediate', 'advanced'];
 $valid_days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+$valid_times = ['morning', 'afternoon', 'evening'];
 $filter_types = selected_values('type', $valid_types);
 $filter_levels = selected_values('level', $valid_levels);
 $filter_days = selected_values('day', $valid_days);
+$filter_times = selected_values('time', $valid_times);
 
 // ── Fetch all active trainers for the filter bar ──────────────
 $trainers = $db->query(
@@ -247,6 +249,23 @@ if ($filter_days) {
         $day_values[] = $day_map[$day];
     }
     add_in_filter($where, $params, "strftime('%w', cs.scheduled_at)", $day_values);
+}
+
+if ($filter_times) {
+    $time_conditions = [];
+    foreach ($filter_times as $time) {
+        if ($time === 'morning') {
+            $time_conditions[] = "(time(cs.scheduled_at) >= '06:00:00' AND time(cs.scheduled_at) < '12:00:00')";
+        } elseif ($time === 'afternoon') {
+            $time_conditions[] = "(time(cs.scheduled_at) >= '12:00:00' AND time(cs.scheduled_at) < '17:00:00')";
+        } elseif ($time === 'evening') {
+            $time_conditions[] = "(time(cs.scheduled_at) >= '17:00:00' AND time(cs.scheduled_at) < '22:00:00')";
+        }
+    }
+
+    if ($time_conditions) {
+        $where[] = '(' . implode(' OR ', $time_conditions) . ')';
+    }
 }
 
 $sql = '
@@ -332,6 +351,7 @@ function is_active_filter(string $param, string $value): string {
         'type' => ['powerlifting', 'hiit', 'crossfit', 'yoga'],
         'level' => ['beginner', 'intermediate', 'advanced'],
         'day' => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+        'time' => ['morning', 'afternoon', 'evening'],
     ];
     $selected = selected_values($param, $allowed[$param] ?? []);
     return ($value === 'all' ? empty($selected) : in_array($value, $selected, true)) ? 'chip--active' : '';
@@ -356,6 +376,7 @@ function toggle_filter_url(string $param, string $value): string {
         'type' => ['powerlifting', 'hiit', 'crossfit', 'yoga'],
         'level' => ['beginner', 'intermediate', 'advanced'],
         'day' => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+        'time' => ['morning', 'afternoon', 'evening'],
     ];
     $selected = selected_values($param, $allowed[$param] ?? []);
     if (in_array($value, $selected, true)) {
@@ -451,6 +472,17 @@ function toggle_trainer_url(int $trainer_id): string {
             <?php foreach (['mon'=>'Mon','tue'=>'Tue','wed'=>'Wed','thu'=>'Thu','fri'=>'Fri','sat'=>'Sat'] as $k=>$v): ?>
             <a href="<?= toggle_filter_url('day',$k) ?>" class="chip <?= is_active_filter('day',$k) ?>"><?= $v ?></a>
             <?php endforeach; ?>
+          </div>
+        </div>
+
+        <!-- Time -->
+        <div class="filter-group">
+          <span class="filter-group__label">Time</span>
+          <div class="filter-chips">
+            <a href="<?= filter_url(['time'=>'all']) ?>" class="chip <?= is_active_filter('time','all') ?>">All</a>
+            <a href="<?= toggle_filter_url('time','morning') ?>" class="chip <?= is_active_filter('time','morning') ?>">Morning</a>
+            <a href="<?= toggle_filter_url('time','afternoon') ?>" class="chip <?= is_active_filter('time','afternoon') ?>">Afternoon</a>
+            <a href="<?= toggle_filter_url('time','evening') ?>" class="chip <?= is_active_filter('time','evening') ?>">Evening</a>
           </div>
         </div>
 
