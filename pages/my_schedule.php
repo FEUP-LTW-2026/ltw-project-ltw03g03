@@ -7,14 +7,25 @@ $trainer = require_trainer();
 $role = $trainer['role'];
 $db = get_db();
 $uid = current_user_id();
+$flash = get_flash();
+
+$stmt = $db->prepare(
+    'SELECT id, name, type, duration_min, capacity
+     FROM classes
+     WHERE trainer_id = ? AND is_active = 1
+     ORDER BY name'
+);
+$stmt->execute([$uid]);
+$assigned_classes = $stmt->fetchAll();
 
 // Get group class sessions
 $stmt = $db->prepare(
-    'SELECT cs.id, cs.scheduled_at, c.name, c.type, c.duration_min, c.capacity,
+    'SELECT cs.id, cs.scheduled_at, cs.status, c.name, c.type, c.duration_min, c.capacity,
             (SELECT COUNT(*) FROM enrollments e WHERE e.session_id = cs.id AND e.status = "enrolled") AS enrolled
      FROM class_sessions cs
      JOIN classes c ON c.id = cs.class_id
-     WHERE c.trainer_id = ? AND cs.scheduled_at >= datetime("now")
+     WHERE c.trainer_id = ?
+       AND cs.scheduled_at >= datetime("now", "-1 day")
      ORDER BY cs.scheduled_at ASC'
 );
 $stmt->execute([$uid]);
@@ -26,13 +37,12 @@ $stmt = $db->prepare(
             u.first_name, u.last_name
      FROM pt_bookings pt
      JOIN users u ON u.id = pt.member_id
-     WHERE pt.trainer_id = ? AND pt.scheduled_at >= datetime("now")
+     WHERE pt.trainer_id = ?
+       AND pt.scheduled_at >= datetime("now", "-1 day")
      ORDER BY pt.scheduled_at ASC'
 );
 $stmt->execute([$uid]);
 $pt_sessions = $stmt->fetchAll();
-
-// No demo PT bookings are generated here; only real bookings appear in trainer schedules.
 
 // Combine all sessions and sort by date/time
 $all_sessions = [];
@@ -46,6 +56,7 @@ foreach ($class_sessions as $s) {
         'duration_min' => $s['duration_min'],
         'capacity' => $s['capacity'],
         'enrolled' => $s['enrolled'],
+        'status' => $s['status'],
     ];
 }
 
@@ -109,6 +120,47 @@ ksort($sessions_by_day);
       <a href="my_roster.php" class="btn btn-primary">View Roster</a>
     </header>
 
+    <?php if ($flash): ?>
+      <div class="flash flash--<?= htmlspecialchars($flash['type'], ENT_QUOTES, 'UTF-8') ?>">
+        <?= htmlspecialchars($flash['message'], ENT_QUOTES, 'UTF-8') ?>
+      </div>
+    <?php endif; ?>
+
+    <section class="trainer-workspace__manager">
+      <form class="trainer-schedule-form" method="post" action="../actions/trainer_schedule_action.php">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+        <input type="hidden" name="action" value="create_class_session">
+        <div class="trainer-schedule-form__body">
+          <div class="field">
+            <label class="field__label" for="class_id">Assigned Class</label>
+            <select class="field__input" id="class_id" name="class_id" required <?= empty($assigned_classes) ? 'disabled' : '' ?>>
+              <?php if (empty($assigned_classes)): ?>
+                <option value="">No active classes assigned</option>
+              <?php else: ?>
+                <option value="">Choose class</option>
+                <?php foreach ($assigned_classes as $class): ?>
+                  <option value="<?= (int)$class['id'] ?>">
+                    <?= htmlspecialchars($class['name'], ENT_QUOTES, 'UTF-8') ?>
+                    (<?= (int)$class['duration_min'] ?> min)
+                  </option>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field__label" for="scheduled_at">Date and Time</label>
+            <input class="field__input" id="scheduled_at" name="scheduled_at" type="datetime-local" required>
+          </div>
+          <button class="btn btn-primary" type="submit" <?= empty($assigned_classes) ? 'disabled' : '' ?>>Add Session</button>
+        </div>
+        <?php if (empty($assigned_classes)): ?>
+          <p class="trainer-schedule-form__empty">
+            Ask an admin to assign active classes to this trainer before adding sessions.
+          </p>
+        <?php endif; ?>
+      </form>
+    </section>
+
     <section class="trainer-workspace__panel">
       <?php if (empty($sessions_by_day)): ?>
         <div class="trainers-empty">No upcoming sessions.</div>
@@ -130,9 +182,27 @@ ksort($sessions_by_day);
                     <div class="trainer-session-card__body">
                       <div class="trainer-session-card__type trainer-session-card__type--class"><?= htmlspecialchars($s['class_type'], ENT_QUOTES, 'UTF-8') ?></div>
                       <h2><?= htmlspecialchars($s['name'], ENT_QUOTES, 'UTF-8') ?></h2>
-                      <p><?= (int)$s['enrolled'] ?> / <?= (int)$s['capacity'] ?> enrolled</p>
+                      <p><?= (int)$s['enrolled'] ?> / <?= (int)$s['capacity'] ?> enrolled &middot; <?= htmlspecialchars($s['status'], ENT_QUOTES, 'UTF-8') ?></p>
                     </div>
-                    <a class="trainer-session-card__action" href="my_roster.php?session_id=<?= (int)$s['id'] ?>">Roster</a>
+                    <div class="trainer-session-card__actions">
+                      <a class="trainer-session-card__action" href="my_roster.php?session_id=<?= (int)$s['id'] ?>">Roster</a>
+                      <?php if ($s['status'] === 'scheduled'): ?>
+                        <?php if (strtotime($s['scheduled_at']) <= time()): ?>
+                        <form method="post" action="../actions/trainer_schedule_action.php">
+                          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                          <input type="hidden" name="action" value="complete_class_session">
+                          <input type="hidden" name="session_id" value="<?= (int)$s['id'] ?>">
+                          <button class="trainer-session-card__action" type="submit">Done</button>
+                        </form>
+                        <?php endif; ?>
+                        <form method="post" action="../actions/trainer_schedule_action.php">
+                          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                          <input type="hidden" name="action" value="cancel_class_session">
+                          <input type="hidden" name="session_id" value="<?= (int)$s['id'] ?>">
+                          <button class="trainer-session-card__action trainer-session-card__action--danger" type="submit">Cancel</button>
+                        </form>
+                      <?php endif; ?>
+                    </div>
                   </article>
                 <?php else: ?>
                   <article class="trainer-session-card trainer-session-card--pt">
@@ -143,13 +213,29 @@ ksort($sessions_by_day);
                     <div class="trainer-session-card__body">
                       <div class="trainer-session-card__type trainer-session-card__type--pt">Personal Training</div>
                       <h2><?= htmlspecialchars($s['client_name'], ENT_QUOTES, 'UTF-8') ?></h2>
-                      <p>Client Session</p>
+                      <p><?= htmlspecialchars($s['status'], ENT_QUOTES, 'UTF-8') ?> client session</p>
                     </div>
-                    <div class="trainer-session-card__action trainer-session-card__action--pt">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="8" r="3"/>
-                        <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7"/>
-                      </svg>
+                    <div class="trainer-session-card__actions">
+                      <?php
+                        $pt_actions = [];
+                        if ($s['status'] === 'pending') {
+                            $pt_actions = ['confirmed' => 'Confirm', 'cancelled' => 'Cancel'];
+                        } elseif ($s['status'] === 'confirmed') {
+                            $pt_actions = ['cancelled' => 'Cancel'];
+                            if (strtotime($s['scheduled_at']) <= time()) {
+                                $pt_actions = ['completed' => 'Done'] + $pt_actions;
+                            }
+                        }
+                      ?>
+                      <?php foreach ($pt_actions as $status => $label): ?>
+                        <form method="post" action="../actions/trainer_schedule_action.php">
+                          <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                          <input type="hidden" name="action" value="update_pt_status">
+                          <input type="hidden" name="booking_id" value="<?= (int)$s['id'] ?>">
+                          <input type="hidden" name="status" value="<?= htmlspecialchars($status, ENT_QUOTES, 'UTF-8') ?>">
+                          <button class="trainer-session-card__action <?= $status === 'cancelled' ? 'trainer-session-card__action--danger' : 'trainer-session-card__action--pt' ?>" type="submit"><?= $label ?></button>
+                        </form>
+                      <?php endforeach; ?>
                     </div>
                   </article>
                 <?php endif; ?>

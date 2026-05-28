@@ -830,6 +830,32 @@
   z-index: 2;
 }
 
+.trainer-workspace__manager {
+  margin-bottom: 2rem;
+}
+
+.trainer-schedule-form {
+  background: var(--color-steel);
+  border: 1px solid var(--color-border);
+  padding: 1rem;
+}
+
+.trainer-schedule-form__body {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) minmax(220px, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.trainer-schedule-form__empty {
+  margin-top: 0.8rem;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-subtle);
+}
+
 .trainer-session-list {
   display: flex;
   flex-direction: column;
@@ -904,22 +930,47 @@
   color: var(--color-subtle);
 }
 
+.trainer-session-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--color-border);
+}
+
+.trainer-session-card__actions form {
+  display: contents;
+}
+
 .trainer-session-card__action {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 1.25rem;
+  align-self: stretch;
+  border: 0;
   border-left: 1px solid var(--color-border);
+  background: transparent;
   font-family: var(--font-display);
   font-size: 0.9rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-subtle);
+  text-decoration: none;
+  cursor: pointer;
   transition: background var(--transition), color var(--transition);
+}
+
+.trainer-session-card__action:first-child {
+  border-left: 0;
 }
 
 .trainer-session-card__action:hover {
   background: var(--color-accent);
+  color: #fff;
+}
+
+.trainer-session-card__action--danger:hover {
+  background: #e84040;
   color: #fff;
 }
 
@@ -1122,14 +1173,19 @@
   }
 
   .trainer-session-card__date,
-  .trainer-session-card__action {
+  .trainer-session-card__actions {
     border-right: 0;
     border-left: 0;
     border-bottom: 1px solid var(--color-border);
   }
 
+  .trainer-session-card__actions {
+    justify-content: stretch;
+  }
+
   .trainer-session-card__action {
     min-height: 44px;
+    flex: 1;
   }
 
   .trainer-roster-card__header {
@@ -1138,6 +1194,10 @@
 
   .booking-form__submit .btn {
     width: 100%;
+  }
+
+  .trainer-schedule-form__body {
+    grid-template-columns: 1fr;
   }
 }
 

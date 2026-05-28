@@ -130,6 +130,7 @@ if ($role === 'member') {
           <span>Experience</span>
           <span class="sidebar-stat__val"><?= $trainer_profile['years_experience'] ?? 0 ?> yrs</span>
         </div>
+        <a class="btn btn-secondary btn-block" href="trainer_profile.php?id=<?= (int)$u['id'] ?>" style="margin-top:1rem;">View Public Profile</a>
       </aside>
       <?php endif; ?>
 
