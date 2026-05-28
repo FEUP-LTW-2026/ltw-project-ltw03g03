@@ -24,12 +24,13 @@ $is_active = function($page) use ($current_page) {
     <?php if ($role): ?>
       <a href="<?= $base_path ?>pages/dashboard.php" class="<?= $is_active('dashboard') ?>">Dashboard</a>
     <?php endif; ?>
-    <?php if ($current_page !== 'index' && ($role === null || $role === 'member')): ?>
+    <?php if ($role === null || $role === 'member'): ?>
       <a href="<?= $base_path ?>pages/classes.php" class="<?= $is_active('classes') ?>">Classes</a>
     <?php endif; ?>
     <?php if ($role === 'member'): ?>
       <a href="<?= $base_path ?>pages/equipment.php" class="<?= $is_active('equipment') ?>">Equipment</a>
       <a href="<?= $base_path ?>pages/trainers.php" class="<?= $is_active('trainers') ?>">Trainers</a>
+      <a href="<?= $base_path ?>pages/my_reviews.php" class="<?= $is_active('my_reviews') ?>">Reviews</a>
     <?php elseif ($role === 'trainer'): ?>
       <a href="<?= $base_path ?>pages/my_schedule.php" class="<?= $is_active('my_schedule') ?>">My Schedule</a>
       <a href="<?= $base_path ?>pages/my_roster.php" class="<?= $is_active('my_roster') ?>">Roster</a>
