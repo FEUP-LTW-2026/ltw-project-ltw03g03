@@ -7,15 +7,17 @@ $role = $trainer['role'];
 $db = get_db();
 $uid = current_user_id();
 $selected_session_id = isset($_GET['session_id']) ? (int)$_GET['session_id'] : 0;
+$flash = get_flash();
 
 $stmt = $db->prepare(
-    'SELECT cs.id AS session_id, cs.scheduled_at, c.name, u.id as member_id, u.first_name, u.last_name
+    'SELECT cs.id AS session_id, cs.scheduled_at, c.name, u.id as member_id,
+            u.first_name, u.last_name, e.status as enrollment_status
      FROM class_sessions cs
      JOIN classes c ON c.id = cs.class_id
-     LEFT JOIN enrollments e ON e.session_id = cs.id AND e.status = "enrolled"
+     LEFT JOIN enrollments e ON e.session_id = cs.id AND e.status IN ("enrolled", "attended")
      LEFT JOIN users u ON u.id = e.member_id
      WHERE c.trainer_id = ? AND cs.scheduled_at >= datetime("now")
-     ORDER BY cs.scheduled_at ASC'
+     ORDER BY cs.scheduled_at ASC, e.status ASC, u.first_name ASC, u.last_name ASC'
 );
 $stmt->execute([$uid]);
 $rows = $stmt->fetchAll();
@@ -46,6 +48,12 @@ foreach ($rows as $r) {
   <span class="corner corner--br"></span>
 
   <?php $current_page = 'my_roster'; require_once __DIR__ . '/../includes/nav.php'; ?>
+
+  <?php if ($flash): ?>
+  <div class="flash flash--<?= htmlspecialchars($flash['type'], ENT_QUOTES, 'UTF-8') ?> flash--page">
+    <?= htmlspecialchars($flash['message'], ENT_QUOTES, 'UTF-8') ?>
+  </div>
+  <?php endif; ?>
 
   <main class="trainers-layout trainer-workspace">
     <header class="trainer-workspace__header">
@@ -78,7 +86,17 @@ foreach ($rows as $r) {
                 <?php foreach ($data['members'] as $m): ?>
                   <div class="trainer-member">
                     <span><?= htmlspecialchars(substr($m['first_name'], 0, 1) . substr($m['last_name'], 0, 1), ENT_QUOTES, 'UTF-8') ?></span>
-                    <?= htmlspecialchars($m['first_name'] . ' ' . $m['last_name'], ENT_QUOTES, 'UTF-8') ?>
+                    <strong><?= htmlspecialchars($m['first_name'] . ' ' . $m['last_name'], ENT_QUOTES, 'UTF-8') ?></strong>
+                    <?php if ($m['enrollment_status'] === 'attended'): ?>
+                      <em class="trainer-member__status">Attended</em>
+                    <?php else: ?>
+                      <a
+                        class="trainer-member__action"
+                        href="../actions/mark_attendance.php?session_id=<?= (int)$sid ?>&member_id=<?= (int)$m['member_id'] ?>&csrf_token=<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
+                        onclick="return confirm('Mark this member as attended?')">
+                        Mark Attended
+                      </a>
+                    <?php endif; ?>
                   </div>
                 <?php endforeach; ?>
               </div>
