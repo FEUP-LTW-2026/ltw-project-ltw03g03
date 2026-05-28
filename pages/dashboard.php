@@ -132,6 +132,25 @@ if ($role === 'admin') {
     $admin_stats['open_disputes']  = $db->query('SELECT COUNT(*) FROM disputes WHERE status="open"')->fetchColumn();
     $admin_stats['total_equipment'] = $db->query('SELECT COUNT(*) FROM equipment')->fetchColumn();
 
+    // Analytics
+    $admin_stats['popular_classes'] = $db->query(
+        "SELECT c.name, c.type, COUNT(e.id) as enroll_count 
+         FROM classes c 
+         LEFT JOIN class_sessions cs ON cs.class_id = c.id 
+         LEFT JOIN enrollments e ON e.session_id = cs.id AND e.status = 'enrolled'
+         GROUP BY c.id 
+         ORDER BY enroll_count DESC 
+         LIMIT 4"
+    )->fetchAll();
+
+    $admin_stats['equipment_usage'] = $db->query(
+        "SELECT status, COUNT(*) as count FROM equipment_units GROUP BY status"
+    )->fetchAll();
+
+    $admin_stats['retention_active'] = (int)$db->query("SELECT COUNT(*) FROM users WHERE role = 'member' AND is_active = 1")->fetchColumn();
+    $admin_stats['retention_inactive'] = (int)$db->query("SELECT COUNT(*) FROM users WHERE role = 'member' AND is_active = 0")->fetchColumn();
+    $admin_stats['new_signups'] = (int)$db->query("SELECT COUNT(*) FROM users WHERE role = 'member' AND created_at >= date('now', '-30 days')")->fetchColumn();
+
     // Recent registrations
     $recent_users = $db->query(
         'SELECT id, first_name, last_name, email, role, photo_path, created_at FROM users ORDER BY created_at DESC LIMIT 6'
@@ -443,6 +462,60 @@ $type_colors = [
       </div>
     </article>
     </section>
+
+    <!-- Analytics Section -->
+    <section class="dash-grid dash-grid--admin" style="grid-template-columns:1fr 1fr 1fr;">
+      
+      <article class="dash-card">
+        <div class="dash-card__title">Most Popular Classes</div>
+        <div class="session-list" style="margin-top:1rem;">
+          <?php foreach ($admin_stats['popular_classes'] as $pc): ?>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--surface-3);padding:0.5rem 0;">
+              <div>
+                <span style="font-weight:600;display:block;"><?= htmlspecialchars($pc['name']) ?></span>
+                <span style="font-size:0.75rem;color:var(--subtle);"><?= ucfirst($pc['type']) ?></span>
+              </div>
+              <div style="font-family:var(--fu);font-weight:600;color:var(--accent);">
+                <?= $pc['enroll_count'] ?> <span style="font-size:0.7rem;color:var(--subtle);">enrolls</span>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </article>
+
+      <article class="dash-card">
+        <div class="dash-card__title">Equipment Status</div>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:0.75rem;">
+          <?php foreach ($admin_stats['equipment_usage'] as $eq): ?>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="text-transform:capitalize;font-size:0.9rem;"><?= str_replace('_', ' ', $eq['status']) ?></span>
+              <span class="badge badge--<?= $eq['status'] === 'available' ? 'completed' : ($eq['status'] === 'maintenance' ? 'in_review' : 'cancelled') ?>"><?= $eq['count'] ?> units</span>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </article>
+
+      <article class="dash-card">
+        <div class="dash-card__title">Member Retention</div>
+        <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div style="text-align:center;background:var(--surface-2);padding:1rem;border-radius:8px;">
+            <div style="font-size:2rem;font-weight:700;font-family:var(--fu);color:var(--accent);"><?= $admin_stats['new_signups'] ?></div>
+            <div style="font-size:0.75rem;color:var(--subtle);text-transform:uppercase;letter-spacing:0.05em;">New (30 days)</div>
+          </div>
+          <div style="text-align:center;background:var(--surface-2);padding:1rem;border-radius:8px;">
+            <?php $total_mem = $admin_stats['retention_active'] + $admin_stats['retention_inactive']; 
+                  $retention_rate = $total_mem > 0 ? round(($admin_stats['retention_active'] / $total_mem) * 100) : 0; ?>
+            <div style="font-size:2rem;font-weight:700;font-family:var(--fu);color:#42a882;"><?= $retention_rate ?>%</div>
+            <div style="font-size:0.75rem;color:var(--subtle);text-transform:uppercase;letter-spacing:0.05em;">Active Rate</div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;font-size:0.85rem;color:var(--subtle);text-align:center;">
+          <?= $admin_stats['retention_active'] ?> active vs <?= $admin_stats['retention_inactive'] ?> inactive accounts
+        </div>
+      </article>
+
+    </section>
+
     <?php endif; ?>
 
   </main>

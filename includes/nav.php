@@ -8,6 +8,17 @@ $base_path = $base_path ?? '../';
 $is_active = function($page) use ($current_page) {
     return $current_page === $page ? 'nav-link--active' : '';
 };
+
+$unread_notifications_count = 0;
+if ($role) {
+    $nav_user_id = current_user_id();
+    if ($nav_user_id) {
+        $nav_db = get_db();
+        $nav_stmt = $nav_db->prepare('SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0');
+        $nav_stmt->execute([$nav_user_id]);
+        $unread_notifications_count = (int) $nav_stmt->fetchColumn();
+    }
+}
 ?>
 <nav>
   <a href="<?= $base_path ?>index.php" class="nav-brand">
@@ -24,10 +35,8 @@ $is_active = function($page) use ($current_page) {
     <?php if ($role): ?>
       <a href="<?= $base_path ?>pages/dashboard.php" class="<?= $is_active('dashboard') ?>">Dashboard</a>
     <?php endif; ?>
-    <?php if ($role === null || $role === 'member'): ?>
-      <a href="<?= $base_path ?>pages/classes.php" class="<?= $is_active('classes') ?>">Classes</a>
-    <?php endif; ?>
     <?php if ($role === 'member'): ?>
+      <a href="<?= $base_path ?>pages/classes.php" class="<?= $is_active('classes') ?>">Classes</a>
       <a href="<?= $base_path ?>pages/equipment.php" class="<?= $is_active('equipment') ?>">Equipment</a>
       <a href="<?= $base_path ?>pages/trainers.php" class="<?= $is_active('trainers') ?>">Trainers</a>
       <a href="<?= $base_path ?>pages/my_reviews.php" class="<?= $is_active('my_reviews') ?>">Reviews</a>
@@ -50,7 +59,18 @@ $is_active = function($page) use ($current_page) {
   </div>
   
   <?php if ($role): ?>
-    <a href="<?= $base_path ?>actions/do_logout.php" class="nav-cta nav-desktop-auth">Sign Out</a>
+    <div class="nav-desktop-auth" style="display: flex; gap: 1.5rem; align-items: center;">
+      <a href="<?= $base_path ?>pages/notifications.php" style="position:relative;color:var(--text);display:flex;align-items:center;">
+        <svg viewBox="0 0 24 24" fill="none" style="width:20px;height:20px;">
+          <path d="M18 15h2v2H4v-2h2v-4a6 6 0 0112 0v4z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <?php if ($unread_notifications_count > 0): ?>
+          <span style="position:absolute;top:-6px;right:-8px;background:var(--accent);color:#000;font-size:0.65rem;font-weight:700;padding:2px 5px;border-radius:10px;"><?= $unread_notifications_count ?></span>
+        <?php endif; ?>
+      </a>
+      <a href="<?= $base_path ?>actions/do_logout.php" class="nav-cta">Sign Out</a>
+    </div>
   <?php else: ?>
     <div class="nav-desktop-auth" style="display: flex; gap: 1rem; align-items: center;">
       <a href="<?= $base_path ?>pages/sign_in.php" style="color: var(--subtle); font-family: var(--fu); font-size: .8rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; text-decoration: none;">Sign In</a>
