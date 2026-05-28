@@ -13,10 +13,10 @@ INSERT INTO users (username, email, password_hash, first_name, last_name, phone,
 
 -- Trainers
 INSERT INTO users (username, email, password_hash, first_name, last_name, phone, role, is_active) VALUES
-('sarahj', 'sarah@w8gym.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Sarah', 'Johnson', '555-1001', 'trainer', 1),
-('mikec', 'mike@w8gym.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Mike', 'Chen', '555-1002', 'trainer', 1),
-('emmar', 'emma@w8gym.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Emma', 'Rodriguez', '555-1003', 'trainer', 1),
-('davidw', 'david@w8gym.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'David', 'Williams', '555-1004', 'trainer', 1);
+('Ronnie', 'ronnie@w8gym.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Ronnie', 'Coleman', '555-1001', 'trainer', 1),
+('Oogway', 'oogway@w8gym.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Master', 'Oogway', '555-1002', 'trainer', 1),
+('Sportacus', 'sportacus@w8gym.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Sportacus', '', '555-1003', 'trainer', 1),
+('Popeye', 'popeye@w8gym.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Popeye', '', '555-1004', 'trainer', 1);
 
 -- Members (8 active members)
 INSERT INTO users (username, email, password_hash, first_name, last_name, phone, role, is_active) VALUES
@@ -33,22 +33,22 @@ INSERT INTO users (username, email, password_hash, first_name, last_name, phone,
 -- TRAINER PROFILES
 -- =====================================================
 INSERT INTO trainer_profiles (user_id, bio, specialty, certifications, years_experience) VALUES
-((SELECT id FROM users WHERE username = 'sarahj'), 
+((SELECT id FROM users WHERE username = 'Ronnie'), 
  '8 time Mr.Olympia, now focused on strength training.',
  'strength',
  'RYT-200, Yin Yoga Certified, Yoga Nidra Facilitator',
  8),
-((SELECT id FROM users WHERE username = 'mikec'),
+((SELECT id FROM users WHERE username = 'Oogway'),
  'Aerobics world champion focused on performance and conditioning.',
  'cardio',
  'NASM CPT, USA Powerlifting Coach, FRC Mobility',
  10),
-((SELECT id FROM users WHERE username = 'emmar'),
+((SELECT id FROM users WHERE username = 'Sportacus'),
  'Specialist in movement quality and injury prevention.',
  'crossfit',
  'CrossFit L2, F45 Certified, CPR/AED',
  6),
-((SELECT id FROM users WHERE username = 'davidw'),
+((SELECT id FROM users WHERE username = 'Popeye'),
  'Yoga instructor focused on recovery, breathwork and relaxation.',
  'yoga',
  'Precision Nutrition L1, ISSA Nutritionist, Kettlebell Certified',
@@ -121,10 +121,6 @@ INSERT INTO class_sessions (class_id, scheduled_at) VALUES
 -- =====================================================
 -- Enroll members in sessions (use actual session IDs, but we'll use subqueries)
 
--- Alice enrolled in Power Yoga (session 1)
-INSERT INTO enrollments (session_id, member_id, status) VALUES
-((SELECT id FROM class_sessions LIMIT 1), (SELECT id FROM users WHERE username = 'aliceb'), 'enrolled');
-
 -- Bob enrolled in HIIT Burn (session 8)
 INSERT INTO enrollments (session_id, member_id, status) VALUES
 ((SELECT id FROM class_sessions LIMIT 1 OFFSET 7), (SELECT id FROM users WHERE username = 'bobl'), 'enrolled');
@@ -158,7 +154,6 @@ INSERT INTO enrollments (session_id, member_id, status, waitlist_position) VALUE
 -- =====================================================
 -- Note: These sessions are in the past relative to DB creation
 INSERT INTO class_reviews (session_id, member_id, rating, comment) VALUES
-((SELECT id FROM class_sessions LIMIT 1), (SELECT id FROM users WHERE username = 'aliceb'), 5, 'Amazing class! Sarah is so knowledgeable and patient.'),
 ((SELECT id FROM class_sessions LIMIT 1 OFFSET 7), (SELECT id FROM users WHERE username = 'bobl'), 4, 'Great workout, really intense!'),
 ((SELECT id FROM class_sessions LIMIT 1 OFFSET 14), (SELECT id FROM users WHERE username = 'carolm'), 5, 'Mike helped me fix my deadlift form perfectly.');
 
@@ -167,7 +162,6 @@ INSERT INTO class_reviews (session_id, member_id, rating, comment) VALUES
 -- =====================================================
 INSERT INTO notifications (user_id, type, message, is_read) VALUES
 ((SELECT id FROM users WHERE username = 'henryk'), 'waitlist_update', 'You are on the waitlist for HIIT Burn. Current position: 1', 0),
-((SELECT id FROM users WHERE username = 'aliceb'), 'class_reminder', 'Reminder: Power Yoga Flow tomorrow at 9:00 AM', 1),
 ((SELECT id FROM users WHERE username = 'bobl'), 'class_reminder', 'Reminder: HIIT Burn tomorrow at 6:00 PM', 0);
 
 -- =====================================================

@@ -46,16 +46,9 @@ try {
         'last_name'  => $lastname,
         'email'      => $email,
         'password'   => $password,
-<<<<<<< Updated upstream
         'phone'      => $_POST['phone'] ?? null,
         'dob'        => $_POST['dob']   ?? null,
         'role'       => 'member',
-=======
-        'phone'      => $_POST['phone']      ?? null,
-        'dob'        => $_POST['dob']        ?? null,
-        'role'       => $requested_role,
-        'specialty'  => $specialty,
->>>>>>> Stashed changes
     ]);
 } catch (PDOException $e) {
     $msg = 'Registration failed.';
@@ -75,27 +68,18 @@ try {
 // Auto-login the newly registered member
 $user = User::getUserWithPassword($db, $email, $password);
 
-<<<<<<< Updated upstream
 if ($user) {
     $_SESSION['user'] = [
-        'id'       => $user->id,
-        'role'     => $user->role,
+        'id' => $user->id,
+        'role' => $user->role,
         'username' => $user->username
     ];
     refresh_session_user();
-=======
-    if ($user) {
-        $_SESSION['user'] = [
-            'id' => $user->id,
-            'role' => $user->role,
-            'username' => $user->username
-        ];
-        refresh_session_user();
-    }
     header('Location: ../pages/dashboard.php');
+    exit;
 } else {
     // Admin created the account; redirect back to admin users page
     set_flash('success', 'User account created successfully.');
     header('Location: ../pages/admin_users.php');
->>>>>>> Stashed changes
+    exit;
 }

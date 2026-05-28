@@ -32,55 +32,7 @@ $stmt = $db->prepare(
 $stmt->execute([$uid]);
 $pt_sessions = $stmt->fetchAll();
 
-// If no PT sessions exist, create demo data for the trainer
-if (empty($pt_sessions)) {
-    $trainer_username = $trainer['username'] ?? '';
-    $random_clients = [
-        'John Smith', 'Emma Wilson', 'Michael Brown', 'Sarah Davis',
-        'James Johnson', 'Emily Taylor', 'David Martinez', 'Lisa Anderson'
-    ];
-    
-    $week_start = strtotime('monday this week');
-    $demo_times = [
-        ['mon', '10:00'],
-        ['tue', '14:00'],
-        ['wed', '11:00'],
-        ['thu', '16:00'],
-        ['fri', '09:00'],
-    ];
-    
-    $day_offsets = ['mon' => 0, 'tue' => 1, 'wed' => 2, 'thu' => 3, 'fri' => 4];
-    
-    foreach ($demo_times as [$day, $time]) {
-        $scheduled_at = date('Y-m-d ' . $time . ':00', strtotime('+' . $day_offsets[$day] . ' days', $week_start));
-        $client_name = $random_clients[array_rand($random_clients)];
-        $name_parts = explode(' ', $client_name);
-        
-        // Get a random member ID
-        $member_stmt = $db->prepare('SELECT id FROM users WHERE role = "member" LIMIT 1');
-        $member_stmt->execute();
-        $member_id = $member_stmt->fetchColumn();
-        
-        if ($member_id) {
-            $insert_stmt = $db->prepare(
-                'INSERT INTO pt_bookings (trainer_id, member_id, scheduled_at, duration_min, status) VALUES (?, ?, ?, 60, "confirmed")'
-            );
-            $insert_stmt->execute([$uid, $member_id, $scheduled_at]);
-        }
-    }
-    
-    // Re-fetch PT sessions after creating demo data
-    $stmt = $db->prepare(
-        'SELECT pt.id, pt.scheduled_at, pt.duration_min, pt.status,
-                u.first_name, u.last_name
-         FROM pt_bookings pt
-         JOIN users u ON u.id = pt.member_id
-         WHERE pt.trainer_id = ? AND pt.scheduled_at >= datetime("now")
-         ORDER BY pt.scheduled_at ASC'
-    );
-    $stmt->execute([$uid]);
-    $pt_sessions = $stmt->fetchAll();
-}
+// No demo PT bookings are generated here; only real bookings appear in trainer schedules.
 
 // Combine all sessions and sort by date/time
 $all_sessions = [];
