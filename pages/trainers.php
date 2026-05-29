@@ -88,6 +88,9 @@ function trainer_specialty_label(?string $specialty): string {
       <div class="page-header__deco">TRAINERS</div>
     </header>
 
+    <!-- Live API Stats Bar (populated by js/trainers.js via api/trainers.php) -->
+    <div id="trainers-api-stats" data-api-url="../api/trainers.php" style="max-width:1100px;margin:0 auto;padding:0 2rem;"></div>
+
     <!-- Trainers Grid -->
     <section class="trainers-layout">
 
@@ -102,7 +105,7 @@ function trainer_specialty_label(?string $specialty): string {
     <?php else: ?>
       <div class="trainers-grid">
         <?php foreach ($trainers as $t): ?>
-        <article class="trainer-card">
+        <article class="trainer-card" data-trainer-id="<?= (int)$t['id'] ?>">
 
           <!-- Photo or default avatar -->
           <div class="trainer-card__photo">
@@ -130,7 +133,7 @@ function trainer_specialty_label(?string $specialty): string {
             <div class="trainer-card__name">
               <?= htmlspecialchars($t['first_name'] . ' ' . $t['last_name'], ENT_QUOTES, 'UTF-8') ?>
             </div>
-            <div class="trainer-card__experience">
+            <div class="trainer-card__experience" data-trainer-exp>
               <strong><?= (int)$t['years_experience'] ?></strong>
               yr<?= (int)$t['years_experience'] !== 1 ? 's' : '' ?> experience
             </div>
@@ -171,5 +174,6 @@ function trainer_specialty_label(?string $specialty): string {
     </div>
   </footer>
 
+  <script src="../js/trainers.js"></script>
 </body>
 </html>

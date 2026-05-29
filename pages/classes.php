@@ -440,6 +440,10 @@ function toggle_trainer_url(int $trainer_id): string {
       <div class="page-header__deco">CLASSES</div>
     </header>
 
+    <!-- Live API Stats Bar (populated by js/classes_api.js via api/classes.php) -->
+    <div id="classes-api-stats" data-api-url="../api/classes.php"
+         style="max-width:1100px;margin:0 auto;padding:0 2rem;"></div>
+
     <section class="filters-bar">
       <div class="filters-bar__inner">
         <div class="filter-group">
@@ -622,5 +626,6 @@ function toggle_trainer_url(int $trainer_id): string {
     </div>
   </footer>
 
+  <script src="../js/classes_api.js"></script>
 </body>
 </html>

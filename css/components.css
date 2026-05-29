@@ -892,3 +892,121 @@ footer {
     padding: 8rem 1.2rem 3.5rem;
   }
 }
+
+/* ── Live API Stats Bars (classes & trainers pages) ────────────── */
+
+/* Shared bar layout */
+.classes-stat-bar,
+.trainer-stat-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  padding: 0.6rem 1rem;
+  margin: 1rem 0 1.5rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  font-family: var(--fu);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  animation: stat-bar-in 0.4s ease both;
+}
+
+@keyframes stat-bar-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Totals */
+.classes-stat-total,
+.trainer-stat-total {
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.classes-stat-total strong,
+.trainer-stat-total strong {
+  color: var(--accent);
+}
+
+/* Pill groups */
+.classes-stat-pills,
+.trainer-stat-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.classes-stat-pill,
+.trainer-stat-pill {
+  padding: 0.2rem 0.6rem;
+  border: 1px solid transparent;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.trainer-stat-pill {
+  border-color: rgba(245,104,26,0.2);
+  color: var(--accent);
+}
+
+.trainer-stat-pill strong {
+  color: var(--text);
+}
+
+/* "Next class" label */
+.classes-stat-next {
+  color: var(--subtle);
+  white-space: nowrap;
+}
+
+.classes-stat-next strong {
+  margin: 0 0.25rem;
+}
+
+.classes-stat-when {
+  color: var(--muted);
+  margin-left: 0.25rem;
+}
+
+/* Pulsing live dot */
+.classes-stat-live,
+.trainer-stat-live {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.classes-stat-dot,
+.trainer-stat-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #42a882;
+  animation: live-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+@media (max-width: 600px) {
+  .classes-stat-bar,
+  .trainer-stat-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .classes-stat-live,
+  .trainer-stat-live {
+    margin-left: 0;
+  }
+}
