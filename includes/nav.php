@@ -51,7 +51,10 @@ if ($role) {
     <?php endif; ?>
     <?php if ($role): ?>
       <a href="<?= $base_path ?>pages/profile.php" class="<?= $is_active('profile') ?>">Profile</a>
-      <a href="<?= $base_path ?>actions/do_logout.php" class="nav-mobile-auth" style="display:none;">Sign Out</a>
+      <form method="post" action="<?= $base_path ?>actions/do_logout.php" style="display:none;" class="nav-mobile-auth">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES) ?>">
+        <button type="submit" class="nav-link-btn">Sign Out</button>
+      </form>
     <?php else: ?>
       <a href="<?= $base_path ?>pages/sign_in.php" class="nav-mobile-auth" style="display:none;">Sign In</a>
       <a href="<?= $base_path ?>pages/register.php" class="nav-mobile-auth" style="display:none;">Register</a>
@@ -69,7 +72,10 @@ if ($role) {
           <span style="position:absolute;top:-6px;right:-8px;background:var(--accent);color:#000;font-size:0.65rem;font-weight:700;padding:2px 5px;border-radius:10px;"><?= $unread_notifications_count ?></span>
         <?php endif; ?>
       </a>
-      <a href="<?= $base_path ?>actions/do_logout.php" class="nav-cta">Sign Out</a>
+      <form method="post" action="<?= $base_path ?>actions/do_logout.php">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES) ?>">
+        <button type="submit" class="nav-cta nav-link-btn">Sign Out</button>
+      </form>
     </div>
   <?php else: ?>
     <div class="nav-desktop-auth" style="display: flex; gap: 1rem; align-items: center;">

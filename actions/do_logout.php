@@ -3,6 +3,13 @@ declare(strict_types=1);
 
 require_once('../config/session.php');
 
+// Logout must be a POST with a valid CSRF token to prevent CSRF forced-logout.
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../pages/dashboard.php');
+    exit;
+}
+validate_csrf();
+
 // Clear remember-me cookie and DB token if present
 if (isset($_COOKIE['remember_token'])) {
     $tokenHash = hash('sha256', $_COOKIE['remember_token']);
@@ -20,3 +27,4 @@ if (isset($_COOKIE['remember_token'])) {
 session_destroy();
 
 header('Location: ../pages/sign_in.php');
+exit;

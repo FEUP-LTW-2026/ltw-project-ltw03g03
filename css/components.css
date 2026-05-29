@@ -236,6 +236,21 @@ nav {
   color: #fff;
 }
 
+/* Logout buttons rendered as links — strips all <button> chrome */
+.nav-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-decoration: none;
+  display: inline;
+}
+
 .nav-mobile-btn {
   display: none;
 }

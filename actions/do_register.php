@@ -23,6 +23,13 @@ $lastname = trim($_POST['lastname'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 
+// Security guard: only admins can create users with trainer/admin roles.
+// Defined here (before any early exits) to avoid "undefined variable" warnings.
+$allowed_roles = ['member', 'trainer', 'admin'];
+$requested_role = ($isAdmin && isset($_POST['role']) && in_array($_POST['role'], $allowed_roles, true))
+    ? $_POST['role']
+    : 'member';
+
 if (empty($firstname) || empty($lastname) || empty($email) || empty($password)) {
     set_flash('error', 'All fields are required.');
     header('Location: ' . $redirect_on_error);
@@ -34,9 +41,6 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     header('Location: ' . $redirect_on_error);
     exit;
 }
-
-// Security guard: only admins can create users with trainer/admin roles
-$requested_role = ($isAdmin && isset($_POST['role'])) ? $_POST['role'] : 'member';
 
 // Validate and prepare specialty (only applicable for trainers)
 $specialty = null;

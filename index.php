@@ -404,7 +404,10 @@ $user = current_user();
             <?php if ($user): ?>
               <a href="pages/dashboard.php">Dashboard</a>
               <a href="pages/profile.php">Profile</a>
-              <a href="actions/do_logout.php">Sign Out</a>
+              <form method="post" action="actions/do_logout.php">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES) ?>">
+                <button type="submit" class="nav-link-btn">Sign Out</button>
+              </form>
             <?php else: ?>
               <a href="pages/sign_in.php">Sign In</a>
               <a href="pages/register.php">Register</a>
