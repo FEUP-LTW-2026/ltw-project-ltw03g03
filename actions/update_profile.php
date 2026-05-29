@@ -63,9 +63,13 @@ if ($user) {
 
     // Save trainer-specific profile fields
     if ($role === 'trainer') {
+        $allowedSpecialties = ['strength', 'cardio', 'yoga', 'crossfit', 'pilates', 'martial_arts', 'nutrition', ''];
+        $specialty = $_POST['specialty'] ?? null;
+        $specialty = in_array($specialty, $allowedSpecialties, true) ? ($specialty ?: null) : null;
+
         $user->saveTrainerProfile($db, [
             'bio'              => $_POST['bio']              ?? null,
-            'specialty'        => $_POST['specialty']        ?? null,
+            'specialty'        => $specialty,
             'certifications'   => $_POST['certifications']   ?? null,
             'years_experience' => $_POST['years_experience'] ?? 0,
         ]);
