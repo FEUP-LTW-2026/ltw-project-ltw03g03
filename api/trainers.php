@@ -2,10 +2,17 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/session.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
 try {
+    if (!isset($_SESSION['user']['id']) && !isset($_SESSION['id'])) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Unauthorized']);
+        exit;
+    }
+
     $db = get_db();
     
     // Get all active trainers and their profiles
