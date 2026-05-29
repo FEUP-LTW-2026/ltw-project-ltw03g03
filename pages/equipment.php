@@ -153,7 +153,7 @@ function equipment_chip_active(string $param, string $value): string {
       </div>
     </section>
 
-    <section class="equipment-layout" style="padding-top:1.5rem;" id="equipment-container" data-status="<?= htmlspecialchars($filter_status) ?>" data-category="<?= htmlspecialchars($filter_category) ?>">
+    <section class="equipment-layout" style="padding-top:1.5rem;" id="equipment-container" data-status="<?= htmlspecialchars($filter_status) ?>" data-category="<?= htmlspecialchars($filter_category) ?>" data-user-role="<?= htmlspecialchars($role) ?>">
       <div class="equipment-empty" id="loading-spinner">
         Loading equipment...
       </div>

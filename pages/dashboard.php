@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../database/equipment.class.php';
 
 $user  = require_login();
 $db    = get_db();
@@ -76,6 +77,9 @@ if ($role === 'member') {
     );
     $stmt->execute([$user['id']]);
     $member_plan = $stmt->fetch();
+
+    // Fetch upcoming equipment reservations
+    $upcoming_equipment_reservations = EquipmentReservation::getForMember($db, $user['id']);
 }
 
 if ($role === 'trainer') {
@@ -297,6 +301,32 @@ $type_colors = [
         <a href="pt_bookings.php" style="display:inline-block;margin-top:1rem;font-family:var(--fu);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">View all PT bookings →</a>
       <?php else: ?>
         <p style="color:var(--subtle);font-size:.9rem;">You have no upcoming PT sessions. <a href="trainers.php">Book a trainer →</a></p>
+      <?php endif; ?>
+    </article>
+
+    <article class="dash-card dash-card--wide">
+      <div class="dash-card__title">Upcoming Equipment Reservations</div>
+      <?php if (!empty($upcoming_equipment_reservations)): ?>
+        <div class="session-list">
+          <?php foreach ($upcoming_equipment_reservations as $res): ?>
+          <article class="session-item">
+            <div class="session-item__bar" style="background:var(--accent)"></div>
+            <div class="session-item__time">
+              <?= date('D d M, H:i', strtotime($res['reserved_from'])) ?> &mdash; <?= date('H:i', strtotime($res['reserved_to'])) ?>
+            </div>
+            <div class="session-item__info">
+              <div class="session-item__name"><?= htmlspecialchars($res['equipment_name'], ENT_QUOTES, 'UTF-8') ?></div>
+              <div class="session-item__meta"><?= htmlspecialchars($res['unit_label'], ENT_QUOTES, 'UTF-8') ?> &middot; <?= ucfirst(htmlspecialchars($res['category'], ENT_QUOTES, 'UTF-8')) ?></div>
+            </div>
+            <div class="session-item__action">
+              <a href="../actions/cancel_equipment_reservation.php?reservation_id=<?= (int)$res['id'] ?>&csrf_token=<?= $_SESSION['csrf_token'] ?>" onclick="return confirm('Cancel this equipment reservation?')">Cancel</a>
+            </div>
+          </article>
+          <?php endforeach; ?>
+        </div>
+        <a href="reserve_equipment.php" style="display:inline-block;margin-top:1rem;font-family:var(--fu);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Book more equipment &rarr;</a>
+      <?php else: ?>
+        <p style="color:var(--subtle);font-size:.9rem;">You have no upcoming equipment reservations. <a href="reserve_equipment.php">Reserve gear &rarr;</a></p>
       <?php endif; ?>
     </article>
 

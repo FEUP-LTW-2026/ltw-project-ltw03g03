@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const statusFilter = container.getAttribute("data-status") || "";
     const categoryFilter = container.getAttribute("data-category") || "";
+    const userRole = container.getAttribute("data-user-role") || "";
 
     function fetchEquipment() {
         let url = '../api/equipment.php?';
@@ -72,12 +73,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const dateStr = eq.updated_at ? eq.updated_at.split(' ')[0] : '';
                 
+                let reserveButtonHtml = '';
+                if (userRole === 'member') {
+                    reserveButtonHtml = `
+                      <a href="reserve_equipment.php?equipment_id=${eq.id}" class="btn btn-primary" style="margin-top: 0.6rem; font-size: 0.72rem; padding: 0.45rem 1rem; width: 100%; text-align: center; border-radius: var(--radius-field);">
+                        Reserve
+                      </a>
+                    `;
+                }
+
                 html += `
                   <article class="equipment-card">
                     <div class="equipment-card__body">
                       <div class="equipment-card__category">${escapeHtml(eq.category)}</div>
                       <div class="equipment-card__name">${escapeHtml(eq.name)}</div>
                       <div class="equipment-card__quantity">Qty: <strong>${eq.quantity}</strong></div>
+                      ${reserveButtonHtml}
                     </div>
                     <div class="equipment-card__footer">
                       <span class="status-badge ${cssClass}">${label}</span>
