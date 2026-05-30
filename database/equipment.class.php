@@ -16,7 +16,7 @@ class Equipment {
                     SUM(CASE WHEN eu.status = 'available' THEN 1 ELSE 0 END) AS available_units,
                     SUM(CASE WHEN eu.status = 'maintenance' THEN 1 ELSE 0 END) AS maintenance_units
              FROM equipment e
-             LEFT JOIN equipment_units eu ON eu.equipment_id = e.id
+             LEFT JOIN equipment_units eu ON eu.equipment_id = e.id AND eu.status != 'retired'
              GROUP BY e.id
              ORDER BY e.category, e.name"
         );

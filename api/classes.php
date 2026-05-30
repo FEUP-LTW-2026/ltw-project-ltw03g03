@@ -32,7 +32,9 @@ try {
         FROM class_sessions cs
         JOIN classes c ON c.id = cs.class_id
         LEFT JOIN users u ON u.id = c.trainer_id
-        WHERE cs.status = 'scheduled' AND cs.scheduled_at > datetime('now')
+        WHERE cs.status = 'scheduled'
+          AND cs.scheduled_at > datetime('now')
+          AND c.is_active = 1
         ORDER BY cs.scheduled_at ASC
         LIMIT 100
     ");
