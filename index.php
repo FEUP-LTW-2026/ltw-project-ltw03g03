@@ -3,6 +3,16 @@ require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/config/session.php';
 
 $user = current_user();
+$role = $user ? $user['role'] : null;
+$planIdsByName = [];
+
+if ($role === 'member') {
+    $db = get_db();
+    $stmt = $db->query('SELECT id, name FROM membership_plans WHERE is_active = 1');
+    foreach ($stmt->fetchAll() as $plan) {
+        $planIdsByName[$plan['name']] = (int)$plan['id'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +33,6 @@ $user = current_user();
   <?php 
     $base_path = '';
     $current_page = 'index';
-    $role = $user ? $user['role'] : null;
     require_once __DIR__ . '/includes/nav.php'; 
   ?>
   
@@ -252,7 +261,15 @@ $user = current_user();
             <li>Locker room</li>
             <li>Off-peak hours</li>
           </ul>
-          <a href="pages/register.php" class="price-btn">Get Started</a>
+          <?php if ($role === 'member' && isset($planIdsByName['Starter'])): ?>
+            <form method="post" action="actions/subscribe.php">
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+              <input type="hidden" name="plan_id" value="<?= (int)$planIdsByName['Starter'] ?>">
+              <button type="submit" class="price-btn">Get Started</button>
+            </form>
+          <?php else: ?>
+            <a href="<?= $user ? 'pages/dashboard.php' : 'pages/register.php' ?>" class="price-btn">Get Started</a>
+          <?php endif; ?>
         </article>
 
         <article class="price-card featured">
@@ -270,7 +287,15 @@ $user = current_user();
             <li>Nutrition discount</li>
             <li>1 PT session</li>
           </ul>
-          <a href="pages/register.php" class="price-btn">Join Pro</a>
+          <?php if ($role === 'member' && isset($planIdsByName['Pro'])): ?>
+            <form method="post" action="actions/subscribe.php">
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+              <input type="hidden" name="plan_id" value="<?= (int)$planIdsByName['Pro'] ?>">
+              <button type="submit" class="price-btn">Join Pro</button>
+            </form>
+          <?php else: ?>
+            <a href="<?= $user ? 'pages/dashboard.php' : 'pages/register.php' ?>" class="price-btn">Join Pro</a>
+          <?php endif; ?>
         </article>
 
         <article class="price-card">
@@ -287,7 +312,15 @@ $user = current_user();
             <li>Priority booking</li>
             <li>Guest passes</li>
           </ul>
-          <a href="pages/register.php" class="price-btn">Go Elite</a>
+          <?php if ($role === 'member' && isset($planIdsByName['Elite'])): ?>
+            <form method="post" action="actions/subscribe.php">
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+              <input type="hidden" name="plan_id" value="<?= (int)$planIdsByName['Elite'] ?>">
+              <button type="submit" class="price-btn">Go Elite</button>
+            </form>
+          <?php else: ?>
+            <a href="<?= $user ? 'pages/dashboard.php' : 'pages/register.php' ?>" class="price-btn">Go Elite</a>
+          <?php endif; ?>
         </article>
 
       </div>

@@ -24,6 +24,7 @@ $plans = $stmt->fetchAll();
 $stmt = $db->prepare("SELECT plan_id FROM member_profiles WHERE user_id = ?");
 $stmt->execute([$user['id']]);
 $current_plan_id = $stmt->fetchColumn();
+$current_plan_id = $current_plan_id !== false && $current_plan_id !== null ? (int)$current_plan_id : null;
 
 ?>
 <!DOCTYPE html>
@@ -72,7 +73,7 @@ $current_plan_id = $stmt->fetchColumn();
           <?php foreach ($plans as $plan): ?>
           <?php 
              $features = json_decode($plan['features'], true) ?? [];
-             $is_current = ($current_plan_id === $plan['id']);
+             $is_current = ($current_plan_id === (int)$plan['id']);
              $is_popular = ($plan['name'] === 'Pro'); // Just mimicking the homepage logic
           ?>
           <article class="price-card <?= $is_popular ? 'featured' : '' ?>">
@@ -100,8 +101,8 @@ $current_plan_id = $stmt->fetchColumn();
             </ul>
             
             <form action="../actions/subscribe.php" method="POST" style="margin-top:auto;">
-              <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-              <input type="hidden" name="plan_id" value="<?= $plan['id'] ?>">
+              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+              <input type="hidden" name="plan_id" value="<?= (int)$plan['id'] ?>">
               <?php if ($is_current): ?>
                 <button type="button" class="price-btn" style="background:var(--surface-3);color:var(--text);cursor:default;">Current Plan</button>
               <?php else: ?>

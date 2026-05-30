@@ -19,8 +19,7 @@
 --   • disputes.resolved_by FK added
 --   • trainer_profiles.specialty changed to controlled values
 --     via a CHECK constraint matching the register form options
---   • Seed data: hardcoded fake hashes replaced by a companion
---     PHP seeder (seed.php) that calls password_hash() at runtime
+--   • Schema and seed data are kept in this single SQL file
 --   • Trainer profile inserts use sub-SELECTs instead of raw IDs
 --   • PRAGMA foreign_keys = ON added (must be run each connection)
 -- ═══════════════════════════════════════════════════════════════
@@ -347,9 +346,8 @@ CREATE TRIGGER IF NOT EXISTS trg_disputes_updated
 
 -- ═══════════════════════════════════════════════════════════════
 --  SEED DATA
---  Passwords are NOT stored here as raw strings.
---  Run seed.php to insert users with proper password_hash() values.
---  Everything below does NOT include user rows — see seed.php.
+--  Includes lookup data, demo accounts, schedules, reservations,
+--  notifications, and profile rows for a complete local database.
 -- ═══════════════════════════════════════════════════════════════
 
 -- Membership Plans (match the pricing section in home.html)
@@ -428,3 +426,115 @@ INSERT INTO equipment_units (equipment_id, unit_label) SELECT id, 'Pull-up Bar #
 -- Their availability is shown as always available unless admin marks otherwise.
 INSERT INTO equipment_units (equipment_id, unit_label) SELECT id, 'Olympic Barbell Set' FROM equipment WHERE name = 'Barbell (Olympic)';
 INSERT INTO equipment_units (equipment_id, unit_label) SELECT id, 'Dumbbell Rack'       FROM equipment WHERE name = 'Dumbbell Set';
+
+
+-- Demo users and activity.
+-- README credentials:
+--   admin / p4s5w0rd
+--   member / 1234
+--   trainer / 1234
+
+-- Admin account.
+INSERT INTO users (username, email, password_hash, first_name, last_name, phone, role, is_active) VALUES
+('admin', 'admin@w8gym.com', '$2y$10$8miVM1XqfCSXEs.rrcJYhOyv7I.ljZuvLvtcc3pzykrCE20VtPxlu', 'System', 'Administrator', '555-0001', 'admin', 1);
+
+-- Trainer accounts. Password for all trainer rows is 1234.
+INSERT INTO users (username, email, password_hash, first_name, last_name, phone, photo_path, role, is_active) VALUES
+('trainer', 'trainer@w8gym.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Demo', 'Trainer', '555-1000', NULL, 'trainer', 1),
+('ronniec', 'ronnie@w8gym.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Ronnie', 'Coleman', '555-1001', 'images/ronnie.jpg', 'trainer', 1),
+('oogway', 'oogway@w8gym.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Master', 'Oogway', '555-1002', 'images/oogway.jpg', 'trainer', 1),
+('sportacus', 'sportacus@w8gym.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Sportacus', '', '555-1003', 'images/sportacus.jpg', 'trainer', 1),
+('popeye', 'popeye@w8gym.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Popeye', '', '555-1004', 'images/popeye.jpg', 'trainer', 1);
+
+-- Member accounts. Password for all member rows is 1234.
+INSERT INTO users (username, email, password_hash, first_name, last_name, phone, role, is_active) VALUES
+('member', 'member@w8gym.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Demo', 'Member', '555-2000', 'member', 1),
+('aliceb', 'alice@example.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Alice', 'Brown', '555-2001', 'member', 1),
+('bobl', 'bob@example.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Bob', 'Lee', '555-2002', 'member', 1),
+('carolm', 'carol@example.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Carol', 'Martinez', '555-2003', 'member', 1),
+('davidb', 'david.b@example.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'David', 'Brown', '555-2004', 'member', 1),
+('emilyc', 'emily@example.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Emily', 'Clark', '555-2005', 'member', 1),
+('frankw', 'frank@example.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Frank', 'Wright', '555-2006', 'member', 1),
+('graceh', 'grace@example.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Grace', 'Harris', '555-2007', 'member', 1),
+('henryk', 'henry@example.com', '$2y$10$ZDPovMGy8o9l3juTXe8rzepd.6pvI2Vf8qYegvoK8vMHnCZTXrJk6', 'Henry', 'Kim', '555-2008', 'member', 1);
+
+INSERT INTO trainer_profiles (user_id, bio, specialty, certifications, years_experience) VALUES
+((SELECT id FROM users WHERE username = 'trainer'), 'Demo trainer account for testing trainer features.', 'strength', 'Demo certification', 5),
+((SELECT id FROM users WHERE username = 'ronniec'), '8 time Mr. Olympia, now focused on strength training.', 'strength', 'Strength coaching, powerlifting technique, contest prep', 8),
+((SELECT id FROM users WHERE username = 'sportacus'), 'Aerobics world champion focused on performance and conditioning.', 'cardio', 'HIIT coaching, mobility, athletic conditioning', 10),
+((SELECT id FROM users WHERE username = 'popeye'), 'Specialist in movement quality and injury prevention.', 'crossfit', 'CrossFit L2, Olympic lifting, movement screening', 6),
+((SELECT id FROM users WHERE username = 'oogway'), 'Yoga instructor focused on recovery, breathwork and relaxation.', 'yoga', 'RYT-200, recovery coaching, breathwork', 12);
+
+INSERT INTO member_profiles (user_id, plan_id, plan_start, plan_end) VALUES
+((SELECT id FROM users WHERE username = 'member'), (SELECT id FROM membership_plans WHERE name = 'Starter'), date('now'), date('now', '+30 days')),
+((SELECT id FROM users WHERE username = 'aliceb'), (SELECT id FROM membership_plans WHERE name = 'Pro'), date('now'), date('now', '+30 days')),
+((SELECT id FROM users WHERE username = 'bobl'), (SELECT id FROM membership_plans WHERE name = 'Starter'), date('now'), date('now', '+30 days')),
+((SELECT id FROM users WHERE username = 'carolm'), (SELECT id FROM membership_plans WHERE name = 'Elite'), date('now'), date('now', '+30 days')),
+((SELECT id FROM users WHERE username = 'davidb'), (SELECT id FROM membership_plans WHERE name = 'Pro'), date('now'), date('now', '+30 days')),
+((SELECT id FROM users WHERE username = 'emilyc'), (SELECT id FROM membership_plans WHERE name = 'Starter'), date('now'), date('now', '+30 days')),
+((SELECT id FROM users WHERE username = 'frankw'), (SELECT id FROM membership_plans WHERE name = 'Pro'), date('now'), date('now', '+30 days')),
+((SELECT id FROM users WHERE username = 'graceh'), (SELECT id FROM membership_plans WHERE name = 'Elite'), date('now'), date('now', '+30 days')),
+((SELECT id FROM users WHERE username = 'henryk'), (SELECT id FROM membership_plans WHERE name = 'Starter'), date('now'), date('now', '+30 days'));
+
+INSERT INTO classes (name, type, level, description, duration_min, capacity, trainer_id) VALUES
+('Power Yoga Flow', 'yoga', 'intermediate', 'Dynamic vinyasa flow building heat and flexibility', 60, 25, (SELECT id FROM users WHERE username = 'oogway')),
+('Gentle Morning Yoga', 'yoga', 'beginner', 'Slow-paced practice focusing on alignment and relaxation', 60, 20, (SELECT id FROM users WHERE username = 'oogway')),
+('HIIT Burn', 'hiit', 'advanced', 'High-intensity interval training for maximum calorie burn', 45, 20, (SELECT id FROM users WHERE username = 'sportacus')),
+('CrossFit Foundations', 'crossfit', 'beginner', 'Learn proper form for Olympic lifts and CrossFit basics', 60, 15, (SELECT id FROM users WHERE username = 'popeye')),
+('Strength Training 101', 'powerlifting', 'beginner', 'Master squat, bench, and deadlift technique', 60, 20, (SELECT id FROM users WHERE username = 'ronniec')),
+('Advanced Powerlifting', 'powerlifting', 'advanced', 'For experienced lifters looking to increase 1RMs', 90, 15, (SELECT id FROM users WHERE username = 'ronniec')),
+('Pilates Core', 'yoga', 'intermediate', 'Mat Pilates focusing on core strength and stability', 50, 20, (SELECT id FROM users WHERE username = 'oogway')),
+('MetCon', 'crossfit', 'intermediate', 'Metabolic conditioning workout with varied movements', 60, 18, (SELECT id FROM users WHERE username = 'popeye'));
+
+INSERT INTO class_sessions (class_id, scheduled_at) VALUES
+((SELECT id FROM classes WHERE name = 'Power Yoga Flow'), datetime('now', '+1 day', '09:00:00')),
+((SELECT id FROM classes WHERE name = 'Power Yoga Flow'), datetime('now', '+3 days', '09:00:00')),
+((SELECT id FROM classes WHERE name = 'Power Yoga Flow'), datetime('now', '+5 days', '09:00:00')),
+((SELECT id FROM classes WHERE name = 'Gentle Morning Yoga'), datetime('now', '+2 days', '08:00:00')),
+((SELECT id FROM classes WHERE name = 'Gentle Morning Yoga'), datetime('now', '+4 days', '08:00:00')),
+((SELECT id FROM classes WHERE name = 'Pilates Core'), datetime('now', '+1 day', '17:30:00')),
+((SELECT id FROM classes WHERE name = 'Pilates Core'), datetime('now', '+4 days', '17:30:00')),
+((SELECT id FROM classes WHERE name = 'HIIT Burn'), datetime('now', '+1 day', '18:00:00')),
+((SELECT id FROM classes WHERE name = 'HIIT Burn'), datetime('now', '+3 days', '18:00:00')),
+((SELECT id FROM classes WHERE name = 'HIIT Burn'), datetime('now', '+5 days', '18:00:00')),
+((SELECT id FROM classes WHERE name = 'CrossFit Foundations'), datetime('now', '+2 days', '19:00:00')),
+((SELECT id FROM classes WHERE name = 'CrossFit Foundations'), datetime('now', '+4 days', '19:00:00')),
+((SELECT id FROM classes WHERE name = 'MetCon'), datetime('now', '+2 days', '07:00:00')),
+((SELECT id FROM classes WHERE name = 'MetCon'), datetime('now', '+4 days', '07:00:00')),
+((SELECT id FROM classes WHERE name = 'Strength Training 101'), datetime('now', '+1 day', '17:00:00')),
+((SELECT id FROM classes WHERE name = 'Strength Training 101'), datetime('now', '+3 days', '17:00:00')),
+((SELECT id FROM classes WHERE name = 'Advanced Powerlifting'), datetime('now', '+2 days', '18:30:00')),
+((SELECT id FROM classes WHERE name = 'Advanced Powerlifting'), datetime('now', '+5 days', '18:30:00'));
+
+INSERT INTO enrollments (session_id, member_id, status) VALUES
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 7), (SELECT id FROM users WHERE username = 'bobl'), 'enrolled'),
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 14), (SELECT id FROM users WHERE username = 'carolm'), 'enrolled'),
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 1), (SELECT id FROM users WHERE username = 'davidb'), 'enrolled'),
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 5), (SELECT id FROM users WHERE username = 'emilyc'), 'enrolled'),
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 12), (SELECT id FROM users WHERE username = 'frankw'), 'enrolled'),
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 16), (SELECT id FROM users WHERE username = 'graceh'), 'enrolled');
+
+INSERT INTO enrollments (session_id, member_id, status, waitlist_position) VALUES
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 7), (SELECT id FROM users WHERE username = 'henryk'), 'waitlist', 1);
+
+INSERT INTO class_reviews (session_id, member_id, rating, comment) VALUES
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 7), (SELECT id FROM users WHERE username = 'bobl'), 4, 'Great workout, really intense!'),
+((SELECT id FROM class_sessions LIMIT 1 OFFSET 14), (SELECT id FROM users WHERE username = 'carolm'), 5, 'Ronnie helped me fix my deadlift form perfectly.');
+
+INSERT INTO notifications (user_id, type, message, is_read) VALUES
+((SELECT id FROM users WHERE username = 'henryk'), 'waitlist_update', 'You are on the waitlist for HIIT Burn. Current position: 1', 0),
+((SELECT id FROM users WHERE username = 'bobl'), 'class_reminder', 'Reminder: HIIT Burn tomorrow at 6:00 PM', 0);
+
+INSERT INTO equipment_reservations (unit_id, member_id, reserved_from, reserved_to, status) VALUES
+((SELECT eu.id FROM equipment_units eu JOIN equipment e ON e.id = eu.equipment_id WHERE e.name = 'Treadmill' LIMIT 1),
+ (SELECT id FROM users WHERE username = 'aliceb'),
+ datetime('now', '+1 day', '10:00:00'),
+ datetime('now', '+1 day', '11:00:00'),
+ 'active');
+
+INSERT INTO pt_availability (trainer_id, start_time, end_time, is_booked) VALUES
+((SELECT id FROM users WHERE username = 'trainer'), datetime('now', '+1 day', '09:00:00'), datetime('now', '+1 day', '10:00:00'), 0),
+((SELECT id FROM users WHERE username = 'ronniec'), datetime('now', '+1 day', '10:00:00'), datetime('now', '+1 day', '11:00:00'), 0),
+((SELECT id FROM users WHERE username = 'ronniec'), datetime('now', '+1 day', '11:00:00'), datetime('now', '+1 day', '12:00:00'), 0),
+((SELECT id FROM users WHERE username = 'oogway'), datetime('now', '+2 days', '14:00:00'), datetime('now', '+2 days', '15:00:00'), 0),
+((SELECT id FROM users WHERE username = 'popeye'), datetime('now', '+3 days', '09:00:00'), datetime('now', '+3 days', '10:00:00'), 0);

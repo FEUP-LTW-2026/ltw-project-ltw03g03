@@ -23,21 +23,31 @@ if (!$plan) {
     exit;
 }
 
-// Update or insert member_profiles
+// Activate or replace the member's current plan.
 $start_date = date('Y-m-d');
 $end_date = date('Y-m-d', strtotime('+1 month'));
 
-$stmt = $db->prepare('SELECT user_id FROM member_profiles WHERE user_id = ?');
-$stmt->execute([$uid]);
-$profile = $stmt->fetch();
+try {
+    $db->beginTransaction();
 
-if ($profile) {
-    $db->prepare('UPDATE member_profiles SET plan_id = ?, plan_start = ?, plan_end = ? WHERE user_id = ?')
-       ->execute([$plan_id, $start_date, $end_date, $uid]);
-} else {
-    $db->prepare('INSERT INTO member_profiles (user_id, plan_id, plan_start, plan_end) VALUES (?, ?, ?, ?)')
-       ->execute([$uid, $plan_id, $start_date, $end_date]);
+    $stmt = $db->prepare(
+        'INSERT INTO member_profiles (user_id, plan_id, plan_start, plan_end)
+         VALUES (?, ?, ?, ?)
+         ON CONFLICT(user_id) DO UPDATE SET
+           plan_id = excluded.plan_id,
+           plan_start = excluded.plan_start,
+           plan_end = excluded.plan_end'
+    );
+    $stmt->execute([$uid, $plan_id, $start_date, $end_date]);
+
+    $db->commit();
+    set_flash('success', "Your {$plan['name']} membership is now active.");
+} catch (Throwable $e) {
+    if ($db->inTransaction()) {
+        $db->rollBack();
+    }
+    set_flash('error', 'Unable to activate membership plan. Please try again.');
 }
 
-set_flash('success', "Successfully subscribed to the {$plan['name']} plan.");
-header('Location: ../pages/dashboard.php');
+header('Location: ../pages/plans.php');
+exit;

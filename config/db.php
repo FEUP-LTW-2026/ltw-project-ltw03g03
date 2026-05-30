@@ -1,7 +1,7 @@
 <?php
 // PDO database connection singleton (SQLite).
 
-define('DB_PATH', __DIR__ . '/../data/w8_gym.db');
+define('DB_PATH', __DIR__ . '/../database/database.db');
 
 function get_db(): PDO {
     static $pdo = null;
