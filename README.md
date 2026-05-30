@@ -3,21 +3,21 @@
 ## Features
 
 **All users:**
-- [ ] Register a new account.
-- [ ] Log in and out.
-- [ ] Edit their profile, including name, username, password, and profile photo.
+- [x] Register a new account.
+- [x] Log in and out.
+- [x] Edit their profile, including name, username, password, and profile photo.
 
 **Members:**
-- [ ] Browse the schedule of available fitness classes, filtering by type, trainer, day, or time.
-- [ ] Enroll in and cancel enrollment from upcoming classes, subject to capacity limits.
-- [ ] View trainer profiles, including their specializations and the classes they teach.
-- [ ] Check the current availability of equipment in the main training area.
-- [ ] Leave ratings and reviews for classes they have attended.
+- [x] Browse the schedule of available fitness classes, filtering by type, trainer, day, or time.
+- [x] Enroll in and cancel enrollment from upcoming classes, subject to capacity limits.
+- [x] View trainer profiles, including their specializations and the classes they teach.
+- [x] Check the current availability of equipment in the main training area.
+- [x] Leave ratings and reviews for classes they have attended.
 
 **Trainers:**
-- [ ] Manage their public profile, including bio, specializations, and certifications.
-- [ ] View the roster of members enrolled in their classes.
-- [ ] Track and manage their assigned class schedule.
+- [x] Manage their public profile, including bio, specializations, and certifications.
+- [x] View the roster of members enrolled in their classes.
+- [x] Track and manage their assigned class schedule.
 
 **Admins:**
 - [x] Manage members and trainers (create, update, and deactivate accounts).
@@ -27,7 +27,16 @@
 - [x] Oversee and ensure the smooth operation of the entire system.
 
 **Extra:**
-- [ ] Something extra (e.g., personal training bookings, membership plans, waitlist, ...).
+- [x] Personal Training Bookings: Members can browse trainer availability and book one-on-one personal training sessions.
+- [x] Membership Plans: Tiered membership plans (basic, pro, elite) with different access levels. Members can subscribe to or upgrade their plan.
+- [x] Equipment Reservation: Members can reserve a specific piece of equipment for a time slot in the main training area.
+- [x] Class Waitlist: When a class is full, members can join a waitlist and are automatically enrolled when a spot opens.
+- [x] Member Progress Tracking: Members can log workouts, set fitness goals, and track progress over time.
+- [x] Notification System: In-app notifications for class reminders, booking confirmations, and waitlist updates.
+- [x] Trainer Analytics Dashboard: Trainers can view attendance records and class rosters with enrollment details.
+- [x] Admin Analytics Dashboard: Admins can view gym-wide metrics including most popular classes, equipment usage, and member retention.
+- [x] Disputes and Feedback: Members can report issues and admins can manage and respond to dispute reports.
+- [x] REST API: Public API endpoints for querying class schedules, trainer profiles, and equipment availability.
 
 ## Running
 
@@ -39,9 +48,3 @@
 - admin/p4s5w0rd
 - member/1234
 - trainer/1234
-
-## Pages for 1st delivery:
-
-- html/register.html
-- html/home.html
-- html/classes.html
