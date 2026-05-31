@@ -1,28 +1,6 @@
--- ═══════════════════════════════════════════════════════════════
 --  W8 GYM — Database Schema
 --  SQLite 3  (compatible with PHP PDO + SQLite)
---
---  Changes from v1:
---   • Ported from MySQL 8 → SQLite 3 (removed ENGINE=InnoDB,
---     CHARACTER SET, CREATE DATABASE, USE, ON UPDATE triggers)
---   • AUTOINCREMENT uses SQLite INTEGER PRIMARY KEY convention
---   • BOOLEAN stored as INTEGER (0/1) — SQLite has no BOOL type
---   • DATETIME stored as TEXT in ISO-8601 (SQLite best practice)
---   • DEFAULT CURRENT_TIMESTAMP kept (SQLite supports it on TEXT cols)
---   • ON UPDATE CURRENT_TIMESTAMP removed (not supported in SQLite);
---     updated_at must be maintained at the application layer
---   • Removed duplicate fitness_goals TEXT from member_profiles
---     (structured fitness_goals table already exists)
---   • equipment_units table added to properly track per-unit
---     availability instead of a single global status flag
---   • waitlist_position INTEGER added to enrollments
---   • disputes.resolved_by FK added
---   • trainer_profiles.specialty changed to controlled values
---     via a CHECK constraint matching the register form options
---   • Schema and seed data are kept in this single SQL file
---   • Trainer profile inserts use sub-SELECTs instead of raw IDs
---   • PRAGMA foreign_keys = ON added (must be run each connection)
--- ═══════════════════════════════════════════════════════════════
+
 
 PRAGMA journal_mode = WAL;       -- better concurrency for web apps
 PRAGMA foreign_keys = ON;        -- enforce FK constraints in SQLite
